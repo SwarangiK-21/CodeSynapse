@@ -1,0 +1,8 @@
+gradio
+google-generativeai>=0.8.3
+python-dotenv
+playwright
+plotly
+pandas
+reportlab
+aiohttp
