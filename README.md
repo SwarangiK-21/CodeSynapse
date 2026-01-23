@@ -5,7 +5,7 @@
 ![Gemini](https://img.shields.io/badge/AI-Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)
 ![Docker](https://img.shields.io/badge/Deployment-Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-**Live Demo:** [Click Here to Launch App](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse/blob/main/app.py)
+**Live Demo:** [Click Here to Launch App](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse)
 
 CodeSynapse is a futuristic, AI-powered analytics dashboard designed for Computer Science students. It aggregates coding performance data from multiple platforms, visualizes skill competencies, and provides an AI Career Coach to generate personalized study roadmaps and resume reviews.
 
