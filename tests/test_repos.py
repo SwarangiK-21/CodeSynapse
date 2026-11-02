@@ -114,7 +114,7 @@ def test_search_before_indexing_is_empty(client, auth):
     assert client.get("/api/search", params={"q": "retry"}, headers=auth()).json()["results"] == []
 
 def test_vector_search_finds_meaning_without_shared_words(client, auth, github, monkeypatch):
-    def fake_embed(texts, task_type):
+    def fake_embed(texts, task_type, retries=0):
         def vector(text):
             v = [0.0] * EMBEDDING_DIM
             v[0 if "retry" in text or "resilience" in text else 1] = 1.0
