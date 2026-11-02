@@ -11,3 +11,4 @@ select = ["E", "F"]
 [tool.ruff.lint.per-file-ignores]
 # Settings must be in place before the app is imported
 "tests/conftest.py" = ["E402"]
+"evals/run.py" = ["E402"]

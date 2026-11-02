@@ -40,12 +40,13 @@ def get_github_json(client, url):
         raise RepoError(f"GitHub is unavailable (HTTP {resp.status_code}).")
     return resp.json()
 
-def download_archive(full_name):
-    """Returns the latest commit sha and its source archive."""
+def download_archive(full_name, sha=None):
+    """Returns the commit sha and its source archive. Without a sha, uses the latest commit."""
     with httpx.Client(timeout=30, follow_redirects=True) as client:
-        info = get_github_json(client, f"https://api.github.com/repos/{full_name}")
-        branch = info["default_branch"]
-        sha = get_github_json(client, f"https://api.github.com/repos/{full_name}/commits/{branch}")["sha"]
+        if not sha:
+            info = get_github_json(client, f"https://api.github.com/repos/{full_name}")
+            branch = info["default_branch"]
+            sha = get_github_json(client, f"https://api.github.com/repos/{full_name}/commits/{branch}")["sha"]
 
         data = bytearray()
         with client.stream("GET", f"https://codeload.github.com/{full_name}/tar.gz/{sha}") as resp:
@@ -87,10 +88,10 @@ def read_source_files(archive):
 def embedding_text(chunk):
     return f"{chunk.path} {chunk.symbol}\n{chunk.content}"
 
-def index_repo(db: Session, user: User, value):
+def index_repo(db: Session, user: User, value, sha=None):
     """Downloads a public repository and makes its code searchable for this user."""
     full_name = parse_name(value)
-    sha, archive = download_archive(full_name)
+    sha, archive = download_archive(full_name, sha)
 
     chunks = [c for path, text in read_source_files(archive) for c in chunker.chunk_file(path, text)]
     if not chunks:

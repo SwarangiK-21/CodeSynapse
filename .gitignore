@@ -9,3 +9,6 @@ __pycache__/
 # Local data and generated files
 *.db
 *.pdf
+
+# Evaluation index
+evals/.cache/

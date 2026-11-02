@@ -1,0 +1,64 @@
+[
+  {"repo": "pallets/itsdangerous", "commit": "672971d66a2ef9f85151e53283113f33d642dabd", "skills": [
+    {"name": "Cryptographic signing with HMAC", "present": true, "proof": "hmac"},
+    {"name": "pytest", "present": true, "proof": "import pytest"},
+    {"name": "GitHub Actions", "present": true, "proof": "^on:"},
+    {"name": "Python type hints", "present": true, "proof": "-> (str|bytes|bool|None)"},
+    {"name": "Kubernetes", "present": false, "proof": "kind: (Deployment|Service)"},
+    {"name": "Redis", "present": false, "proof": "(?i)\\bredis\\b"},
+    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"}
+  ]},
+  {"repo": "pallets/markupsafe", "commit": "4e111271b1494995708a9e878a10829b5e10c7ba", "skills": [
+    {"name": "HTML escaping", "present": true, "proof": "&lt;|&#34;"},
+    {"name": "Python C extensions", "present": true, "proof": "PyInit_|PyObject"},
+    {"name": "pytest", "present": true, "proof": "import pytest"},
+    {"name": "SQLAlchemy", "present": false, "proof": "(?i)sqlalchemy"},
+    {"name": "FastAPI", "present": false, "proof": "(?i)from fastapi|import fastapi"}
+  ]},
+  {"repo": "expressjs/cors", "commit": "5317ebe670db2aaebc1d496eb5d33493deefb3ed", "skills": [
+    {"name": "Express middleware", "present": true, "proof": "function \\w*\\(req, res, next\\)|\\(req, res, next\\)"},
+    {"name": "CORS headers", "present": true, "proof": "Access-Control-Allow-Origin"},
+    {"name": "GitHub Actions", "present": true, "proof": "^on:"},
+    {"name": "TypeScript", "present": false, "proof": "\\binterface \\w+ \\{"},
+    {"name": "Docker", "present": false, "proof": "^FROM "},
+    {"name": "PostgreSQL", "present": false, "proof": "(?i)postgres"}
+  ]},
+  {"repo": "kennethreitz/records", "commit": "ea4273695cee6da42edf1cb294d1f2a4505470fc", "skills": [
+    {"name": "SQLAlchemy", "present": true, "proof": "from sqlalchemy|import sqlalchemy"},
+    {"name": "Database transactions", "present": true, "proof": "transaction"},
+    {"name": "pytest", "present": true, "proof": "import pytest"},
+    {"name": "Docker", "present": false, "proof": "^FROM "},
+    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"}
+  ]},
+  {"repo": "encode/databases", "commit": "ae3fb16f40201d9ed0ed31bea31a289127169568", "skills": [
+    {"name": "Python asyncio", "present": true, "proof": "import asyncio"},
+    {"name": "SQLAlchemy", "present": true, "proof": "import sqlalchemy|from sqlalchemy"},
+    {"name": "PostgreSQL", "present": true, "proof": "asyncpg"},
+    {"name": "Database transactions", "present": true, "proof": "class Transaction"},
+    {"name": "Kubernetes", "present": false, "proof": "kind: (Deployment|Service)"},
+    {"name": "Redis", "present": false, "proof": "(?i)\\bredis\\b"}
+  ]},
+  {"repo": "fastapi/asyncer", "commit": "3b301d75c4bb0c681e03a90f62963a1f62dd7b0c", "skills": [
+    {"name": "Python async concurrency", "present": true, "proof": "async def"},
+    {"name": "GitHub Actions", "present": true, "proof": "^on:"},
+    {"name": "PostgreSQL", "present": false, "proof": "(?i)postgres"},
+    {"name": "JWT authentication", "present": false, "proof": "(?i)\\bjwt\\b"}
+  ]},
+  {"repo": "sindresorhus/ky", "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d", "skills": [
+    {"name": "TypeScript", "present": true, "proof": "\\binterface \\w+|export type "},
+    {"name": "HTTP retry logic", "present": true, "proof": "(?i)retry"},
+    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"},
+    {"name": "SQL databases", "present": false, "proof": "\\bINSERT INTO\\b"},
+    {"name": "Docker", "present": false, "proof": "^FROM "}
+  ]},
+  {"repo": "fastapi/full-stack-fastapi-template", "commit": "f4bcfaba7c85be3c6332cc74a20819f586dcdbc6", "skills": [
+    {"name": "FastAPI", "present": true, "proof": "from fastapi"},
+    {"name": "React", "present": true, "proof": "from ['\"]react['\"]"},
+    {"name": "JWT authentication", "present": true, "proof": "import jwt"},
+    {"name": "Docker", "present": true, "proof": "^FROM "},
+    {"name": "GitHub Actions", "present": true, "proof": "^on:"},
+    {"name": "Kubernetes", "present": false, "proof": "kind: (Deployment|Service)"},
+    {"name": "Redis", "present": false, "proof": "(?i)import redis|from redis"},
+    {"name": "GraphQL", "present": false, "proof": "(?i)\\bgraphql\\b"}
+  ]}
+]
