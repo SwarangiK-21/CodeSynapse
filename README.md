@@ -18,6 +18,8 @@ CodeSynapse is an AI-powered career dashboard for Computer Science students. It 
 - **Competency scores:** turns each platform's stats into a 0–100 score shown in an interactive Plotly chart.
 - **AI Nexus Coach:** a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies and automatic fallback to a second model.
 - **Private per-user data:** each browser gets its own user, so profiles and chats stay separate and return after a reload.
+- **Code search:** indexes public repositories by function and class using Tree-sitter, then finds code with hybrid keyword and vector search. Repository code is read from memory and never run.
+- **Job description parsing:** extracts required skills, and drops any skill the AI can't back with a quote from the text.
 - **PDF career report:** a one-click summary of your synced stats.
 - **REST API:** everything in the UI is also available through FastAPI.
 
@@ -106,6 +108,11 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 | GET, PUT | `/api/profile` | Read the profile, or sync it from live stats |
 | GET, POST, DELETE | `/api/chat` | Read history, ask the coach, or clear history |
 | GET | `/api/report` | Download the PDF report |
+| GET, POST | `/api/repos` | List repositories, or index a public one |
+| DELETE | `/api/repos/{id}` | Remove an indexed repository |
+| GET | `/api/search?q=` | Search indexed code by keyword and meaning |
+| POST | `/api/jobs` | Extract skills from a job description |
+| GET | `/api/jobs/{id}` | Read a parsed job description |
 | GET | `/health` | Health check |
 
 ---
@@ -116,7 +123,8 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 - [x] AI coach with stats context, conversation memory and model fallback
 - [x] Per-user data on PostgreSQL with migrations
 - [x] REST API, automated tests and CI
-- [ ] Analyse real repository code against a job description
+- [x] Index public repositories and search code with hybrid retrieval
+- [x] Extract skills from job descriptions, each backed by a quote
 - [ ] Multi-step agent with cited, verified evidence
 - [ ] Evaluation suite with measured accuracy
 - [ ] GitHub login, rate limiting and updated live deployment

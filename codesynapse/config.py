@@ -9,6 +9,8 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///codesynapse_local.db")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODELS = [m.strip() for m in os.getenv("GEMINI_MODELS", "gemini-3.8-flash,gemini-3.5-flash-lite").split(",")]
 
+GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-2")
+
 # Optional: raises GitHub's hourly rate limit
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
