@@ -1,77 +1,82 @@
+import json
 import os
-import google.generativeai as genai
 from dotenv import load_dotenv
+from google import genai
+from google.genai import errors, types
+from pydantic import BaseModel
 
 # 1. Load keys
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
-if api_key:
-    genai.configure(api_key=api_key)
+client = genai.Client(api_key=api_key) if api_key else None
 
-# 2. List of models to try (Priority: Free/Exp -> Lite -> Standard)
-# This list is based exactly on the screenshot you shared.
-MODEL_FALLBACKS = [
-    "gemini-2.0-flash-exp",           # often unlimited free preview
-    "gemini-2.0-flash-lite-preview-02-05", # 'Lite' models consume less quota
-    "gemini-2.0-flash",               # Standard (what you were using)
-    "gemini-2.5-flash"                # Newest (might have strict limits)
-]
+# 2. List of models to try, in order. Override with GEMINI_MODELS in .env
+MODEL_FALLBACKS = os.getenv("GEMINI_MODELS", "gemini-3.8-flash,gemini-3.5-flash-lite").split(",")
 
-generation_config = {
-    "temperature": 0.7,
-    "max_output_tokens": 1024,
-}
+# Errors worth retrying on another model: not found, quota, overloaded
+FALLBACK_CODES = {404, 429, 500, 503}
+
+class Action(BaseModel):
+    step: str
+
+class CoachReply(BaseModel):
+    advice: str
+    actions: list[Action]
+
+generation_config = types.GenerateContentConfig(
+    temperature=0.7,
+    max_output_tokens=1024,
+    response_mime_type="application/json",
+    response_schema=CoachReply,
+)
+
+def error_reply(message):
+    return json.dumps({"advice": message, "actions": []})
+
+def describe_error(code):
+    if code in (400, 401, 403):
+        return "AI Error: the API key was rejected. Check GEMINI_API_KEY in .env."
+    if code == 404:
+        return "AI Error: none of the configured models exist. Check GEMINI_MODELS."
+    if code == 429:
+        return "AI Quota Exceeded (Error 429). Please wait 1 minute and try again."
+    return f"AI Service Error ({code}). Please try again later."
 
 def ask_gemini(user_question, user_stats):
-    if not api_key:
-        return '{"advice": "Error: API Key Missing. Check .env file.", "actions": []}'
+    if not client:
+        return error_reply("Error: API Key Missing. Check .env file.")
 
-    last_error = ""
+    prompt = f"""
+    Role: Expert Career Coach.
+    User Stats: {str(user_stats) if user_stats else "None yet. The user has not synced any profiles."}
+    User Question: {user_question}
+
+    Give short, specific advice and a list of actions. Only refer to stats listed above.
+    Never invent stats for a platform marked as not found or unavailable.
+    """
+
+    last_code = None
 
     # 3. The Self-Healing Loop 🔄
     for model_name in MODEL_FALLBACKS:
         try:
-            # print(f"Trying model: {model_name}...") # Uncomment for debugging
-            
-            model = genai.GenerativeModel(
-                model_name=model_name,
-                generation_config=generation_config
+            response = client.models.generate_content(
+                model=model_name.strip(),
+                contents=prompt,
+                config=generation_config,
             )
+            return response.text.strip()
 
-            prompt = f"""
-            Role: Expert Career Coach.
-            User Stats: {str(user_stats)}
-            User Question: {user_question}
-            
-            CRITICAL OUTPUT RULES:
-            1. Respond ONLY in raw JSON.
-            2. Do not use Markdown (no ```json blocks).
-            3. Structure:
-            {{
-                "advice": "Short, specific advice string.",
-                "actions": [
-                    {{"step": "Action 1"}},
-                    {{"step": "Action 2"}}
-                ]
-            }}
-            """
-            
-            response = model.generate_content(prompt)
-            
-            # Clean up response
-            text = response.text.strip()
-            if text.startswith("```json"): text = text[7:]
-            if text.startswith("```"): text = text[3:]
-            if text.endswith("```"): text = text[:-3]
-            
-            return text.strip()
+        except errors.APIError as e:
+            print(f"Gemini Error on {model_name}: {e.code} {e.message}")
+            last_code = e.code
+            if e.code not in FALLBACK_CODES:
+                break
 
         except Exception as e:
-            # If we hit a 429 (Quota) or 404 (Not Found), we catch it and try the next model.
-            last_error = str(e)
-            continue 
+            print(f"Gemini Error on {model_name}: {e}")
+            return error_reply("AI Error: could not reach the AI service. Please try again.")
 
     # If ALL models fail
-    print(f"❌ ALL AI MODELS FAILED. Last error: {last_error}")
-    return f'{{"advice": "AI Quota Exceeded (Error 429). Please wait 1 minute and try again.", "actions": []}}'
+    return error_reply(describe_error(last_code))

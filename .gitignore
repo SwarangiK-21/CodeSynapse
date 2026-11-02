@@ -1,0 +1,11 @@
+# Secrets
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Local data and generated files
+*.db
+*.pdf

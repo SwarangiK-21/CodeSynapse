@@ -1,16 +1,17 @@
-import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+from google import genai
 
-# --- PASTE YOUR REAL KEY HERE ---
-api_key = "AIzaSyAmggF5Y2jIKcESWZSadaM4CsjjMwmwOB0" 
+load_dotenv()
 
-genai.configure(api_key=api_key)
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 print("🔍 Checking available models for you...")
 
 try:
-    for m in genai.list_models():
+    for m in client.models.list():
         # We only care about models that can generate text
-        if 'generateContent' in m.supported_generation_methods:
+        if 'generateContent' in (m.supported_actions or []):
             print(f"✅ Found: {m.name}")
 except Exception as e:
     print(f"❌ Error: {e}")

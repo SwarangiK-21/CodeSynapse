@@ -14,9 +14,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS user_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             github TEXT,
-            leetcode TEXT,
-            hackerrank TEXT,
-            gfg TEXT
+            leetcode TEXT
         )
     ''')
 
@@ -33,23 +31,22 @@ def init_db():
     conn.commit()
     conn.close()
 
-def save_profile(gh, lc, hr, gfg):
+def save_profile(gh, lc):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     cursor.execute("DELETE FROM user_history") # Keep only latest
-    cursor.execute("INSERT INTO user_history (github, leetcode, hackerrank, gfg) VALUES (?, ?, ?, ?)", 
-                   (gh, lc, hr, gfg))
+    cursor.execute("INSERT INTO user_history (github, leetcode) VALUES (?, ?)", (gh, lc))
     conn.commit()
     conn.close()
 
 def get_last_profile():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    cursor.execute("SELECT github, leetcode, hackerrank, gfg FROM user_history ORDER BY id DESC LIMIT 1")
+    cursor.execute("SELECT github, leetcode FROM user_history ORDER BY id DESC LIMIT 1")
     row = cursor.fetchone()
     conn.close()
     if row:
-        return {"github": row[0], "leetcode": row[1], "hackerrank": row[2], "gfg": row[3]}
+        return {"github": row[0], "leetcode": row[1]}
     return None
 
 # --- CHAT HISTORY FUNCTIONS ---
