@@ -1,35 +1,25 @@
 # 🎮 CodeSynapse: AI Career Architect
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.14-blue?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Gradio](https://img.shields.io/badge/Frontend-Gradio-orange?style=for-the-badge&logo=gradio&logoColor=white)
 ![Gemini](https://img.shields.io/badge/AI-Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)
-![HuggingFace](https://img.shields.io/badge/Deployment-Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
+![CI](https://github.com/SwarangiK-21/CodeSynapse/actions/workflows/ci.yml/badge.svg)
 
-**Live Demo:** [Click Here to Launch App](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse)
+CodeSynapse is an AI-powered career dashboard for Computer Science students. It collects live coding stats from GitHub and LeetCode, scores them, and provides an AI Career Coach that gives advice based on your real numbers.
 
-CodeSynapse is a futuristic, AI-powered analytics dashboard designed for Computer Science students. It aggregates coding performance data from multiple platforms, visualizes skill competencies, and provides an AI Career Coach to generate personalized study roadmaps and career advice.
+**Live demo:** [Hugging Face Space](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse). This still runs the older January 2026 version, not the code in this repository.
 
 ---
 
 ## 🚀 Key Features
 
-### 1. 🔗 Multi-Platform Identity Uplink
-- **Real-time Sync:** Fetches live user profiles from **GitHub**, **LeetCode**, and **GeeksForGeeks**.
-- **Data Aggregation:** Consolidates repository counts, problem-solving stats, rankings, and coding scores into a single unified view.
-- **HackerRank:** Integration coming in a future update.
-
-### 2. 📊 Competency Radar Matrix
-- **Visual Analytics:** Uses **Plotly Express** to generate interactive Cyberpunk-styled radar charts.
-- **Skill Scoring:** Normalizes data from different platforms to calculate a "Competency Score" (0–100) per platform.
-
-### 3. 🤖 AI Nexus Coach
-- **Powered by Google Gemini Flash:** A built-in AI chatbot that is contextually aware of your actual fetched stats.
-- **Career Advice:** Ask for project ideas, DSA roadmaps, or study plans tailored to your weak areas.
-- **Self-Healing Logic:** Automatically falls back across 4 Gemini model variants to ensure the AI always responds, even during quota limits.
-
-### 4. 📄 Instant Career Report
-- **One-Click PDF Download:** Generates a clean, printable career summary from your synced stats.
-- **ReportLab Integration:** Produces a structured PDF report on the fly.
+- **Live profile sync:** fetches public stats from GitHub and LeetCode at the same time. If a user doesn't exist or a service is down, the app says so instead of showing made-up numbers.
+- **Competency scores:** turns each platform's stats into a 0–100 score shown in an interactive Plotly chart.
+- **AI Nexus Coach:** a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies and automatic fallback to a second model.
+- **Private per-user data:** each browser gets its own user, so profiles and chats stay separate and return after a reload.
+- **PDF career report:** a one-click summary of your synced stats.
+- **REST API:** everything in the UI is also available through FastAPI.
 
 ---
 
@@ -37,14 +27,14 @@ CodeSynapse is a futuristic, AI-powered analytics dashboard designed for Compute
 
 | Layer | Tools |
 |---|---|
-| Frontend | Gradio (Custom Cyberpunk Dark/Neon Theme) |
-| Backend | Python 3.11, AsyncIO |
-| AI Engine | Google Gemini Flash API |
-| Data Visualization | Plotly Express, Pandas |
-| Data Fetching | AIOHTTP (GitHub, LeetCode), Playwright (GFG) |
-| PDF Generation | ReportLab |
-| Database | SQLite3 |
-| Deployment | Hugging Face Spaces |
+| Backend | Python 3.14, FastAPI, Uvicorn |
+| Frontend | Gradio, Plotly Express, Pandas |
+| AI | Google Gemini via `google-genai`, Pydantic for structured output |
+| Data fetching | HTTPX (GitHub API, LeetCode GraphQL) |
+| Database | SQLAlchemy, Alembic, PostgreSQL (SQLite for quick local runs) |
+| PDF | ReportLab |
+| Quality | pytest, respx, ruff, GitHub Actions |
+| Packaging | Docker |
 
 ---
 
@@ -52,64 +42,84 @@ CodeSynapse is a futuristic, AI-powered analytics dashboard designed for Compute
 
 ```
 CodeSynapse/
-│
-├── app.py                  # Main UI — Gradio interface & event wiring
-├── logic/
-│   ├── fetchers.py         # Async platform data fetchers
-│   ├── ai_coach.py         # Gemini AI integration with fallback chain
-│   └── database.py         # SQLite — profile & chat history storage
-├── requirements.txt
-└── README.md
+├── app.py                  # Entry point: runs migrations, starts the server
+├── codesynapse/
+│   ├── main.py             # FastAPI app with the Gradio UI mounted
+│   ├── config.py           # Settings from environment variables
+│   ├── api/routes.py       # REST endpoints
+│   ├── ui/app.py           # Gradio interface
+│   ├── db/                 # Models, session and migration runner
+│   └── services/           # Fetchers, AI coach, chat, profiles, reports, users
+├── migrations/             # Alembic database migrations
+├── scripts/check_models.py # Lists Gemini models your key can use
+├── tests/                  # pytest suite; external services are mocked
+└── .github/workflows/      # Lint, tests and Docker build on every push
 ```
-
----
-
-## ⚙️ How It Works
-
-1. Enter your usernames for GitHub, LeetCode, and GeeksForGeeks.
-2. Click **⚡ INITIALIZE SYNC** — all platforms are fetched in parallel using `asyncio.gather`.
-3. View your **Competency Radar** chart and full stats breakdown.
-4. Switch to the **AI Nexus** tab and ask the coach anything — it already knows your stats.
-5. Download your **PDF Career Report** with one click.
 
 ---
 
 ## 🔧 Running Locally
 
+Requires Python 3.14.
+
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/CodeSynapse.git
+git clone https://github.com/SwarangiK-21/CodeSynapse.git
 cd CodeSynapse
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Install Playwright browser
-playwright install chromium
-
-# 4. Add your Gemini API key
-echo "GEMINI_API_KEY=your_key_here" > .env
-
-# 5. Run the app
-python app.py
+py -3.14 -m venv venv
+venv/Scripts/python.exe -m pip install -r requirements-dev.txt
+cp .env.example .env
 ```
 
-App will be live at `http://localhost:7860`
+Add your Gemini API key to `.env`, then start the app:
+
+```bash
+venv/Scripts/python.exe app.py
+```
+
+The app runs at `http://localhost:7860`, and the API docs are at `http://localhost:7860/docs`. On macOS or Linux, use `venv/bin/python` instead.
+
+Run the checks:
+
+```bash
+venv/Scripts/python.exe -m pytest
+venv/Scripts/python.exe -m ruff check .
+```
+
+### With Docker
+
+Set `DATABASE_URL` to a Postgres database and `UI_SECRET` to a long random value in `.env`, then:
+
+```bash
+docker build -t codesynapse .
+docker run --env-file .env -p 7860:7860 codesynapse
+```
+
+---
+
+## 🔌 API
+
+Create a user with `POST /api/users`, then send the returned token as `Authorization: Bearer <token>`.
+
+| Method | Path | Purpose |
+|---|---|---|
+| POST | `/api/users` | Create a user and get a token |
+| GET, PUT | `/api/profile` | Read the profile, or sync it from live stats |
+| GET, POST, DELETE | `/api/chat` | Read history, ask the coach, or clear history |
+| GET | `/api/report` | Download the PDF report |
+| GET | `/health` | Health check |
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] GitHub live stats
-- [x] LeetCode live stats (GraphQL)
-- [x] GeeksForGeeks scraping (Playwright)
-- [x] AI Coach with Gemini fallback chain
-- [x] PDF report generation
-- [x] SQLite chat & profile history
-- [ ] HackerRank live integration
-- [ ] User authentication
-- [ ] Styled PDF with charts embedded
-- [ ] Weekly progress tracking & email digest
+- [x] Live GitHub and LeetCode stats
+- [x] AI coach with stats context, conversation memory and model fallback
+- [x] Per-user data on PostgreSQL with migrations
+- [x] REST API, automated tests and CI
+- [ ] Analyse real repository code against a job description
+- [ ] Multi-step agent with cited, verified evidence
+- [ ] Evaluation suite with measured accuracy
+- [ ] GitHub login, rate limiting and updated live deployment
 
 ---
 

@@ -32,3 +32,41 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: ruff check .
       - run: pytest
+
+  docker:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: codesynapse
+          POSTGRES_PASSWORD: codesynapse
+          POSTGRES_DB: codesynapse_app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U codesynapse"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t codesynapse .
+      - name: Start the container
+        run: >-
+          docker run -d --name app --network host
+          -e DATABASE_URL=postgresql+psycopg://codesynapse:codesynapse@localhost:5432/codesynapse_app
+          -e UI_SECRET=ci-only
+          codesynapse
+      - name: Check the running app
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf localhost:7860/health && break
+            sleep 2
+          done
+          curl -sf localhost:7860/health
+          curl -sf localhost:7860/ -o /dev/null
+          curl -sf -X POST localhost:7860/api/users
+      - name: Show container logs
+        if: always()
+        run: docker logs app
