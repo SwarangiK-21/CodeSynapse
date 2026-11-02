@@ -60,6 +60,21 @@ def test_gives_up_after_every_round(setup):
         llm.generate_json("p", Reply)
     assert len(setup.calls) == 6 and len(setup.waits) == llm.ROUNDS - 1
 
+def daily_limit():
+    message = "Quota exceeded: requests per day limit. Please retry in 18h44m26s."
+    return errors.ClientError(429, {"error": {"code": 429, "message": message, "status": "S"}})
+
+def test_daily_limit_stops_without_waiting(setup):
+    setup.script = [daily_limit(), daily_limit()]
+    with pytest.raises(llm.LLMError, match="daily AI quota"):
+        llm.generate_json("p", Reply)
+    assert len(setup.calls) == 2 and setup.waits == []
+
+def test_daily_limit_on_one_model_uses_the_others(setup):
+    setup.script = [daily_limit(), api_error(503), GOOD]
+    assert llm.generate_json("p", Reply).answer == "yes"
+    assert setup.calls == ["first", "second", "second"]
+
 def test_rejected_key_stops_immediately(setup):
     setup.script = [api_error(403)]
     with pytest.raises(llm.LLMError, match="key was rejected"):

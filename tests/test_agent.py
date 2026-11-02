@@ -37,6 +37,18 @@ def test_quote_across_lines_ignores_indentation():
 def test_invented_or_trivial_quotes_are_rejected(quote):
     assert verifier.verify_claim(claim(quote), {"E1": evidence()}) is None
 
+@pytest.mark.parametrize("quote", [
+    "import kubernetes", "from redis import Redis", "import { useState } from 'react'",
+    "const redis = require('redis')", "#include <stdio.h>", "import os\nimport sys",
+])
+def test_imports_alone_are_not_proof(quote):
+    item = {**evidence(), "content": f"{quote}\n{CODE}"}
+    assert verifier.verify_claim(claim(quote), {"E1": item}) is None
+
+def test_code_with_an_import_is_still_proof():
+    item = {**evidence(), "content": "import redis\nclient = redis.Redis()\n"}
+    assert verifier.verify_claim(claim("import redis\nclient = redis.Redis()"), {"E1": item})
+
 def test_unknown_evidence_id_is_rejected():
     assert verifier.verify_claim(claim("except TimeoutError:", "E9"), {"E1": evidence()}) is None
 

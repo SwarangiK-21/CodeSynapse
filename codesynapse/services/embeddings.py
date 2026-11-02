@@ -15,6 +15,10 @@ def retry_delay(error):
     match = re.search(r"retry in ([\d.]+)s", str(error.message), re.IGNORECASE)
     return min(float(match.group(1)) + 1, MAX_WAIT_SECONDS) if match else 30
 
+def is_daily_limit(error):
+    """A daily quota lasts for hours, so waiting and retrying is pointless."""
+    return "per day" in str(error.message).lower()
+
 def embed_batch(batch, embed_config, retries):
     for attempt in range(retries + 1):
         try:
@@ -25,7 +29,7 @@ def embed_batch(batch, embed_config, retries):
             )
             return [e.values for e in response.embeddings]
         except errors.APIError as e:
-            if e.code != 429 or attempt == retries:
+            if e.code != 429 or attempt == retries or is_daily_limit(e):
                 print(f"Embedding Error: {e.code} {e.message}")
                 return None
             time.sleep(retry_delay(e))

@@ -1,8 +1,17 @@
 """Checks the AI's claims against real code. This is plain code on purpose: a model
 that was misled by a repository cannot talk its way past it."""
+import re
 from codesynapse.services.jobs import normalize
 
 MIN_QUOTE_CHARS = 8
+IMPORT_LINE = re.compile(
+    r"^\s*(import\s|from\s+\S+\s+import\s|#\s*include\s|using\s+\S+;|(const|let|var)\s+.*require\(|require\()"
+)
+
+def is_import_only(quote):
+    """An import shows a dependency was added, not that the skill was used."""
+    lines = [line for line in quote.split("\n") if line.strip()]
+    return all(IMPORT_LINE.match(line) for line in lines)
 
 def find_lines(content, quote):
     """Returns the (first, last) line of the quote within content, 0-based, or None."""
@@ -25,7 +34,7 @@ def permalink(evidence, first_line, last_line):
 def verify_claim(claim, evidence_by_id):
     """Returns the citation with real line numbers, or None if the claim can't be proved."""
     evidence = evidence_by_id.get(claim.evidence_id)
-    if not evidence:
+    if not evidence or is_import_only(claim.quote):
         return None
     position = find_lines(evidence["content"], claim.quote)
     if position is None:

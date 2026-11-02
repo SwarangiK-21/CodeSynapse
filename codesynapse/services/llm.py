@@ -46,9 +46,12 @@ def generate_json(prompt, schema: type[BaseModel], usage: Usage | None = None, t
         response_schema=schema,
     )
     last_code = None
+    exhausted = set()
     for round_number in range(ROUNDS):
         wait = BACKOFF_SECONDS * (round_number + 1)
         for model_name in config.GEMINI_MODELS:
+            if model_name in exhausted:
+                continue
             try:
                 return call_model(model_name, prompt, schema, generation, usage)
             except errors.APIError as e:
@@ -56,13 +59,17 @@ def generate_json(prompt, schema: type[BaseModel], usage: Usage | None = None, t
                 last_code = e.code
                 if e.code not in coach.FALLBACK_CODES:
                     raise LLMError(coach.describe_error(e.code))
-                if e.code == 429:
+                if e.code == 429 and embeddings.is_daily_limit(e):
+                    exhausted.add(model_name)
+                elif e.code == 429:
                     wait = max(wait, embeddings.retry_delay(e))
             except (httpx.TransportError, OSError) as e:
                 print(f"LLM Network Error on {model_name}: {e}")
                 last_code = 504
             except (ValidationError, TypeError) as e:
                 print(f"LLM Reply Error on {model_name}: {e}")
+        if exhausted == set(config.GEMINI_MODELS):
+            raise LLMError("The daily AI quota is used up. Please try again tomorrow.")
         if round_number < ROUNDS - 1:
             time.sleep(wait)
     raise LLMError(coach.describe_error(last_code) if last_code else "The AI sent back an unreadable reply.")
