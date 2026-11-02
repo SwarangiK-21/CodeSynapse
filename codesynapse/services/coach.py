@@ -1,18 +1,10 @@
 import json
-import os
-from dotenv import load_dotenv
 from google import genai
 from google.genai import errors, types
 from pydantic import BaseModel
+from codesynapse import config
 
-# 1. Load keys
-load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
-
-client = genai.Client(api_key=api_key) if api_key else None
-
-# 2. List of models to try, in order. Override with GEMINI_MODELS in .env
-MODEL_FALLBACKS = os.getenv("GEMINI_MODELS", "gemini-3.8-flash,gemini-3.5-flash-lite").split(",")
+client = genai.Client(api_key=config.GEMINI_API_KEY) if config.GEMINI_API_KEY else None
 
 # Errors worth retrying on another model: not found, quota, overloaded
 FALLBACK_CODES = {404, 429, 500, 503}
@@ -43,26 +35,31 @@ def describe_error(code):
         return "AI Quota Exceeded (Error 429). Please wait 1 minute and try again."
     return f"AI Service Error ({code}). Please try again later."
 
-def ask_gemini(user_question, user_stats):
-    if not client:
-        return error_reply("Error: API Key Missing. Check .env file.")
-
-    prompt = f"""
+def build_prompt(user_question, user_stats, history):
+    earlier = "\n".join(f"{m['role']}: {m['content']}" for m in history) or "None."
+    return f"""
     Role: Expert Career Coach.
     User Stats: {str(user_stats) if user_stats else "None yet. The user has not synced any profiles."}
+    Earlier Conversation:
+    {earlier}
     User Question: {user_question}
 
     Give short, specific advice and a list of actions. Only refer to stats listed above.
     Never invent stats for a platform marked as not found or unavailable.
     """
 
+def ask_gemini(user_question, user_stats, history=()):
+    if not client:
+        return error_reply("Error: API Key Missing. Check .env file.")
+
+    prompt = build_prompt(user_question, user_stats, history)
     last_code = None
 
-    # 3. The Self-Healing Loop 🔄
-    for model_name in MODEL_FALLBACKS:
+    # The Self-Healing Loop 🔄
+    for model_name in config.GEMINI_MODELS:
         try:
             response = client.models.generate_content(
-                model=model_name.strip(),
+                model=model_name,
                 contents=prompt,
                 config=generation_config,
             )

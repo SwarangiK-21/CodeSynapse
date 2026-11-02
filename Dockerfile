@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r /code/requirements.txt
 
 # Copy app code
 COPY . .
-RUN mkdir -p /code/data && chmod 777 /code/data
 
-# Pass the key at runtime: docker run --env-file .env -p 7860:7860 codesynapse
+# Pass settings at runtime: docker run --env-file .env -p 7860:7860 codesynapse
+# Set DATABASE_URL to Postgres; the default SQLite file is lost with the container
 CMD ["python", "app.py"]

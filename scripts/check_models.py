@@ -1,10 +1,7 @@
-import os
-from dotenv import load_dotenv
 from google import genai
+from codesynapse import config
 
-load_dotenv()
-
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=config.GEMINI_API_KEY)
 
 print("🔍 Checking available models for you...")
 
