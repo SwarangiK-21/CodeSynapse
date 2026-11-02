@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Response, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from codesynapse.db.models import User
 from codesynapse.db.session import get_db
-from codesynapse.services import chat, jobs, profiles, reports, repos, search, users
+from codesynapse.services import analyses, chat, jobs, profiles, reports, repos, search, users
 
 router = APIRouter(prefix="/api")
 bearer = HTTPBearer(auto_error=False)
@@ -22,6 +22,15 @@ class RepoIn(BaseModel):
 class JobIn(BaseModel):
     text: str = Field(min_length=20, max_length=20000)
 
+class AnalysisIn(BaseModel):
+    job_id: int
+    repo_ids: list[int] = Field(min_length=1, max_length=5)
+
+def analysis_out(a):
+    return {"id": a.id, "job_id": a.job_id, "repo_ids": a.repo_ids, "status": a.status, "error": a.error,
+            "report": a.report, "trace": a.trace, "usage": a.usage, "created_at": a.created_at,
+            "finished_at": a.finished_at}
+
 def job_out(job):
     return {"id": job.id, "title": job.title, "skills": job.skills, "created_at": job.created_at}
 
@@ -30,6 +39,12 @@ def current_user(credentials: HTTPAuthorizationCredentials | None = Depends(bear
     if not user:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid or missing token")
     return user
+
+def owned_analysis(analysis_id: int, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    analysis = analyses.get_analysis(db, user, analysis_id)
+    if not analysis:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Analysis not found")
+    return analysis
 
 def profile_out(profile):
     if not profile:
@@ -85,7 +100,8 @@ def delete_repo(repo_id: int, user: User = Depends(current_user), db: Session = 
 @router.get("/search")
 def search_code(q: str = Query(min_length=2, max_length=200), repo_id: int | None = None,
                 limit: int = Query(10, ge=1, le=50), user: User = Depends(current_user), db: Session = Depends(get_db)):
-    return {"results": search.search_code(db, user, q, repo_id, limit)}
+    results = search.search_code(db, user, q, repo_id, limit)
+    return {"results": [{k: v for k, v in r.items() if k != "content"} for r in results]}
 
 @router.post("/jobs", status_code=status.HTTP_201_CREATED)
 def create_job(body: JobIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
@@ -100,6 +116,33 @@ def read_job(job_id: int, user: User = Depends(current_user), db: Session = Depe
     if not job:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Job description not found")
     return job_out(job)
+
+@router.post("/analyses", status_code=status.HTTP_202_ACCEPTED)
+def start_analysis(body: AnalysisIn, background: BackgroundTasks, user: User = Depends(current_user),
+                   db: Session = Depends(get_db)):
+    try:
+        analysis = analyses.create_analysis(db, user, body.job_id, body.repo_ids)
+    except analyses.AnalysisError as e:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(e))
+    background.add_task(analyses.execute, analysis.id)
+    return analysis_out(analysis)
+
+@router.get("/analyses/{analysis_id}")
+def read_analysis(analysis=Depends(owned_analysis)):
+    return analysis_out(analysis)
+
+@router.post("/analyses/{analysis_id}/approve")
+def approve_analysis(analysis=Depends(owned_analysis), db: Session = Depends(get_db)):
+    try:
+        return analysis_out(analyses.approve(db, analysis))
+    except analyses.AnalysisError as e:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(e))
+
+@router.get("/analyses/{analysis_id}/markdown")
+def analysis_markdown(analysis=Depends(owned_analysis)):
+    if analysis.status not in ("draft", "approved"):
+        raise HTTPException(status.HTTP_409_CONFLICT, "This analysis has no report yet")
+    return Response(analyses.to_markdown(analysis), media_type="text/markdown")
 
 @router.get("/report")
 def download_report(user: User = Depends(current_user), db: Session = Depends(get_db)):

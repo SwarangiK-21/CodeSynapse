@@ -2,7 +2,7 @@ from types import SimpleNamespace
 import json
 import pytest
 from google.genai import errors
-from codesynapse.services import coach, jobs
+from codesynapse.services import coach, jobs, llm
 
 TEXT = """Backend Engineer. You must know Python and PostgreSQL.
 Docker experience is a bonus."""
@@ -14,6 +14,7 @@ def skill(name, quote, importance="required"):
     return {"name": name, "category": "tool", "importance": importance, "quote": quote}
 
 def use_ai(monkeypatch, behaviour):
+    monkeypatch.setattr(llm, "BACKOFF_SECONDS", 0)
     def generate_content(model, contents, config):
         result = behaviour(model)
         if isinstance(result, Exception):

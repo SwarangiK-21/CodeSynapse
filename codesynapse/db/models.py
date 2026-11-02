@@ -73,3 +73,19 @@ class JobDescription(Base):
     raw_text: Mapped[str] = mapped_column(Text)
     skills: Mapped[list] = mapped_column(JSON, default=list)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+class Analysis(Base):
+    __tablename__ = "analyses"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    job_id: Mapped[int] = mapped_column(ForeignKey("job_descriptions.id", ondelete="CASCADE"))
+    repo_ids: Mapped[list] = mapped_column(JSON)
+    # running -> draft -> approved, or failed
+    status: Mapped[str] = mapped_column(String(10), default="running")
+    error: Mapped[str] = mapped_column(Text, default="")
+    report: Mapped[dict] = mapped_column(JSON, default=dict)
+    trace: Mapped[list] = mapped_column(JSON, default=list)
+    usage: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

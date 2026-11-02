@@ -38,7 +38,7 @@ def symbols(chunks):
     return {c.symbol: c for c in chunks}
 
 def test_python_splits_by_definition():
-    found = symbols(chunker.chunk_file("app.py", PYTHON))
+    found = symbols(c for c in chunker.chunk_file("app.py", PYTHON) if c.kind != "module")
     assert set(found) == {"top_level", "decorated", "Store.save", "Store.load", "Empty", "fetch"}
     assert found["Store.save"].kind == "function"
     assert found["Empty"].kind == "class"
@@ -82,6 +82,26 @@ def test_blank_file_has_no_chunks():
 def test_broken_code_does_not_crash():
     assert chunker.chunk_file("bad.py", "def (((\n  nonsense") is not None
 
+def test_code_outside_definitions_is_kept():
+    source = """from fastapi import FastAPI
+
+app = FastAPI()
+
+def health():
+    return 1
+
+router = 2
+"""
+    modules = [c for c in chunker.chunk_file("main.py", source) if c.kind == "module"]
+    assert "app = FastAPI()" in modules[0].content and modules[0].start_line == 1
+    assert modules[1].content.strip() == "router = 2"
+    assert modules[1].content.split("\n").index("router = 2") + modules[1].start_line == 8
+
+def test_config_files_are_indexed():
+    for path, language in [(".github/workflows/ci.yml", "yaml"), ("Dockerfile", "docker"), ("k8s/app.yaml", "yaml")]:
+        assert chunker.is_supported(path)
+        assert chunker.chunk_file(path, "name: x")[0].language == language
+
 def test_supported_files():
     assert chunker.is_supported("src/a.py") and chunker.is_supported("A.TSX")
-    assert not chunker.is_supported("logo.png") and not chunker.is_supported("Makefile")
+    assert not chunker.is_supported("logo.png") and not chunker.is_supported("LICENSE")

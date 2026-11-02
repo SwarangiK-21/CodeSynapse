@@ -4,10 +4,14 @@ from google.genai import errors, types
 from pydantic import BaseModel
 from codesynapse import config
 
-client = genai.Client(api_key=config.GEMINI_API_KEY) if config.GEMINI_API_KEY else None
+REQUEST_TIMEOUT_MS = 60000
 
-# Errors worth retrying on another model: not found, quota, overloaded
-FALLBACK_CODES = {404, 429, 500, 503}
+client = None
+if config.GEMINI_API_KEY:
+    client = genai.Client(api_key=config.GEMINI_API_KEY, http_options=types.HttpOptions(timeout=REQUEST_TIMEOUT_MS))
+
+# Errors worth retrying on another model: not found, quota, overloaded, timed out
+FALLBACK_CODES = {404, 429, 500, 503, 504}
 
 class Action(BaseModel):
     step: str

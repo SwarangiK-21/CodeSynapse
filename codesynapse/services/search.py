@@ -79,7 +79,7 @@ def search_code(db: Session, user: User, query, repo_id=None, limit=10):
         results.append({
             "repo": repo_names[chunk_id], "path": c.path, "symbol": c.symbol, "kind": c.kind,
             "language": c.language, "start_line": c.start_line, "end_line": c.end_line,
-            "score": round(score, 5), "snippet": c.content[:SNIPPET_CHARS],
+            "score": round(score, 5), "snippet": c.content[:SNIPPET_CHARS], "content": c.content,
             "matched_by": [name for name, ranking in (("keyword", keyword), ("vector", vector)) if chunk_id in ranking],
         })
     return results

@@ -1,5 +1,6 @@
 import re
 import time
+import httpx
 from google.genai import errors, types
 from codesynapse import config
 from codesynapse.db.models import EMBEDDING_DIM
@@ -28,6 +29,9 @@ def embed_batch(batch, embed_config, retries):
                 print(f"Embedding Error: {e.code} {e.message}")
                 return None
             time.sleep(retry_delay(e))
+        except (httpx.TransportError, OSError) as e:
+            print(f"Embedding Network Error: {e}")
+            return None
 
 def embed_texts(texts, task_type, retries=0):
     """Returns one vector per text, with None for any that failed, or None without a key.

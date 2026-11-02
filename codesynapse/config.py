@@ -7,7 +7,8 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///codesynapse_local.db")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODELS = [m.strip() for m in os.getenv("GEMINI_MODELS", "gemini-3.8-flash,gemini-3.5-flash-lite").split(",")]
+DEFAULT_MODELS = "gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite"
+GEMINI_MODELS = [m.strip() for m in os.getenv("GEMINI_MODELS", DEFAULT_MODELS).split(",")]
 
 GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-2")
 

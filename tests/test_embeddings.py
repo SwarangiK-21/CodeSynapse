@@ -67,6 +67,12 @@ def test_finished_batches_are_kept_when_quota_runs_out(monkeypatch):
     vectors = embeddings.embed_documents(["x"] * 60)
     assert vectors[49] == [0.1] and vectors[50] is None and len(vectors) == 60
 
+def test_dropped_connection_falls_back_to_keywords(monkeypatch):
+    def embed_content(model, contents, config):
+        raise ConnectionResetError("reset")
+    use_ai(monkeypatch, embed_content)
+    assert embeddings.embed_query("a") is None
+
 def test_live_search_does_not_wait(monkeypatch):
     use_ai(monkeypatch, lambda model, contents, config: (_ for _ in ()).throw(rate_limit()))
     monkeypatch.setattr(embeddings.time, "sleep", lambda seconds: pytest.fail("search must not wait"))

@@ -5,7 +5,10 @@ import pandas as pd
 import plotly.express as px
 from codesynapse import config
 from codesynapse.db.session import SessionLocal
-from codesynapse.services import chat, profiles, reports, users
+from codesynapse.services import analyses, chat, jobs, profiles, reports, repos, users
+
+DRAFT_NOTE = "**DRAFT:** review this report, then approve it.\n\n"
+APPROVED_NOTE = "**APPROVED**\n\n"
 
 # --- HELPER FUNCTIONS ---
 
@@ -86,6 +89,39 @@ def chat_logic(message, history, token):
     with SessionLocal() as db:
         return chat.send_message(db, require_user(db, token), message)
 
+def run_agent_logic(token, repo, job_text):
+    """Indexes the repository, reads the job description and runs the agent, reporting each stage."""
+    if not repo.strip() or len(job_text.strip()) < 20:
+        raise gr.Error("Enter a repository and paste a job description.")
+    with SessionLocal() as db:
+        user = require_user(db, token)
+        try:
+            yield "Indexing repository. Large repositories can take a few minutes...", None
+            indexed = repos.index_repo(db, user, repo)
+            yield "Reading the job description...", None
+            job = jobs.create_job(db, user, job_text)
+            yield "Analysing your code. This usually takes a minute or two...", None
+            analysis = analyses.create_analysis(db, user, job.id, [indexed.id])
+        except (repos.RepoError, jobs.JobError, analyses.AnalysisError) as e:
+            raise gr.Error(str(e))
+
+        analyses.execute(analysis.id)
+        db.refresh(analysis)
+        if analysis.status == "failed":
+            raise gr.Error(analysis.error)
+        yield DRAFT_NOTE + analyses.to_markdown(analysis), analysis.id
+
+def approve_logic(token, analysis_id):
+    with SessionLocal() as db:
+        analysis = analyses.get_analysis(db, require_user(db, token), analysis_id)
+        if not analysis:
+            raise gr.Error("Run an analysis first.")
+        try:
+            analyses.approve(db, analysis)
+        except analyses.AnalysisError as e:
+            raise gr.Error(str(e))
+        return APPROVED_NOTE + analyses.to_markdown(analysis)
+
 # --- CUSTOM THEME (Cyberpunk/Techie) ---
 theme = gr.themes.Soft(
     primary_hue="cyan",
@@ -136,7 +172,17 @@ with gr.Blocks(title="CodeSynapse") as demo:
                 pdf_btn = gr.Button("📄 DOWNLOAD REPORT")
                 pdf_out = gr.File(label="Download Report")
 
-        # TAB 2: AI COACH
+        # TAB 2: SKILL GAP AGENT
+        with gr.TabItem("SKILL GAP AGENT"):
+            gr.Markdown("Compare a public repository with a job description. Every claim links to real code.")
+            repo_in = gr.Textbox(label="GitHub Repository", placeholder="owner/repo")
+            job_in = gr.Textbox(label="Job Description", lines=8, placeholder="Paste the job description...")
+            run_btn = gr.Button("🔍 RUN ANALYSIS", variant="primary")
+            agent_output = gr.Markdown()
+            approve_btn = gr.Button("✅ APPROVE REPORT")
+            analysis_id = gr.State(None)
+
+        # TAB 3: AI COACH
         with gr.TabItem("AI NEXUS"):
             chatbot = gr.Chatbot(label="AI Nexus Coach")
             gr.ChatInterface(
@@ -151,3 +197,5 @@ with gr.Blocks(title="CodeSynapse") as demo:
     demo.load(load_session, [user_token], [user_token, gh_in, lc_in, stats_display, score_plot, chatbot])
     sync_btn.click(fetch_data_logic, [user_token, gh_in, lc_in], [stats_display, score_plot])
     pdf_btn.click(generate_pdf_logic, [user_token], [pdf_out])
+    run_btn.click(run_agent_logic, [user_token, repo_in, job_in], [agent_output, analysis_id])
+    approve_btn.click(approve_logic, [user_token, analysis_id], [agent_output])

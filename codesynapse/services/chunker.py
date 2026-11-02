@@ -19,7 +19,11 @@ LANGUAGES = {
 OTHER_LANGUAGES = {
     ".java": "java", ".go": "go", ".rs": "rust", ".c": "c", ".h": "c", ".cpp": "cpp", ".cs": "csharp",
     ".rb": "ruby", ".php": "php", ".kt": "kotlin", ".swift": "swift", ".sql": "sql", ".md": "markdown",
+    ".yml": "yaml", ".yaml": "yaml", ".toml": "toml", ".tf": "terraform", ".sh": "shell",
 }
+
+# Config files show skills too, such as CI, containers and infrastructure
+NAMED_FILES = {"dockerfile": "docker", "makefile": "make"}
 
 FUNCTION_NODES = {"function_definition", "function_declaration", "generator_function_declaration",
                   "method_definition"}
@@ -38,7 +42,10 @@ class Chunk:
     content: str
 
 def is_supported(path):
-    return extension(path) in LANGUAGES or extension(path) in OTHER_LANGUAGES
+    return extension(path) in LANGUAGES or extension(path) in OTHER_LANGUAGES or file_name(path) in NAMED_FILES
+
+def file_name(path):
+    return path.rsplit("/", 1)[-1].lower()
 
 def extension(path):
     name = path.rsplit("/", 1)[-1]
@@ -102,16 +109,29 @@ def walk(node, path, language, lines, chunks, prefix=""):
         elif inner.type in VALUE_NODES and arrow_name(inner):
             add(chunks, path, language, lines, outer, "function", prefix + arrow_name(inner))
 
+def module_chunks(path, language, lines, chunks):
+    """Keeps code outside any definition: imports, app setup and configuration."""
+    covered = {i for c in chunks for i in range(c.start_line - 1, c.end_line)}
+    found = []
+    start = None
+    for i in range(len(lines) + 1):
+        if i < len(lines) and i not in covered:
+            start = i if start is None else start
+        elif start is not None:
+            found.extend(windows(path, language, lines[start:i], start, "module"))
+            start = None
+    return found
+
 def chunk_file(path, text):
     """Splits a file by function and class where a grammar exists, otherwise into line windows."""
     lines = text.split("\n")
     ext = extension(path)
     if ext not in LANGUAGES:
-        return windows(path, OTHER_LANGUAGES.get(ext, "text"), lines)
+        return windows(path, OTHER_LANGUAGES.get(ext) or NAMED_FILES.get(file_name(path), "text"), lines)
 
     language, grammar = LANGUAGES[ext]
     root = Parser(grammar).parse(text.encode("utf-8")).root_node
     chunks = []
     walk(root, path, language, lines, chunks)
     # Scripts with no definitions, or code the grammar couldn't read
-    return chunks or windows(path, language, lines)
+    return chunks + module_chunks(path, language, lines, chunks) if chunks else windows(path, language, lines)

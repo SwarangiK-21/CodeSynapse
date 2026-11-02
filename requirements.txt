@@ -18,3 +18,4 @@ tree-sitter-typescript==0.23.2
 rank-bm25==0.2.2
 pgvector==0.5.1
 numpy==2.5.4
+langgraph==1.2.19
