@@ -46,6 +46,13 @@ def execute(analysis_id):
 def get_analysis(db: Session, user: User, analysis_id):
     return db.scalar(select(Analysis).where(Analysis.id == analysis_id, Analysis.user_id == user.id))
 
+def latest_report(db: Session, user: User):
+    """Returns this user's newest analysis that produced a report."""
+    return db.scalar(
+        select(Analysis).where(Analysis.user_id == user.id, Analysis.status.in_(("draft", "approved")))
+        .order_by(Analysis.id.desc()).limit(1)
+    )
+
 def approve(db: Session, analysis):
     """A person signs off on the draft before it counts as a final report."""
     if analysis.status != "draft":

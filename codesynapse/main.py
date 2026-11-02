@@ -1,7 +1,8 @@
 import gradio as gr
 from fastapi import FastAPI
 from codesynapse.api.routes import router
-from codesynapse.ui.app import custom_css, demo, theme
+from codesynapse.ui.app import demo
+from codesynapse.ui.style import custom_css, theme
 
 app = FastAPI(title="CodeSynapse")
 app.include_router(router)

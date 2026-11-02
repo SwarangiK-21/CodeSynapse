@@ -13,7 +13,7 @@ def test_first_visit_creates_a_user():
     with SessionLocal() as db:
         assert users.get_user_by_token(db, token)
     assert (github, leetcode, chart, history) == ("", "", None, [])
-    assert stats_text == "Waiting for Uplink..."
+    assert "Sync your profiles" in stats_text
 
 def test_returning_visit_restores_data(fake_stats, fake_ai):
     token = new_token()
@@ -22,7 +22,7 @@ def test_returning_visit_restores_data(fake_stats, fake_ai):
 
     same_token, github, _, stats_text, chart, history = ui.load_session(token)
     assert same_token == token and github == "octocat"
-    assert "GITHUB" in stats_text and chart is not None
+    assert "GitHub" in stats_text and chart is not None
     assert history[0] == {"role": "user", "content": "hello"}
 
 def test_unknown_token_cannot_read_data(fake_stats):
