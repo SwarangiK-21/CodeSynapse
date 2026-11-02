@@ -18,6 +18,7 @@ CodeSynapse is an AI-powered career dashboard for Computer Science students. It 
 - **Competency scores:** turns each platform's stats into a 0–100 score shown in an interactive Plotly chart.
 - **AI Nexus Coach:** a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies and automatic fallback to a second model.
 - **Private per-user data:** each browser gets its own user, so profiles and chats stay separate and return after a reload.
+- **Skill gap agent:** compares a repository with a job description using a LangGraph workflow. Every claim is checked in plain code against the real source and links to the exact lines, and a person approves the report before it is final.
 - **Code search:** indexes public repositories by function and class using Tree-sitter, then finds code with hybrid keyword and vector search. Repository code is read from memory and never run.
 - **Job description parsing:** extracts required skills, and drops any skill the AI can't back with a quote from the text.
 - **PDF career report:** a one-click summary of your synced stats.
@@ -31,7 +32,8 @@ CodeSynapse is an AI-powered career dashboard for Computer Science students. It 
 |---|---|
 | Backend | Python 3.14, FastAPI, Uvicorn |
 | Frontend | Gradio, Plotly Express, Pandas |
-| AI | Google Gemini via `google-genai`, Pydantic for structured output |
+| AI | Google Gemini via `google-genai`, LangGraph, Pydantic for structured output |
+| Retrieval | Tree-sitter, BM25, pgvector, reciprocal rank fusion |
 | Data fetching | HTTPX (GitHub API, LeetCode GraphQL) |
 | Database | SQLAlchemy, Alembic, PostgreSQL (SQLite for quick local runs) |
 | PDF | ReportLab |
@@ -113,6 +115,10 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 | GET | `/api/search?q=` | Search indexed code by keyword and meaning |
 | POST | `/api/jobs` | Extract skills from a job description |
 | GET | `/api/jobs/{id}` | Read a parsed job description |
+| POST | `/api/analyses` | Start a skill gap analysis |
+| GET | `/api/analyses/{id}` | Read status, report, step trace and token usage |
+| POST | `/api/analyses/{id}/approve` | Approve a draft report |
+| GET | `/api/analyses/{id}/markdown` | Export a report as Markdown |
 | GET | `/health` | Health check |
 
 ---
@@ -125,7 +131,7 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 - [x] REST API, automated tests and CI
 - [x] Index public repositories and search code with hybrid retrieval
 - [x] Extract skills from job descriptions, each backed by a quote
-- [ ] Multi-step agent with cited, verified evidence
+- [x] Multi-step agent with cited, verified evidence
 - [ ] Evaluation suite with measured accuracy
 - [ ] GitHub login, rate limiting and updated live deployment
 
