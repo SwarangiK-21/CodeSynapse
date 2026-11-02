@@ -3,6 +3,7 @@ import tarfile
 import pytest
 import respx
 from codesynapse.db.models import EMBEDDING_DIM
+from codesynapse.db.session import SessionLocal
 from codesynapse.services import repos
 
 REPO = "octocat/demo"
@@ -143,6 +144,24 @@ def test_delete_repo(client, auth, github):
     repo_id = client.post("/api/repos", json={"repo": REPO}, headers=headers).json()["id"]
     assert client.delete(f"/api/repos/{repo_id}", headers=headers).status_code == 204
     assert client.get("/api/search", params={"q": "retry"}, headers=headers).json()["results"] == []
+
+def test_interrupted_indexing_resumes_only_missing_chunks(client, auth, github, monkeypatch):
+    def half_done(texts, task_type, retries=0):
+        return [[0.1] * EMBEDDING_DIM] + [None] * (len(texts) - 1)
+    monkeypatch.setattr("codesynapse.services.embeddings.embed_texts", half_done)
+    headers = auth()
+    repo_id = client.post("/api/repos", json={"repo": REPO}, headers=headers).json()["id"]
+
+    seen = []
+    def finish(texts, task_type, retries=0):
+        seen.extend(texts)
+        return [[0.2] * EMBEDDING_DIM for _ in texts]
+    monkeypatch.setattr("codesynapse.services.embeddings.embed_texts", finish)
+    with SessionLocal() as db:
+        assert repos.embed_missing(db, repo_id) == (1, 0)
+        assert repos.embed_missing(db, repo_id) == (0, 0)
+    assert len(seen) == 1
+    assert client.get("/api/repos", headers=headers).json()["repos"][0]["embedded_chunks"] == 2
 
 def test_fusion_rewards_agreement():
     from codesynapse.services.search import fuse

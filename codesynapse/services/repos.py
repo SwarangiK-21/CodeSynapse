@@ -116,6 +116,18 @@ def index_repo(db: Session, user: User, value, sha=None):
     db.commit()
     return repo
 
+def embed_missing(db: Session, repo_id):
+    """Adds vectors only to chunks without one, so an interrupted index doesn't start over."""
+    chunks = list(db.scalars(select(CodeChunk).where(CodeChunk.repo_id == repo_id, CodeChunk.embedding.is_(None))))
+    vectors = embeddings.embed_documents([embedding_text(c) for c in chunks]) if chunks else None
+    added = 0
+    for chunk, vector in zip(chunks, vectors or []):
+        if vector is not None:
+            chunk.embedding = vector
+            added += 1
+    db.commit()
+    return added, len(chunks) - added
+
 def list_repos(db: Session, user: User):
     rows = db.execute(
         select(Repo, func.count(CodeChunk.id), func.count(CodeChunk.embedding))

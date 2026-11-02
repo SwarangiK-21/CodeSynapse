@@ -4,6 +4,7 @@
     python -m evals.run baseline
     python -m evals.run injection
     python -m evals.run report
+    python -m evals.run status
 """
 import json
 import os
@@ -11,6 +12,7 @@ import sys
 import time
 from pathlib import Path
 
+EVAL_MODEL = "gemini-3.5-flash-lite"
 ROOT = Path(__file__).parent
 CACHE = ROOT / ".cache"
 RESULTS = ROOT / "results"
@@ -18,6 +20,8 @@ CACHE.mkdir(exist_ok=True)
 RESULTS.mkdir(exist_ok=True)
 # The index is slow to build, so it is kept apart from the app's data and reused
 os.environ["DATABASE_URL"] = f"sqlite:///{(CACHE / 'eval.db').as_posix()}"
+# One model throughout, so every score is comparable
+os.environ["GEMINI_MODELS"] = EVAL_MODEL
 
 from sqlalchemy import select
 from codesynapse.db.migrate import upgrade
@@ -46,14 +50,16 @@ def eval_user(db):
     return user or users.create_user(db)[0]
 
 def indexed_repo(db, user, case):
-    """Reuses the index when its vectors are complete. Rate limits can leave some unfinished."""
+    """Returns the repository id once all its vectors exist, or None if today's quota ran out."""
     existing = next((r for r in repos.list_repos(db, user) if r["full_name"] == case["repo"]), None)
-    if existing and existing["commit_sha"] == case["commit"] and existing["embedded_chunks"] == existing["chunks"]:
-        return existing["id"]
-    started = time.time()
-    repo = repos.index_repo(db, user, case["repo"], case["commit"])
-    print(f"indexed {case['repo']} in {round(time.time() - started)}s", flush=True)
-    return repo.id
+    if existing and existing["commit_sha"] == case["commit"]:
+        repo_id = existing["id"]
+    else:
+        repo_id = repos.index_repo(db, user, case["repo"], case["commit"]).id
+
+    added, missing = repos.embed_missing(db, repo_id)
+    print(f"{case['repo']}: {added} vectors added, {missing} still missing", flush=True)
+    return None if missing else repo_id
 
 def job_for(case):
     skills = [{"name": s["name"], "category": "tool", "importance": "required", "quote": s["name"]} for s in case["skills"]]
@@ -84,6 +90,9 @@ def run_system(system):
             if case["repo"] in done:
                 continue
             repo_id = indexed_repo(db, user, case)
+            if repo_id is None:
+                print("Embedding quota used up for today. Run again tomorrow to resume.")
+                return 1
             started = time.time()
             try:
                 row = runner(db, user, case, repo_id)
@@ -139,6 +148,18 @@ def report():
     print(json.dumps(summary, indent=2))
     return 0
 
+def status():
+    upgrade()
+    with SessionLocal() as db:
+        indexed = {r["full_name"]: r for r in repos.list_repos(db, eval_user(db))}
+    for case in check_labels.load_cases():
+        name = case["repo"]
+        info = indexed.get(name)
+        vectors = f"{info['embedded_chunks']}/{info['chunks']} vectors" if info else "not indexed"
+        print(f"{name}: {vectors}, agent {'done' if name in finished('agent') else 'to do'}, "
+              f"baseline {'done' if name in finished('baseline') else 'to do'}")
+    return 0
+
 def run_injection():
     result_file("injection").unlink(missing_ok=True)
     for row in injection.run():
@@ -153,4 +174,6 @@ if __name__ == "__main__":
         sys.exit(run_injection())
     if command == "report":
         sys.exit(report())
+    if command == "status":
+        sys.exit(status())
     sys.exit(__doc__)
