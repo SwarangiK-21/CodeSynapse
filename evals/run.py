@@ -117,19 +117,16 @@ def rows_for(system):
 def system_report(system):
     rows = rows_for(system)
     done = finished(system)
-    files = {}
-    citations = []
-    for case in check_labels.load_cases():
-        if case["repo"] in done and done[case["repo"]]["citations"]:
-            repo_files = check_labels.load_files(case["repo"], case["commit"])
-            for citation in done[case["repo"]]["citations"]:
-                files[citation["path"]] = repo_files.get(citation["path"])
-                citations.append(citation)
+    # Checked one repository at a time, since different repositories share paths like tests/conftest.py
+    per_repo = [
+        (done[case["repo"]]["citations"], check_labels.load_files(case["repo"], case["commit"]))
+        for case in check_labels.load_cases() if case["repo"] in done and done[case["repo"]]["citations"]
+    ]
     usage = [r["usage"] for r in done.values()]
     return {
         "repos": len(done),
         "presence": metrics.score(rows),
-        "citations": metrics.citation_score(citations, {k: v for k, v in files.items() if v is not None}),
+        "citations": metrics.combined_citation_score(per_repo),
         "rejected_claims": sum(r["rejected_claims"] for r in done.values()),
         "retried_repos": sum(1 for r in done.values() if r["retried"] > 0),
         "llm_calls": sum(u["llm_calls"] for u in usage),

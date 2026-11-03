@@ -36,3 +36,9 @@ def citation_score(citations, files):
     real = sum(1 for c in citations if citation_is_real(c, files))
     return {"citations": len(citations), "real": real,
             "accuracy": round(real / len(citations), 3) if citations else None}
+
+def combined_citation_score(per_repo):
+    """Scores (citations, files) pairs, keeping each repository's files separate."""
+    total = sum(len(citations) for citations, _ in per_repo)
+    real = sum(citation_score(citations, files)["real"] for citations, files in per_repo)
+    return {"citations": total, "real": real, "accuracy": round(real / total, 3) if total else None}

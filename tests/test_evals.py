@@ -39,6 +39,11 @@ def test_citation_score():
     assert metrics.citation_score([citation(), citation(quote="fake")], {"a.py": FILE})["accuracy"] == 0.5
     assert metrics.citation_score([], {})["accuracy"] is None
 
+def test_repositories_with_the_same_path_are_checked_separately():
+    repo_a = ([citation()], {"a.py": FILE})
+    repo_b = ([citation(quote="other code", start_line=1, end_line=1)], {"a.py": "other code"})
+    assert metrics.combined_citation_score([repo_a, repo_b]) == {"citations": 2, "real": 2, "accuracy": 1.0}
+
 def test_label_check_catches_a_wrong_present_label():
     files = {"a.py": "print(1)"}
     assert "matches nothing" in check_labels.label_problem({"present": True, "proof": "import redis"}, files)
