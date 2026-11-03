@@ -2,6 +2,8 @@
 
     python -m evals.run agent
     python -m evals.run baseline
+    python -m evals.run agent-hard
+    python -m evals.run baseline-hard
     python -m evals.run injection
     python -m evals.run report
     python -m evals.run status
@@ -30,6 +32,11 @@ from codesynapse.db.session import SessionLocal
 from codesynapse.services import llm, repos, users
 from codesynapse.agents import gap_analysis
 from evals import baseline, check_labels, injection, metrics
+
+RUNNERS = ("agent", "baseline", "agent-hard", "baseline-hard")
+
+def suite_of(system):
+    return "hard" if system.endswith("-hard") else "core"
 
 def result_file(system):
     return RESULTS / f"{system}.jsonl"
@@ -81,12 +88,12 @@ def run_baseline(db, user, case, repo_id):
             "usage": {"llm_calls": usage.calls, "prompt_tokens": usage.prompt_tokens, "output_tokens": usage.output_tokens}}
 
 def run_system(system):
-    runner = {"agent": run_agent, "baseline": run_baseline}[system]
+    runner = {"agent": run_agent, "baseline": run_baseline}[system.removesuffix("-hard")]
     upgrade()
     done = finished(system)
     with SessionLocal() as db:
         user = eval_user(db)
-        for case in check_labels.load_cases():
+        for case in check_labels.load_cases(suite_of(system)):
             if case["repo"] in done:
                 continue
             repo_id = indexed_repo(db, user, case)
@@ -107,10 +114,11 @@ def run_system(system):
 def rows_for(system):
     done = finished(system)
     rows = []
-    for case in check_labels.load_cases():
+    for case in check_labels.load_cases(suite_of(system)):
         if case["repo"] in done:
             for skill in case["skills"]:
                 rows.append({"repo": case["repo"], "skill": skill["name"], "expected": skill["present"],
+                             "type": skill.get("type", "plain"),
                              "level": done[case["repo"]]["levels"].get(skill["name"], "none")})
     return rows
 
@@ -120,23 +128,25 @@ def system_report(system):
     # Checked one repository at a time, since different repositories share paths like tests/conftest.py
     per_repo = [
         (done[case["repo"]]["citations"], check_labels.load_files(case["repo"], case["commit"]))
-        for case in check_labels.load_cases() if case["repo"] in done and done[case["repo"]]["citations"]
+        for case in check_labels.load_cases(suite_of(system))
+        if case["repo"] in done and done[case["repo"]]["citations"]
     ]
     usage = [r["usage"] for r in done.values()]
     return {
         "repos": len(done),
         "presence": metrics.score(rows),
+        "by_type": {t: metrics.score([r for r in rows if r["type"] == t]) for t in sorted({r["type"] for r in rows})},
         "citations": metrics.combined_citation_score(per_repo),
         "rejected_claims": sum(r["rejected_claims"] for r in done.values()),
         "retried_repos": sum(1 for r in done.values() if r["retried"] > 0),
         "llm_calls": sum(u["llm_calls"] for u in usage),
         "tokens": sum(u["prompt_tokens"] + u["output_tokens"] for u in usage),
         "seconds_per_repo": round(sum(r["seconds"] for r in done.values()) / len(done)) if done else 0,
-        "errors": [{k: r[k] for k in ("repo", "skill", "expected", "level")} for r in metrics.errors(rows)],
+        "errors": [{k: r[k] for k in ("repo", "skill", "type", "expected", "level")} for r in metrics.errors(rows)],
     }
 
 def report():
-    summary = {system: system_report(system) for system in ("agent", "baseline")}
+    summary = {system: system_report(system) for system in RUNNERS}
     path = result_file("injection")
     if path.exists():
         attacks = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
@@ -149,12 +159,15 @@ def status():
     upgrade()
     with SessionLocal() as db:
         indexed = {r["full_name"]: r for r in repos.list_repos(db, eval_user(db))}
-    for case in check_labels.load_cases():
-        name = case["repo"]
-        info = indexed.get(name)
-        vectors = f"{info['embedded_chunks']}/{info['chunks']} vectors" if info else "not indexed"
-        print(f"{name}: {vectors}, agent {'done' if name in finished('agent') else 'to do'}, "
-              f"baseline {'done' if name in finished('baseline') else 'to do'}")
+    for suite in check_labels.SUITES:
+        print(f"-- {suite}")
+        suffix = "" if suite == "core" else f"-{suite}"
+        for case in check_labels.load_cases(suite):
+            name = case["repo"]
+            info = indexed.get(name)
+            vectors = f"{info['embedded_chunks']}/{info['chunks']} vectors" if info else "not indexed"
+            states = [f"{s} {'done' if name in finished(s + suffix) else 'to do'}" for s in ("agent", "baseline")]
+            print(f"{name}: {vectors}, {', '.join(states)}")
     return 0
 
 def run_injection():
@@ -165,7 +178,7 @@ def run_injection():
 
 if __name__ == "__main__":
     command = sys.argv[1] if len(sys.argv) > 1 else ""
-    if command in ("agent", "baseline"):
+    if command in RUNNERS:
         sys.exit(run_system(command))
     if command == "injection":
         sys.exit(run_injection())

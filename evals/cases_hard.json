@@ -1,0 +1,34 @@
+[
+  {"repo": "pallets/itsdangerous", "commit": "672971d66a2ef9f85151e53283113f33d642dabd", "skills": [
+    {"name": "Tamper-proof data serialization", "type": "paraphrase", "present": true, "proof": "class \\w*Serializer"},
+    {"name": "Expiring tokens", "type": "paraphrase", "present": true, "proof": "max_age"},
+    {"name": "Password hashing", "type": "neighbour", "present": false, "proof": "(?i)bcrypt|argon2|pbkdf2|scrypt"},
+    {"name": "JWT authentication", "type": "neighbour", "present": false, "proof": "(?i)\\bjwt\\b|jsonwebtoken"}
+  ]},
+  {"repo": "pallets/markupsafe", "commit": "4e111271b1494995708a9e878a10829b5e10c7ba", "skills": [
+    {"name": "Preventing cross-site scripting", "type": "paraphrase", "present": true, "proof": "&lt;"},
+    {"name": "Performance optimisation in native code", "type": "paraphrase", "present": true, "proof": "PyObject"},
+    {"name": "HTTP cookies", "type": "mentioned-only", "present": false, "proof": "(?i)\\bcookie", "mention": "(?i)\\bcookie"},
+    {"name": "Template rendering engines", "type": "neighbour", "present": false, "proof": "(?i)jinja2?\\.|Environment\\(|render_template"}
+  ]},
+  {"repo": "expressjs/cors", "commit": "5317ebe670db2aaebc1d496eb5d33493deefb3ed", "skills": [
+    {"name": "Handling browser preflight requests", "type": "paraphrase", "present": true, "proof": "OPTIONS"},
+    {"name": "Allow-listing web origins", "type": "paraphrase", "present": true, "proof": "isOriginAllowed"},
+    {"name": "CSRF protection", "type": "neighbour", "present": false, "proof": "(?i)csrf"},
+    {"name": "Rate limiting", "type": "neighbour", "present": false, "proof": "(?i)rate.?limit"}
+  ]},
+  {"repo": "kennethreitz/records", "commit": "ea4273695cee6da42edf1cb294d1f2a4505470fc", "skills": [
+    {"name": "Running raw SQL queries", "type": "paraphrase", "present": true, "proof": "def query\\("},
+    {"name": "Exporting data to CSV and JSON", "type": "paraphrase", "present": true, "proof": "def export\\("},
+    {"name": "MySQL", "type": "mentioned-only", "present": false, "proof": "(?i)mysql", "mention": "(?i)mysql"},
+    {"name": "ORM model classes", "type": "neighbour", "present": false, "proof": "declarative_base|DeclarativeBase|relationship\\("}
+  ]},
+  {"repo": "encode/databases", "commit": "ae3fb16f40201d9ed0ed31bea31a289127169568", "skills": [
+    {"name": "MySQL", "type": "contrast", "present": true, "proof": "aiomysql|asyncmy"},
+    {"name": "Asynchronous database drivers", "type": "paraphrase", "present": true, "proof": "asyncpg"},
+    {"name": "Connection pooling", "type": "paraphrase", "present": true, "proof": "(?i)create_pool|pool"},
+    {"name": "FastAPI", "type": "mentioned-only", "present": false, "proof": "(?i)fastapi", "mention": "(?i)fastapi"},
+    {"name": "Docker", "type": "mentioned-only", "present": false, "proof": "(?i)docker", "mention": "(?i)docker"},
+    {"name": "MongoDB", "type": "neighbour", "present": false, "proof": "(?i)mongo"}
+  ]}
+]

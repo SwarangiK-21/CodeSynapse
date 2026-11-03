@@ -5,10 +5,14 @@ import sys
 from pathlib import Path
 from codesynapse.services import repos
 
-CASES = Path(__file__).parent / "cases.json"
+SUITES = {
+    "core": Path(__file__).parent / "cases.json",
+    # Traps: skills described in other words, mentioned but unused, or closely related but absent
+    "hard": Path(__file__).parent / "cases_hard.json",
+}
 
-def load_cases():
-    return json.loads(CASES.read_text(encoding="utf-8"))
+def load_cases(suite="core"):
+    return json.loads(SUITES[suite].read_text(encoding="utf-8"))
 
 def load_files(repo, commit):
     _, archive = repos.download_archive(repo, commit)
@@ -23,18 +27,22 @@ def label_problem(skill, files):
         return "labelled present, but the proof pattern matches nothing"
     if not skill["present"] and hits:
         return f"labelled absent, but found in {hits[:3]}"
+    # A mentioned-only trap must really be mentioned somewhere, or it tests nothing
+    if "mention" in skill and not any(re.search(skill["mention"], text) for text in files.values()):
+        return "a trap whose mention appears nowhere in the repository"
     return None
 
 def main():
     problems = checked = 0
-    for case in load_cases():
-        files = load_files(case["repo"], case["commit"])
-        for skill in case["skills"]:
-            checked += 1
-            problem = label_problem(skill, files)
-            if problem:
-                problems += 1
-                print(f"PROBLEM {case['repo']} / {skill['name']}: {problem}")
+    for suite in SUITES:
+        for case in load_cases(suite):
+            files = load_files(case["repo"], case["commit"])
+            for skill in case["skills"]:
+                checked += 1
+                problem = label_problem(skill, files)
+                if problem:
+                    problems += 1
+                    print(f"PROBLEM {suite} {case['repo']} / {skill['name']}: {problem}")
     print(f"{checked} labels checked, {problems} problems")
     return 1 if problems else 0
 

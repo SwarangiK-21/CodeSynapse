@@ -56,13 +56,29 @@ def test_label_check_ignores_readmes():
     assert check_labels.label_problem({"present": False, "proof": "redis"}, {"README.md": "redis"}) is None
 
 def test_label_file_is_valid_and_balanced():
-    cases = json.loads(Path(check_labels.CASES).read_text(encoding="utf-8"))
+    cases = json.loads(Path(check_labels.SUITES["core"]).read_text(encoding="utf-8"))
     skills = [s for c in cases for s in c["skills"]]
     assert len(skills) >= 40
     assert all(re.compile(s["proof"]) for s in skills)
     assert all(len(c["commit"]) == 40 for c in cases)
     positives = sum(s["present"] for s in skills)
     assert 0.4 < positives / len(skills) < 0.65
+
+def test_trap_mention_must_exist():
+    skill = {"present": False, "proof": "mysql", "mention": "(?i)mysql"}
+    assert "mention appears nowhere" in check_labels.label_problem(skill, {"a.py": "x = 1"})
+    assert check_labels.label_problem(skill, {"README.md": "Works with MySQL"}) is None
+
+def test_hard_suite_is_valid_and_has_each_trap_type():
+    skills = [s for c in check_labels.load_cases("hard") for s in c["skills"]]
+    assert {s["type"] for s in skills} == {"paraphrase", "mentioned-only", "neighbour", "contrast"}
+    assert all(re.compile(s["proof"]) for s in skills)
+    assert all("mention" in s for s in skills if s["type"] == "mentioned-only")
+
+def test_the_same_skill_has_opposite_labels_in_different_repos():
+    labels = {(c["repo"], s["name"]): s["present"] for c in check_labels.load_cases("hard") for s in c["skills"]}
+    assert labels[("encode/databases", "MySQL")] is True
+    assert labels[("kennethreitz/records", "MySQL")] is False
 
 def test_attacks_never_contain_the_real_skill():
     assert all("kubectl" not in injection.BASE for _ in injection.ATTACKS)
