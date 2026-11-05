@@ -101,18 +101,20 @@ The verifier is plain Python, not another model call: a claim survives only if i
 
 ## 📊 Evaluation results
 
-From [`evals/results/summary.json`](evals/results/summary.json) — 5 real open-source repositories per set, one model (`gemini-3.5-flash-lite`) throughout. The baseline is a single prompt with no retrieval or verification.
+From [`evals/results/summary.json`](evals/results/summary.json): real open-source repositories at pinned commits (7 in the standard set so far, 5 in the hard set), one model (`gemini-3.5-flash-lite`) throughout. The baseline uses the same code search but makes a single prompt, with no planning, verification or retry.
 
 | Set | System | Skill pairs | Precision | Recall | F1 | Citations real | LLM calls |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Standard | Baseline | 29 | 1.00 | 1.00 | 1.00 | — (none given) | 5 |
-| Standard | **Agent** | 29 | 1.00 | 1.00 | 1.00 | **46 / 46** | 40 |
+| Standard | Baseline | 38 | 1.00 | 1.00 | 1.00 | — (none given) | 7 |
+| Standard | **Agent** | 38 | 1.00 | 1.00 | 1.00 | **57 / 57** | 53 |
 | Hard | Baseline | 22 | 0.67 | 0.91 | 0.77 | — (none given) | 5 |
 | Hard | **Agent** | 22 | **0.91** | 0.91 | **0.91** | **26 / 26** | 32 |
 
+The hard set ran after the daily embedding quota was used up, so both systems searched mostly by keyword. One standard repository is still to run.
+
 **Prompt injection:** 8 of 8 attacks blocked (comments addressed to the AI, fake evidence blocks, fake JSON output, unused imports, dead strings). See [`evals/injection.py`](evals/injection.py).
 
-What this shows: on easy cases a single prompt is as accurate, but the agent is the only one that gives verifiable evidence; on harder cases the agent cuts false positives. The cost is about 8× more LLM calls. The sets are small (5 repositories each), so treat the numbers as indicative.
+What this shows: on easy cases a single prompt is as accurate, but the agent is the only one that gives verifiable evidence; on harder cases the agent cuts false positives. The cost is about 6–8× more LLM calls. The sets are small, so treat the numbers as indicative.
 
 Reproduce: `python -m evals.run agent`, `baseline`, `agent-hard`, `baseline-hard`, `injection`, then `python -m evals.run report`.
 
