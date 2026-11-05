@@ -1,12 +1,12 @@
 {
   "agent": {
-    "repos": 5,
+    "repos": 7,
     "presence": {
-      "pairs": 29,
-      "tp": 17,
+      "pairs": 38,
+      "tp": 21,
       "fp": 0,
       "fn": 0,
-      "tn": 12,
+      "tn": 17,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
@@ -14,11 +14,11 @@
     },
     "by_type": {
       "plain": {
-        "pairs": 29,
-        "tp": 17,
+        "pairs": 38,
+        "tp": 21,
         "fp": 0,
         "fn": 0,
-        "tn": 12,
+        "tn": 17,
         "precision": 1.0,
         "recall": 1.0,
         "f1": 1.0,
@@ -26,25 +26,25 @@
       }
     },
     "citations": {
-      "citations": 46,
-      "real": 46,
+      "citations": 57,
+      "real": 57,
       "accuracy": 1.0
     },
     "rejected_claims": 6,
     "retried_repos": 1,
-    "llm_calls": 40,
-    "tokens": 94740,
-    "seconds_per_repo": 39,
+    "llm_calls": 53,
+    "tokens": 125544,
+    "seconds_per_repo": 76,
     "errors": []
   },
   "baseline": {
-    "repos": 5,
+    "repos": 7,
     "presence": {
-      "pairs": 29,
-      "tp": 17,
+      "pairs": 38,
+      "tp": 21,
       "fp": 0,
       "fn": 0,
-      "tn": 12,
+      "tn": 17,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
@@ -52,11 +52,11 @@
     },
     "by_type": {
       "plain": {
-        "pairs": 29,
-        "tp": 17,
+        "pairs": 38,
+        "tp": 21,
         "fp": 0,
         "fn": 0,
-        "tn": 12,
+        "tn": 17,
         "precision": 1.0,
         "recall": 1.0,
         "f1": 1.0,
@@ -70,9 +70,9 @@
     },
     "rejected_claims": 0,
     "retried_repos": 0,
-    "llm_calls": 5,
-    "tokens": 29370,
-    "seconds_per_repo": 5,
+    "llm_calls": 7,
+    "tokens": 44433,
+    "seconds_per_repo": 8,
     "errors": []
   },
   "agent-hard": {
