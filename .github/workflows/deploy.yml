@@ -1,0 +1,30 @@
+name: Deploy
+
+# Publishes main to the Hugging Face Space once CI has passed on it
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  space:
+    if: >-
+      vars.HF_SPACE != '' && (github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'))
+    runs-on: ubuntu-latest
+    concurrency: deploy-space
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install huggingface_hub==2.3.0
+      - run: python deploy/push_space.py
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+          GITHUB_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}

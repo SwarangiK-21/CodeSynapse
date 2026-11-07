@@ -19,7 +19,7 @@
 
 <sub>Screenshots from a local run of this repository (4 Nov 2026).</sub>
 
-**Live demo:** [Hugging Face Space](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse). It still runs the older January 2026 version, not the code in this repository.
+**Live demo:** [Hugging Face Space](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse). It still runs the older January 2026 version until the new deployment is set up ([how it deploys](docs/DEPLOY.md)).
 
 ---
 
