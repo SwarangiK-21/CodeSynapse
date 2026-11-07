@@ -163,7 +163,7 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 | GET, PUT | `/api/profile` | Read the profile, or sync it from live stats |
 | GET, POST, DELETE | `/api/chat` | Read history, ask the coach, or clear history |
 | GET | `/api/report` | Download the PDF report |
-| GET, POST | `/api/repos` | List repositories, or index a public one |
+| GET, POST | `/api/repos` | List repositories with their status, or start indexing a public one in the background |
 | DELETE | `/api/repos/{id}` | Remove an indexed repository |
 | GET | `/api/search?q=` | Search indexed code by keyword and meaning |
 | POST | `/api/jobs` | Extract skills from a job description |
@@ -210,7 +210,8 @@ CodeSynapse/
 - The live Hugging Face demo still runs the January 2026 version.
 - Evaluation sets are small (5 repositories each); results are indicative, not statistically strong.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits).
-- Users are anonymous per browser; there is no GitHub login or rate limiting yet.
+- Users are anonymous per browser; there is no GitHub login yet.
+- Background jobs and rate limits live in one process, which suits a single server. Several servers would need a shared queue and store such as Redis.
 
 ## 🗺️ Roadmap
 
@@ -223,7 +224,8 @@ CodeSynapse/
 - [x] Multi-step agent with cited, verified evidence
 - [x] Evaluation suite with measured accuracy and prompt-injection tests
 - [ ] Larger evaluation sets
-- [ ] GitHub login, rate limiting and an updated live deployment
+- [x] Background indexing and analysis, rate limiting, and caching of AI results
+- [ ] GitHub login and an updated live deployment
 
 ## 🤝 Contributing
 

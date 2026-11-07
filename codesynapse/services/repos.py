@@ -6,7 +6,8 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 from codesynapse import config
 from codesynapse.db.models import CodeChunk, Repo, User, utcnow
-from codesynapse.services import chunker, embeddings
+from codesynapse.db.session import SessionLocal
+from codesynapse.services import chunker, embeddings, tasks
 
 REPO_NAME = re.compile(r"^(?:https?://github\.com/)?([A-Za-z0-9-]{1,39}/[A-Za-z0-9._-]{1,100}?)(?:\.git)?/?$")
 
@@ -88,33 +89,73 @@ def read_source_files(archive):
 def embedding_text(chunk):
     return f"{chunk.path} {chunk.symbol}\n{chunk.content}"
 
-def index_repo(db: Session, user: User, value, sha=None):
-    """Downloads a public repository and makes its code searchable for this user."""
-    full_name = parse_name(value)
+def build_chunks(full_name, sha=None):
+    """Downloads a repository and returns its commit sha and searchable chunks."""
     sha, archive = download_archive(full_name, sha)
-
     chunks = [c for path, text in read_source_files(archive) for c in chunker.chunk_file(path, text)]
     if not chunks:
         raise RepoError("No supported source files were found.")
-    chunks = chunks[:MAX_CHUNKS]
+    return sha, chunks[:MAX_CHUNKS]
+
+def fill_repo(db: Session, repo, sha=None):
+    """Replaces the repository's chunks with a fresh index and marks it ready."""
+    sha, chunks = build_chunks(repo.full_name, sha)
     vectors = embeddings.embed_documents([embedding_text(c) for c in chunks])
-
-    repo = db.scalar(select(Repo).where(Repo.user_id == user.id, Repo.full_name == full_name))
-    if repo:
-        db.execute(delete(CodeChunk).where(CodeChunk.repo_id == repo.id))
-    else:
-        repo = Repo(user_id=user.id, full_name=full_name, commit_sha=sha)
-        db.add(repo)
-        db.flush()
-    repo.commit_sha, repo.indexed_at = sha, utcnow()
-
+    db.execute(delete(CodeChunk).where(CodeChunk.repo_id == repo.id))
     db.add_all(CodeChunk(
         repo_id=repo.id, path=c.path, language=c.language, kind=c.kind, symbol=c.symbol,
         start_line=c.start_line, end_line=c.end_line, content=c.content,
         embedding=vectors[i] if vectors else None,
     ) for i, c in enumerate(chunks))
+    repo.commit_sha, repo.indexed_at, repo.status, repo.error = sha, utcnow(), "ready", ""
     db.commit()
     return repo
+
+def get_or_create(db: Session, user: User, full_name):
+    repo = db.scalar(select(Repo).where(Repo.user_id == user.id, Repo.full_name == full_name))
+    if not repo:
+        repo = Repo(user_id=user.id, full_name=full_name, commit_sha="", status="indexing")
+        db.add(repo)
+        db.flush()
+    return repo
+
+def index_repo(db: Session, user: User, value, sha=None):
+    """Indexes a public repository and waits for it. The evaluation uses this."""
+    repo = get_or_create(db, user, parse_name(value))
+    return fill_repo(db, repo, sha)
+
+def check_exists(full_name):
+    with httpx.Client(timeout=15, follow_redirects=True) as client:
+        get_github_json(client, f"https://api.github.com/repos/{full_name}")
+
+def start_index(db: Session, user: User, value):
+    """Checks the repository exists, then indexes it in the background."""
+    full_name = parse_name(value)
+    repo = db.scalar(select(Repo).where(Repo.user_id == user.id, Repo.full_name == full_name))
+    if repo and repo.status == "indexing":
+        return repo
+    check_exists(full_name)
+    repo = get_or_create(db, user, full_name)
+    repo.status, repo.error = "indexing", ""
+    db.commit()
+    tasks.submit(run_index, repo.id)
+    db.refresh(repo)
+    return repo
+
+def run_index(repo_id):
+    """The background job. Uses its own session because it outlives the request."""
+    with SessionLocal() as db:
+        repo = db.get(Repo, repo_id)
+        try:
+            fill_repo(db, repo)
+        except RepoError as e:
+            db.rollback()
+            repo.status, repo.error = "failed", str(e)
+        except Exception as e:
+            print(f"Index Error: {e!r}")
+            db.rollback()
+            repo.status, repo.error = "failed", "Indexing stopped unexpectedly. Please try again."
+        db.commit()
 
 def embed_missing(db: Session, repo_id):
     """Adds vectors only to chunks without one, so an interrupted index doesn't start over."""
@@ -135,7 +176,8 @@ def list_repos(db: Session, user: User):
         .where(Repo.user_id == user.id).group_by(Repo.id).order_by(Repo.full_name)
     )
     return [{"id": r.id, "full_name": r.full_name, "commit_sha": r.commit_sha, "indexed_at": r.indexed_at,
-             "chunks": total, "embedded_chunks": embedded} for r, total, embedded in rows]
+             "status": r.status, "error": r.error, "chunks": total, "embedded_chunks": embedded}
+            for r, total, embedded in rows]
 
 def delete_repo(db: Session, user: User, repo_id):
     repo = db.scalar(select(Repo).where(Repo.id == repo_id, Repo.user_id == user.id))

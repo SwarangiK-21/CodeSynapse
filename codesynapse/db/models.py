@@ -49,6 +49,9 @@ class Repo(Base):
     full_name: Mapped[str] = mapped_column(String(140))
     commit_sha: Mapped[str] = mapped_column(String(40))
     indexed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    # indexing -> ready, or failed
+    status: Mapped[str] = mapped_column(String(10), default="ready")
+    error: Mapped[str] = mapped_column(Text, default="")
 
 class CodeChunk(Base):
     __tablename__ = "code_chunks"
@@ -89,3 +92,11 @@ class Analysis(Base):
     usage: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+class CacheEntry(Base):
+    __tablename__ = "cache_entries"
+
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(20))
+    value: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

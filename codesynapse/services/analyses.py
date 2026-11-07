@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from codesynapse.agents import gap_analysis
 from codesynapse.db.models import Analysis, JobDescription, Repo, User, utcnow
 from codesynapse.db.session import SessionLocal
-from codesynapse.services import llm
+from codesynapse.services import llm, tasks
 
 class AnalysisError(ValueError):
     pass
@@ -16,9 +16,11 @@ def create_analysis(db: Session, user: User, job_id, repo_ids):
     if not job.skills:
         raise AnalysisError("No skills were found in that job description.")
 
-    owned = set(db.scalars(select(Repo.id).where(Repo.user_id == user.id, Repo.id.in_(repo_ids))))
-    if not repo_ids or owned != set(repo_ids):
+    owned = {r.id: r for r in db.scalars(select(Repo).where(Repo.user_id == user.id, Repo.id.in_(repo_ids)))}
+    if not repo_ids or set(owned) != set(repo_ids):
         raise AnalysisError("Repository not found.")
+    if any(r.status != "ready" for r in owned.values()):
+        raise AnalysisError("That repository isn't ready yet. Wait for indexing to finish.")
 
     analysis = Analysis(user_id=user.id, job_id=job.id, repo_ids=list(repo_ids))
     db.add(analysis)
@@ -42,6 +44,9 @@ def execute(analysis_id):
             analysis.status, analysis.error = "failed", "The analysis stopped unexpectedly. Please try again."
         analysis.finished_at = utcnow()
         db.commit()
+
+def start(analysis):
+    tasks.submit(execute, analysis.id)
 
 def get_analysis(db: Session, user: User, analysis_id):
     return db.scalar(select(Analysis).where(Analysis.id == analysis_id, Analysis.user_id == user.id))

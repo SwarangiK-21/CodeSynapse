@@ -1,12 +1,17 @@
 import os
 import tempfile
+import time
 import gradio as gr
 import pandas as pd
 import plotly.express as px
 from codesynapse import config
 from codesynapse.db.session import SessionLocal
-from codesynapse.services import analyses, chat, jobs, profiles, reports, repos, users
+from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, users
 from codesynapse.ui import components
+
+# How often to check on a background job, and when to give up waiting
+POLL_SECONDS = 2
+MAX_WAIT_SECONDS = 30 * 60
 
 SAMPLE_REPO = "pallets/itsdangerous"
 SAMPLE_JOB = """Python Developer. You must have strong Python and experience with cryptographic signing.
@@ -49,11 +54,16 @@ def write_temp_file(prefix, suffix, data):
         f.write(data)
     return filename
 
-def load_session(token):
+def load_session(token, request: gr.Request = None):
     """Restores this browser's data, creating a user on the first visit."""
     with SessionLocal() as db:
         user = users.get_user_by_token(db, token)
         if not user:
+            address = request.client.host if request and request.client else "unknown"
+            try:
+                limits.check("signup", address)
+            except limits.Limited as e:
+                raise gr.Error(str(e))
             user, token = users.create_user(db)
         profile = profiles.get_profile(db, user)
         stats = profile.stats if profile else []
@@ -87,7 +97,12 @@ def generate_pdf_logic(token):
 def chat_logic(message, history, token):
     """AI Coach Logic"""
     with SessionLocal() as db:
-        return chat.send_message(db, require_user(db, token), message)
+        user = require_user(db, token)
+        try:
+            limits.check("chat", user.id)
+        except limits.Limited as e:
+            return str(e)
+        return chat.send_message(db, user, message)
 
 def clear_chat_logic(token):
     with SessionLocal() as db:
@@ -113,6 +128,16 @@ def load_latest_report(token):
         analysis = analyses.latest_report(db, user) if user else None
         return report_view(analysis) if analysis else hidden_view(components.empty_report())
 
+def wait_while(db, record, busy_status):
+    """Waits for a background job to move on from busy_status."""
+    started = time.monotonic()
+    db.refresh(record)
+    while record.status == busy_status:
+        if time.monotonic() - started > MAX_WAIT_SECONDS:
+            raise TimeoutError("This is taking longer than expected. Reload the page later to see the result.")
+        time.sleep(POLL_SECONDS)
+        db.refresh(record)
+
 def run_agent_logic(token, repo, job_text):
     """Indexes the repository, reads the job description and runs the agent, reporting each stage."""
     if not repo.strip() or len(job_text.strip()) < 20:
@@ -121,18 +146,27 @@ def run_agent_logic(token, repo, job_text):
     with SessionLocal() as db:
         user = require_user(db, token)
         try:
+            limits.check("analysis", user.id)
             yield hidden_view(components.stage_tracker(0))
-            indexed = repos.index_repo(db, user, repo)
+            indexed = repos.start_index(db, user, repo)
+            wait_while(db, indexed, "indexing")
+            if indexed.status == "failed":
+                yield hidden_view(components.message_box(indexed.error, "error"))
+                return
             yield hidden_view(components.stage_tracker(1))
             job = jobs.create_job(db, user, job_text)
             yield hidden_view(components.stage_tracker(2))
             analysis = analyses.create_analysis(db, user, job.id, [indexed.id])
-        except (repos.RepoError, jobs.JobError, analyses.AnalysisError) as e:
+        except (repos.RepoError, jobs.JobError, analyses.AnalysisError, limits.Limited, TimeoutError) as e:
             yield hidden_view(components.message_box(str(e), "error"))
             return
 
-        analyses.execute(analysis.id)
-        db.refresh(analysis)
+        analyses.start(analysis)
+        try:
+            wait_while(db, analysis, "running")
+        except TimeoutError as e:
+            yield hidden_view(components.message_box(str(e), "error"))
+            return
         if analysis.status == "failed":
             yield hidden_view(components.message_box(analysis.error, "error"))
             return

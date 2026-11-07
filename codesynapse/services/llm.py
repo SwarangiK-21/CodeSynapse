@@ -4,7 +4,7 @@ import httpx
 from google.genai import errors, types
 from pydantic import BaseModel, ValidationError
 from codesynapse import config
-from codesynapse.services import coach, embeddings
+from codesynapse.services import cache, coach, embeddings
 
 # Long-running work can wait for the service to recover
 ROUNDS = 3
@@ -16,6 +16,7 @@ class LLMError(RuntimeError):
 @dataclass
 class Usage:
     calls: int = 0
+    cached: int = 0
     prompt_tokens: int = 0
     output_tokens: int = 0
 
@@ -37,6 +38,17 @@ def generate_json(prompt, schema: type[BaseModel], usage: Usage | None = None, t
 
     Tries every configured model, then waits and tries again, because overloads usually pass.
     """
+    # Only deterministic requests are cached; a creative reply should differ each time
+    cache_parts = [schema.__name__, prompt] if temperature == 0 else None
+    if cache_parts and (stored := cache.get("llm", cache_parts)):
+        try:
+            reply = schema.model_validate_json(stored)
+            if usage:
+                usage.cached += 1
+            return reply
+        except ValidationError:
+            pass
+
     if not coach.client:
         raise LLMError("AI is not configured. Check GEMINI_API_KEY in .env.")
 
@@ -53,7 +65,10 @@ def generate_json(prompt, schema: type[BaseModel], usage: Usage | None = None, t
             if model_name in exhausted:
                 continue
             try:
-                return call_model(model_name, prompt, schema, generation, usage)
+                reply = call_model(model_name, prompt, schema, generation, usage)
+                if cache_parts:
+                    cache.put("llm", cache_parts, reply.model_dump_json())
+                return reply
             except errors.APIError as e:
                 print(f"LLM Error on {model_name}: {e.code} {e.message}")
                 last_code = e.code

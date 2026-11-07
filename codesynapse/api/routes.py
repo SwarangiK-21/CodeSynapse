@@ -1,10 +1,10 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from codesynapse.db.models import User
 from codesynapse.db.session import get_db
-from codesynapse.services import analyses, chat, jobs, profiles, reports, repos, search, users
+from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, search, users
 
 router = APIRouter(prefix="/api")
 bearer = HTTPBearer(auto_error=False)
@@ -53,7 +53,8 @@ def profile_out(profile):
 
 # Plain `def` routes: FastAPI runs them in a thread pool, so slow calls don't block the server
 @router.post("/users", status_code=status.HTTP_201_CREATED)
-def create_user(db: Session = Depends(get_db)):
+def create_user(request: Request, db: Session = Depends(get_db)):
+    limits.check("signup", request.client.host if request.client else "unknown")
     user, token = users.create_user(db)
     return {"user_id": user.id, "token": token}
 
@@ -74,16 +75,19 @@ def read_chat(user: User = Depends(current_user), db: Session = Depends(get_db))
 
 @router.post("/chat")
 def send_chat(body: ChatIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    limits.check("chat", user.id)
     return {"reply": chat.send_message(db, user, body.message)}
 
 @router.delete("/chat", status_code=status.HTTP_204_NO_CONTENT)
 def clear_chat(user: User = Depends(current_user), db: Session = Depends(get_db)):
     chat.clear_history(db, user)
 
-@router.post("/repos", status_code=status.HTTP_201_CREATED)
+@router.post("/repos", status_code=status.HTTP_202_ACCEPTED)
 def index_repo(body: RepoIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Starts indexing. Poll GET /api/repos until status is ready or failed."""
+    limits.check("index", user.id)
     try:
-        repo = repos.index_repo(db, user, body.repo)
+        repo = repos.start_index(db, user, body.repo)
     except repos.RepoError as e:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(e))
     return next(r for r in repos.list_repos(db, user) if r["id"] == repo.id)
@@ -105,6 +109,7 @@ def search_code(q: str = Query(min_length=2, max_length=200), repo_id: int | Non
 
 @router.post("/jobs", status_code=status.HTTP_201_CREATED)
 def create_job(body: JobIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    limits.check("job", user.id)
     try:
         return job_out(jobs.create_job(db, user, body.text))
     except jobs.JobError as e:
@@ -118,13 +123,14 @@ def read_job(job_id: int, user: User = Depends(current_user), db: Session = Depe
     return job_out(job)
 
 @router.post("/analyses", status_code=status.HTTP_202_ACCEPTED)
-def start_analysis(body: AnalysisIn, background: BackgroundTasks, user: User = Depends(current_user),
-                   db: Session = Depends(get_db)):
+def start_analysis(body: AnalysisIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    limits.check("analysis", user.id)
     try:
         analysis = analyses.create_analysis(db, user, body.job_id, body.repo_ids)
     except analyses.AnalysisError as e:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(e))
-    background.add_task(analyses.execute, analysis.id)
+    analyses.start(analysis)
+    db.refresh(analysis)
     return analysis_out(analysis)
 
 @router.get("/analyses/{analysis_id}")

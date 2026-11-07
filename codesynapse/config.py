@@ -15,5 +15,8 @@ GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-2
 # Optional: raises GitHub's hourly rate limit
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
+# How many indexing and analysis jobs run at once
+WORKERS = int(os.getenv("WORKERS", "2"))
+
 # Encrypts the browser's copy of the user token. Set a real value when deployed.
 UI_SECRET = os.getenv("UI_SECRET", "local-dev-only")

@@ -13,13 +13,17 @@ from codesynapse.db.migrate import upgrade
 from codesynapse.db.models import Base
 from codesynapse.db.session import SessionLocal
 from codesynapse.main import app
+from codesynapse.services import limits, tasks
 
 @pytest.fixture(scope="session", autouse=True)
 def migrated_db():
     upgrade()
 
 @pytest.fixture(autouse=True)
-def clean_tables():
+def clean_tables(monkeypatch):
+    # Jobs finish before the request returns, and every test starts with fresh rate limits
+    monkeypatch.setattr(tasks, "RUN_INLINE", True)
+    limits.reset()
     yield
     with SessionLocal() as db:
         for table in reversed(Base.metadata.sorted_tables):

@@ -1,8 +1,8 @@
 from types import SimpleNamespace
 import pytest
-from codesynapse.db.models import Analysis, JobDescription
+from codesynapse.db.models import Analysis, JobDescription, Repo
 from codesynapse.db.session import SessionLocal
-from codesynapse.services import analyses, jobs, repos, users
+from codesynapse.services import analyses, jobs, limits, repos, users
 from codesynapse.ui import app as ui
 from codesynapse.ui import components
 
@@ -130,21 +130,27 @@ def test_bad_repository_shows_a_clear_message():
     html, *_ = list(ui.run_agent_logic(new_token(), "not a repo", "A long enough job description here."))[-1]
     assert "owner/repo" in html
 
+def fake_pipeline(monkeypatch, token, analysis_id, repo_status="ready", repo_error=""):
+    """Replaces the slow steps with saved records, so the UI's waiting logic still runs for real."""
+    with SessionLocal() as db:
+        user = users.get_user_by_token(db, token)
+        repo = Repo(user_id=user.id, full_name="octocat/demo", commit_sha="a" * 40, status=repo_status, error=repo_error)
+        db.add(repo)
+        db.commit()
+        repo_id = repo.id
+    monkeypatch.setattr(repos, "start_index", lambda db, user, value: db.get(Repo, repo_id))
+    monkeypatch.setattr(jobs, "create_job", lambda db, user, text: SimpleNamespace(id=1))
+    monkeypatch.setattr(analyses, "create_analysis", lambda db, user, job, ids: db.get(Analysis, analysis_id))
+    monkeypatch.setattr(analyses, "start", lambda analysis: None)
+
+def run(token):
+    return list(ui.run_agent_logic(token, "octocat/demo", "A long enough job description here."))
+
 def test_full_run_shows_each_stage_then_the_report(monkeypatch):
-    def fake_index(db, user, value):
-        return SimpleNamespace(id=1)
-    def fake_job(db, user, text):
-        return SimpleNamespace(id=1)
     token = new_token()
     analysis_id = seed_analysis(token)
-    with SessionLocal() as db:
-        saved = analyses.get_analysis(db, users.get_user_by_token(db, token), analysis_id)
-    monkeypatch.setattr(repos, "index_repo", fake_index)
-    monkeypatch.setattr(jobs, "create_job", fake_job)
-    monkeypatch.setattr(analyses, "create_analysis", lambda db, user, job, ids: db.merge(saved))
-    monkeypatch.setattr(analyses, "execute", lambda analysis: None)
-
-    views = list(ui.run_agent_logic(token, "octocat/demo", "A long enough job description here."))
+    fake_pipeline(monkeypatch, token, analysis_id)
+    views = run(token)
     assert len(views) == 4 and "aria-current" in views[0][0]
     assert "Engineer" in views[-1][0] and views[-1][1] == analysis_id
 
@@ -152,13 +158,37 @@ def test_failed_run_shows_the_reason(monkeypatch):
     token = new_token()
     analysis_id = seed_analysis(token, "failed")
     with SessionLocal() as db:
-        saved = db.get(Analysis, analysis_id)
-        saved.error = "The daily AI quota is used up."
+        db.get(Analysis, analysis_id).error = "The daily AI quota is used up."
         db.commit()
-    monkeypatch.setattr(repos, "index_repo", lambda db, user, value: SimpleNamespace(id=1))
-    monkeypatch.setattr(jobs, "create_job", lambda db, user, text: SimpleNamespace(id=1))
-    monkeypatch.setattr(analyses, "create_analysis", lambda db, user, job, ids: db.get(Analysis, analysis_id))
-    monkeypatch.setattr(analyses, "execute", lambda analysis: None)
+    fake_pipeline(monkeypatch, token, analysis_id)
+    assert "daily AI quota" in run(token)[-1][0]
 
-    html, *_ = list(ui.run_agent_logic(token, "octocat/demo", "A long enough job description here."))[-1]
-    assert "daily AI quota" in html
+def test_failed_indexing_shows_the_reason(monkeypatch):
+    token = new_token()
+    fake_pipeline(monkeypatch, token, seed_analysis(token), "failed", "That repository is too large to analyse.")
+    assert "too large" in run(token)[-1][0]
+
+def test_ui_waits_for_a_running_job(monkeypatch):
+    token = new_token()
+    analysis_id = seed_analysis(token, "running")
+    fake_pipeline(monkeypatch, token, analysis_id)
+    sleeps = []
+    def finish_job(seconds):
+        sleeps.append(seconds)
+        with SessionLocal() as db:
+            db.get(Analysis, analysis_id).status = "draft"
+            db.commit()
+    monkeypatch.setattr(ui.time, "sleep", finish_job)
+    assert "Engineer" in run(token)[-1][0] and sleeps == [ui.POLL_SECONDS]
+
+def test_ui_gives_up_waiting_eventually(monkeypatch):
+    token = new_token()
+    fake_pipeline(monkeypatch, token, seed_analysis(token, "running"))
+    clock = iter(range(0, 10**6, 600))
+    monkeypatch.setattr(ui.time, "monotonic", lambda: next(clock))
+    monkeypatch.setattr(ui.time, "sleep", lambda seconds: None)
+    assert "longer than expected" in run(token)[-1][0]
+
+def test_ui_rate_limit_is_explained(monkeypatch):
+    monkeypatch.setitem(limits.LIMITS, "analysis", (0, 3600))
+    assert "limit" in run(new_token())[-1][0]
