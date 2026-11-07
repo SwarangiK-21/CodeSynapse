@@ -101,16 +101,16 @@ The verifier is plain Python, not another model call: a claim survives only if i
 
 ## 📊 Evaluation results
 
-From [`evals/results/summary.json`](evals/results/summary.json): real open-source repositories at pinned commits (7 in the standard set so far, 5 in the hard set), one model (`gemini-3.5-flash-lite`) throughout. The baseline uses the same code search but makes a single prompt, with no planning, verification or retry.
+From [`evals/results/summary.json`](evals/results/summary.json): real open-source repositories at pinned commits (8 in the standard set, 5 in the hard set), hybrid keyword and vector search, one model (`gemini-3.5-flash-lite`) throughout. The baseline uses the same code search but makes a single prompt, with no planning, verification or retry.
 
 | Set | System | Skill pairs | Precision | Recall | F1 | Citations real | LLM calls |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Standard | Baseline | 38 | 1.00 | 1.00 | 1.00 | — (none given) | 7 |
-| Standard | **Agent** | 38 | 1.00 | 1.00 | 1.00 | **57 / 57** | 53 |
-| Hard | Baseline | 22 | 0.67 | 0.91 | 0.77 | — (none given) | 5 |
-| Hard | **Agent** | 22 | **0.91** | 0.91 | **0.91** | **26 / 26** | 32 |
+| Standard | Baseline | 46 | 1.00 | 1.00 | 1.00 | — (none given) | 8 |
+| Standard | **Agent** | 46 | 1.00 | 1.00 | 1.00 | **72 / 72** | 63 |
+| Hard | Baseline | 22 | 0.69 | 1.00 | 0.81 | — (none given) | 5 |
+| Hard | **Agent** | 22 | **0.92** | 1.00 | **0.96** | **26 / 26** | 32 |
 
-The hard set ran after the daily embedding quota was used up, so both systems searched mostly by keyword. One standard repository is still to run.
+On the hard set's four "mentioned in the docs but not used in the code" traps, the baseline was fooled by all four and the agent by one. That one is debatable: `encode/databases` runs MySQL and PostgreSQL as container services in CI, which the agent counted as Docker use. An earlier hard-set run with keyword search only is kept in [`evals/results/archive`](evals/results/archive) (agent precision 0.91, baseline 0.67).
 
 **Prompt injection:** 8 of 8 attacks blocked (comments addressed to the AI, fake evidence blocks, fake JSON output, unused imports, dead strings). See [`evals/injection.py`](evals/injection.py).
 

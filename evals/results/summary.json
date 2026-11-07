@@ -1,12 +1,12 @@
 {
   "agent": {
-    "repos": 7,
+    "repos": 8,
     "presence": {
-      "pairs": 38,
-      "tp": 21,
+      "pairs": 46,
+      "tp": 26,
       "fp": 0,
       "fn": 0,
-      "tn": 17,
+      "tn": 20,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
@@ -14,11 +14,11 @@
     },
     "by_type": {
       "plain": {
-        "pairs": 38,
-        "tp": 21,
+        "pairs": 46,
+        "tp": 26,
         "fp": 0,
         "fn": 0,
-        "tn": 17,
+        "tn": 20,
         "precision": 1.0,
         "recall": 1.0,
         "f1": 1.0,
@@ -26,25 +26,25 @@
       }
     },
     "citations": {
-      "citations": 57,
-      "real": 57,
+      "citations": 72,
+      "real": 72,
       "accuracy": 1.0
     },
     "rejected_claims": 6,
     "retried_repos": 1,
-    "llm_calls": 53,
-    "tokens": 125544,
-    "seconds_per_repo": 76,
+    "llm_calls": 63,
+    "tokens": 155458,
+    "seconds_per_repo": 72,
     "errors": []
   },
   "baseline": {
-    "repos": 7,
+    "repos": 8,
     "presence": {
-      "pairs": 38,
-      "tp": 21,
+      "pairs": 46,
+      "tp": 26,
       "fp": 0,
       "fn": 0,
-      "tn": 17,
+      "tn": 20,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
@@ -52,11 +52,11 @@
     },
     "by_type": {
       "plain": {
-        "pairs": 38,
-        "tp": 21,
+        "pairs": 46,
+        "tp": 26,
         "fp": 0,
         "fn": 0,
-        "tn": 17,
+        "tn": 20,
         "precision": 1.0,
         "recall": 1.0,
         "f1": 1.0,
@@ -70,23 +70,23 @@
     },
     "rejected_claims": 0,
     "retried_repos": 0,
-    "llm_calls": 7,
-    "tokens": 44433,
-    "seconds_per_repo": 8,
+    "llm_calls": 8,
+    "tokens": 55488,
+    "seconds_per_repo": 9,
     "errors": []
   },
   "agent-hard": {
     "repos": 5,
     "presence": {
       "pairs": 22,
-      "tp": 10,
+      "tp": 11,
       "fp": 1,
-      "fn": 1,
+      "fn": 0,
       "tn": 10,
-      "precision": 0.909,
-      "recall": 0.909,
-      "f1": 0.909,
-      "accuracy": 0.909
+      "precision": 0.917,
+      "recall": 1.0,
+      "f1": 0.957,
+      "accuracy": 0.955
     },
     "by_type": {
       "contrast": {
@@ -103,35 +103,35 @@
       "mentioned-only": {
         "pairs": 4,
         "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "tn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.75
+      },
+      "neighbour": {
+        "pairs": 7,
+        "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": 4,
+        "tn": 7,
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0,
         "accuracy": 1.0
       },
-      "neighbour": {
-        "pairs": 7,
-        "tp": 0,
-        "fp": 1,
-        "fn": 0,
-        "tn": 6,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "accuracy": 0.857
-      },
       "paraphrase": {
         "pairs": 10,
-        "tp": 9,
+        "tp": 10,
         "fp": 0,
-        "fn": 1,
+        "fn": 0,
         "tn": 0,
         "precision": 1.0,
-        "recall": 0.9,
-        "f1": 0.947,
-        "accuracy": 0.9
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
       }
     },
     "citations": {
@@ -139,23 +139,16 @@
       "real": 26,
       "accuracy": 1.0
     },
-    "rejected_claims": 1,
+    "rejected_claims": 0,
     "retried_repos": 0,
     "llm_calls": 32,
-    "tokens": 66548,
-    "seconds_per_repo": 143,
+    "tokens": 73241,
+    "seconds_per_repo": 39,
     "errors": [
       {
-        "repo": "pallets/itsdangerous",
-        "skill": "Expiring tokens",
-        "type": "paraphrase",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "pallets/markupsafe",
-        "skill": "Template rendering engines",
-        "type": "neighbour",
+        "repo": "encode/databases",
+        "skill": "Docker",
+        "type": "mentioned-only",
         "expected": false,
         "level": "partial"
       }
@@ -165,14 +158,14 @@
     "repos": 5,
     "presence": {
       "pairs": 22,
-      "tp": 10,
+      "tp": 11,
       "fp": 5,
-      "fn": 1,
+      "fn": 0,
       "tn": 6,
-      "precision": 0.667,
-      "recall": 0.909,
-      "f1": 0.769,
-      "accuracy": 0.727
+      "precision": 0.688,
+      "recall": 1.0,
+      "f1": 0.815,
+      "accuracy": 0.773
     },
     "by_type": {
       "contrast": {
@@ -210,14 +203,14 @@
       },
       "paraphrase": {
         "pairs": 10,
-        "tp": 9,
+        "tp": 10,
         "fp": 0,
-        "fn": 1,
+        "fn": 0,
         "tn": 0,
         "precision": 1.0,
-        "recall": 0.9,
-        "f1": 0.947,
-        "accuracy": 0.9
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
       }
     },
     "citations": {
@@ -228,16 +221,9 @@
     "rejected_claims": 0,
     "retried_repos": 0,
     "llm_calls": 5,
-    "tokens": 18856,
-    "seconds_per_repo": 19,
+    "tokens": 25965,
+    "seconds_per_repo": 5,
     "errors": [
-      {
-        "repo": "pallets/itsdangerous",
-        "skill": "Expiring tokens",
-        "type": "paraphrase",
-        "expected": true,
-        "level": "none"
-      },
       {
         "repo": "pallets/markupsafe",
         "skill": "HTTP cookies",
