@@ -30,3 +30,14 @@ def test_space_bundle_has_settings_and_no_secrets(tmp_path):
     assert (tmp_path / "Dockerfile").exists() and (tmp_path / "codesynapse" / "main.py").exists()
     names = {p.name for p in tmp_path.rglob("*")}
     assert ".env" not in names and "tests" not in names and "__pycache__" not in names
+
+def test_tables_are_closed_to_hosted_data_apis():
+    from sqlalchemy import text
+    from codesynapse.db.session import engine
+    if engine.dialect.name != "postgresql":
+        pytest.skip("Row-level security is a Postgres feature")
+    with engine.connect() as connection:
+        open_tables = connection.execute(text(
+            "SELECT relname FROM pg_class WHERE relnamespace = 'public'::regnamespace "
+            "AND relkind = 'r' AND NOT relrowsecurity")).scalars().all()
+    assert open_tables == []
