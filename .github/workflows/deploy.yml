@@ -15,6 +15,11 @@ jobs:
       (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'))
     runs-on: ubuntu-latest
     concurrency: deploy-space
+    permissions:
+      contents: read
+      # Lets the job prove to Hugging Face that it is this repo's deploy.yml on main.
+      # The Space's trusted publisher accepts exactly that, so no HF token is stored.
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,6 +30,6 @@ jobs:
       - run: pip install huggingface_hub==2.3.0
       - run: python deploy/push_space.py
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE: ${{ vars.HF_SPACE }}
+          HF_OIDC_RESOURCE: spaces/${{ vars.HF_SPACE }}
           GITHUB_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}

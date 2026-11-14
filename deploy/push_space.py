@@ -1,8 +1,12 @@
 """Uploads this repository to a Hugging Face Space.
 
 Run by .github/workflows/deploy.yml after CI passes on main. It needs:
-  HF_TOKEN  a Hugging Face token with write access to the Space
-  HF_SPACE  the Space id, for example SwarangiK-21/CodeSynapse
+  HF_SPACE          the Space id, for example SwarangiK-21/CodeSynapse
+  and one way to sign in:
+  HF_OIDC_RESOURCE  spaces/<HF_SPACE>, set in CI. GitHub proves its identity to Hugging Face
+                    (a "trusted publisher" on the Space) and gets a one-hour token, so no
+                    token is stored anywhere.
+  HF_TOKEN          or a Hugging Face token with write access, for running it by hand
 
 Spaces read their settings from the README's front matter, so the uploaded README
 gets that header added. The GitHub README stays unchanged.
@@ -43,13 +47,14 @@ def build(target):
     (target / "README.md").write_text(FRONT_MATTER + readme, encoding="utf-8")
 
 def main():
-    token, space = os.getenv("HF_TOKEN"), os.getenv("HF_SPACE")
-    if not token or not space:
-        sys.exit("Set HF_TOKEN and HF_SPACE.")
+    space = os.getenv("HF_SPACE")
+    if not space or not (os.getenv("HF_OIDC_RESOURCE") or os.getenv("HF_TOKEN")):
+        sys.exit("Set HF_SPACE, and HF_OIDC_RESOURCE (in CI) or HF_TOKEN.")
     with tempfile.TemporaryDirectory() as folder:
         target = Path(folder)
         build(target)
-        HfApi(token=token).upload_folder(
+        # With no token given, huggingface_hub uses HF_OIDC_RESOURCE, then HF_TOKEN
+        HfApi().upload_folder(
             repo_id=space, repo_type="space", folder_path=target,
             # Removes files from older versions of the Space that are no longer uploaded
             delete_patterns="*",

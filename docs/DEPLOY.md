@@ -34,17 +34,27 @@ In the Space, open **Settings → Variables and secrets** and add these as **sec
 
 The app refuses to start on a Space without `UI_SECRET`.
 
-## 3. Connect GitHub to the Space
+## 3. Connect GitHub to the Space (no token needed)
 
-1. On Hugging Face, create an access token (**Settings → Access Tokens**) with **write**
-   access, limited to this Space if you use a fine-grained token.
-2. In the GitHub repository, open **Settings → Secrets and variables → Actions** and add:
-   - Secret `HF_TOKEN`: the token from step 1.
-   - Variable `HF_SPACE`: `SwarangiK-21/CodeSynapse`.
+GitHub signs in to Hugging Face as a *trusted publisher*: each deploy run proves it is this
+repository's `deploy.yml` on `main` and gets a token that lasts one hour and only works for
+this Space. Nothing is stored as a secret.
+
+1. In the Space, open **Settings → Trusted Publishers → Add trusted publisher** and set:
+   - Provider: **GitHub Actions**
+   - Repository: `SwarangiK-21/CodeSynapse`
+   - Branch: `main`
+   - Workflow: `deploy.yml`
+   - Leave **Read-only** unticked.
+2. In the GitHub repository, open **Settings → Secrets and variables → Actions → Variables**
+   and add the variable `HF_SPACE` = `SwarangiK-21/CodeSynapse`.
 3. Run the **Deploy** workflow once from the **Actions** tab, or push to `main`.
 
 The Space then builds the Docker image, which takes a few minutes. Check `/health` on the
 Space URL when it's done.
+
+To deploy by hand instead, set `HF_SPACE` and an `HF_TOKEN` with write access, then run
+`python deploy/push_space.py`.
 
 ## What gets uploaded
 
