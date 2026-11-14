@@ -19,7 +19,7 @@
 
 <sub>Screenshots from a local run of this repository (4 Nov 2026).</sub>
 
-**Live demo:** [Hugging Face Space](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse). It still runs the older January 2026 version until the new deployment is set up ([how it deploys](docs/DEPLOY.md)).
+**Live demo:** [Hugging Face Space](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse), deployed from `main` after CI passes, with data in Supabase Postgres ([how it deploys](docs/DEPLOY.md)). The free Space sleeps when idle, so the first visit can take a minute.
 
 ---
 
@@ -207,7 +207,6 @@ CodeSynapse/
 
 ## ⚠️ Limitations
 
-- The live Hugging Face demo still runs the January 2026 version.
 - Evaluation sets are small (5 repositories each); results are indicative, not statistically strong.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits).
 - Users are anonymous per browser; there is no GitHub login yet.
@@ -225,7 +224,8 @@ CodeSynapse/
 - [x] Evaluation suite with measured accuracy and prompt-injection tests
 - [ ] Larger evaluation sets
 - [x] Background indexing and analysis, rate limiting, and caching of AI results
-- [ ] GitHub login and an updated live deployment
+- [x] Live deployment on Hugging Face with Supabase, deployed automatically from CI
+- [ ] GitHub login
 
 ## 🤝 Contributing
 
