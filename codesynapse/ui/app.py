@@ -30,15 +30,15 @@ def build_chart(stats):
     if not rows:
         return None
     fig = px.bar(pd.DataFrame(rows), x='Score', y='Platform', orientation='h', range_x=[0, 100], height=220)
-    fig.update_traces(marker_color='#c4b5fd', marker_line_color='#a78bfa', marker_line_width=1.5, width=0.5)
+    fig.update_traces(marker_color='#a7d3e8', marker_line_color='#7fb8d4', marker_line_width=1.5, width=0.5)
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font_color="#8b84a3",
+        font_color="#7d8c8d",
         margin=dict(l=10, r=10, t=40, b=10),
         yaxis_title=None,
         xaxis_title="Score out of 100",
-        xaxis_gridcolor="rgba(167,139,250,0.2)",
+        xaxis_gridcolor="rgba(127,184,212,0.25)",
     )
     return fig
 
@@ -195,9 +195,9 @@ with gr.Blocks(title="CodeSynapse") as demo:
           <h1>Your code, your proof.</h1>
           <p>See how your real code matches the job you want, with every skill backed by the exact lines.</p>
           <div class="cs-chips">
-            <span class="cs-chip cs-chip-lavender">🤖 AI agent</span>
+            <span class="cs-chip cs-chip-blue">🤖 AI agent</span>
             <span class="cs-chip cs-chip-mint">🔗 Line-level proof</span>
-            <span class="cs-chip cs-chip-pink">🛡️ No made-up claims</span>
+            <span class="cs-chip cs-chip-sand">🛡️ No made-up claims</span>
           </div>
         </header>""")
         theme_btn = gr.Button("Switch light or dark mode", elem_id="cs-theme-toggle", scale=0, min_width=52)
