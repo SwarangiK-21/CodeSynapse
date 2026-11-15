@@ -27,6 +27,7 @@ def message_box(text, kind="info"):
 
 def empty_report():
     return """<div class="cs-empty">
+      <div class="cs-empty-art" aria-hidden="true">🔍✨</div>
       <h3>Your report will appear here</h3>
       <p>Each skill in the job description is checked against your code, with links to the exact lines.</p>
     </div>"""
@@ -40,7 +41,8 @@ def stage_tracker(active):
         current =' aria-current="step"' if state == "active" else ""
         items.append(f'<li class="cs-stage cs-stage-{state}"{current}><span class="cs-stage-mark">{mark}</span>{esc(label)}</li>')
     note = "This usually takes a few minutes. Keep this page open."
-    return f'<div role="status"><ol class="cs-stages">{"".join(items)}</ol><p class="cs-muted">{note}</p></div>'
+    stages = f'<ol class="cs-stages">{"".join(items)}</ol>'
+    return f'<div class="cs-progress" role="status">{stages}<p class="cs-muted">{note}</p></div>'
 
 def citation_html(citation):
     label = f"{citation['path']}:{citation['start_line']}"

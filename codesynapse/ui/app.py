@@ -8,6 +8,7 @@ from codesynapse import config
 from codesynapse.db.session import SessionLocal
 from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, users
 from codesynapse.ui import components
+from codesynapse.ui.style import RESTORE_THEME, TOGGLE_THEME
 
 # How often to check on a background job, and when to give up waiting
 POLL_SECONDS = 2
@@ -29,15 +30,15 @@ def build_chart(stats):
     if not rows:
         return None
     fig = px.bar(pd.DataFrame(rows), x='Score', y='Platform', orientation='h', range_x=[0, 100], height=220)
-    fig.update_traces(marker_color='#14b8a6', width=0.5)
+    fig.update_traces(marker_color='#c4b5fd', marker_line_color='#a78bfa', marker_line_width=1.5, width=0.5)
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font_color="#64748b",
+        font_color="#8b84a3",
         margin=dict(l=10, r=10, t=40, b=10),
         yaxis_title=None,
         xaxis_title="Score out of 100",
-        xaxis_gridcolor="rgba(148,163,184,0.25)",
+        xaxis_gridcolor="rgba(167,139,250,0.2)",
     )
     return fig
 
@@ -188,20 +189,29 @@ with gr.Blocks(title="CodeSynapse") as demo:
     # The user's private token, kept in this browser so data survives a reload
     user_token = gr.BrowserState(None, storage_key="codesynapse_token", secret=config.UI_SECRET)
 
-    gr.HTML("""<header class="cs-header">
-      <h1>CodeSynapse</h1>
-      <p>See how your real code matches the job you want.</p>
-    </header>""")
+    with gr.Row(elem_classes="cs-topbar"):
+        gr.HTML("""<header class="cs-header">
+          <div class="cs-logo"><span class="cs-logo-mark" aria-hidden="true">✦</span>CodeSynapse</div>
+          <h1>Your code, your proof.</h1>
+          <p>See how your real code matches the job you want, with every skill backed by the exact lines.</p>
+          <div class="cs-chips">
+            <span class="cs-chip cs-chip-lavender">🤖 AI agent</span>
+            <span class="cs-chip cs-chip-mint">🔗 Line-level proof</span>
+            <span class="cs-chip cs-chip-pink">🛡️ No made-up claims</span>
+          </div>
+        </header>""")
+        theme_btn = gr.Button("Switch light or dark mode", elem_id="cs-theme-toggle", scale=0, min_width=52)
 
-    with gr.Tabs():
+    with gr.Tabs(elem_classes="cs-tabs"):
         # TAB 1: SKILL GAP ANALYSIS
-        with gr.TabItem("Skill Gap"):
-            gr.HTML('<p class="cs-intro">Compare a public GitHub repository with a job description.</p>')
+        with gr.TabItem("🎯 Skill Gap"):
+            gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">🧩</span>'
+                    'Compare a public GitHub repository with a job description.</p>')
             repo_in = gr.Textbox(label="GitHub repository", placeholder="owner/repo or a github.com link")
             job_in = gr.Textbox(label="Job description", lines=7, placeholder="Paste the job description here")
             with gr.Row():
-                sample_btn = gr.Button("Try an example")
-                run_btn = gr.Button("Analyse my code", variant="primary")
+                sample_btn = gr.Button("✨ Try an example")
+                run_btn = gr.Button("Analyse my code 🚀", variant="primary")
             agent_output = gr.HTML(components.empty_report())
             with gr.Row():
                 approve_btn = gr.Button("Approve report", variant="primary", visible=False)
@@ -209,12 +219,13 @@ with gr.Blocks(title="CodeSynapse") as demo:
             analysis_id = gr.State(None)
 
         # TAB 2: CODING PROFILE
-        with gr.TabItem("Profile"):
-            gr.HTML('<p class="cs-intro">See your public GitHub and LeetCode stats in one place.</p>')
+        with gr.TabItem("📊 Profile"):
+            gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">📈</span>'
+                    'See your public GitHub and LeetCode stats in one place.</p>')
             with gr.Row():
                 gh_in = gr.Textbox(label="GitHub username", value="", placeholder="octocat")
                 lc_in = gr.Textbox(label="LeetCode username", value="", placeholder="your_username")
-            sync_btn = gr.Button("Sync profiles", variant="primary")
+            sync_btn = gr.Button("Sync profiles 🔄", variant="primary")
             stats_display = gr.HTML(components.profile_html([]))
             score_plot = gr.Plot(label="Activity scores")
             with gr.Row():
@@ -222,14 +233,17 @@ with gr.Blocks(title="CodeSynapse") as demo:
                 pdf_out = gr.File(label="PDF summary")
 
         # TAB 3: CAREER COACH
-        with gr.TabItem("Coach"):
-            gr.HTML('<p class="cs-intro">Ask about your stats, your resume or what to learn next. '
+        with gr.TabItem("💬 Coach"):
+            gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">💡</span>'
+                    'Ask about your stats, your resume or what to learn next. '
                     'Sync your profiles first for advice based on your numbers.</p>')
             chatbot = gr.Chatbot(label="Career Coach", show_label=False, height=420,
                                  placeholder="Try: What should I focus on next?")
             gr.ChatInterface(fn=chat_logic, chatbot=chatbot, additional_inputs=[user_token])
 
     # --- WIRING ---
+    demo.load(None, None, None, js=RESTORE_THEME)
+    theme_btn.click(None, None, None, js=TOGGLE_THEME)
     demo.load(load_session, [user_token], [user_token, gh_in, lc_in, stats_display, score_plot, chatbot]).then(
         load_latest_report, [user_token], [agent_output, analysis_id, approve_btn, download_btn])
     sync_btn.click(fetch_data_logic, [user_token, gh_in, lc_in], [stats_display, score_plot])

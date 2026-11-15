@@ -207,7 +207,7 @@ CodeSynapse/
 
 ## ⚠️ Limitations
 
-- Evaluation sets are small (5 repositories each); results are indicative, not statistically strong.
+- Evaluation sets are small (standard: 8 repositories, 46 skill pairs; hard: 5 repositories, 22 pairs), so results are indicative, not statistically strong.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits).
 - Users are anonymous per browser; there is no GitHub login yet.
 - Background jobs and rate limits live in one process, which suits a single server. Several servers would need a shared queue and store such as Redis.
