@@ -15,9 +15,9 @@
 
 | Skill-gap analysis | Live profile sync |
 |:---:|:---:|
-| ![Skill-gap tab](docs/images/skill_gap.jpg) | ![Profile tab with live GitHub stats](docs/images/profile_sync.jpg) |
+| ![Skill-gap report in light mode: 5 of 5 required skills backed by code, Redis not found](docs/images/skill_gap.png) | ![Profile tab in dark mode with live GitHub stats](docs/images/profile_sync.png) |
 
-<sub>Screenshots from a local run of this repository (4 Nov 2026).</sub>
+<sub>Screenshots from the live demo (16 Nov 2026): a real analysis of <code>pallets/itsdangerous</code> in light mode, and the Profile tab in dark mode.</sub>
 
 **Live demo:** [Hugging Face Space](https://huggingface.co/spaces/SwarangiK-21/CodeSynapse), deployed from `main` after CI passes, with data in Supabase Postgres ([how it deploys](docs/DEPLOY.md)). The free Space sleeps when idle, so the first visit can take a minute.
 
