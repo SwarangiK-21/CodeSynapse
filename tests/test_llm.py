@@ -4,7 +4,7 @@ import pytest
 from google.genai import errors
 from pydantic import BaseModel
 from codesynapse import config
-from codesynapse.services import coach, llm
+from codesynapse.services import coach, llm, model_health
 
 class Reply(BaseModel):
     answer: str
@@ -88,3 +88,43 @@ def test_malformed_reply_tries_next_model(setup):
 def test_empty_reply_tries_next_model(setup):
     setup.script = [None, GOOD]
     assert llm.generate_json("p", Reply).answer == "yes"
+
+# --- Remembering struggling models across requests ---
+
+def test_a_model_that_timed_out_goes_last_on_the_next_request(setup):
+    setup.script = [httpx.ReadTimeout("slow"), GOOD, GOOD]
+    llm.generate_json("p1", Reply)
+    llm.generate_json("p2", Reply)
+    assert setup.calls == ["first", "second", "second"]
+
+def test_an_overloaded_model_goes_last_too(setup):
+    setup.script = [api_error(503), GOOD, GOOD]
+    llm.generate_json("p1", Reply)
+    llm.generate_json("p2", Reply)
+    assert setup.calls == ["first", "second", "second"]
+
+def test_a_rested_model_is_tried_first_again(setup, monkeypatch):
+    clock = [1000.0]
+    monkeypatch.setattr(model_health.time, "monotonic", lambda: clock[0])
+    setup.script = [httpx.ReadTimeout("slow"), GOOD, GOOD]
+    llm.generate_json("p1", Reply)
+    clock[0] += model_health.SLOW_SECONDS + 1
+    llm.generate_json("p2", Reply)
+    assert setup.calls == ["first", "second", "first"]
+
+def test_a_resting_model_is_still_used_when_nothing_else_works(setup):
+    model_health.mark_slow("first")
+    setup.script = [api_error(503), GOOD, GOOD]
+    assert llm.generate_json("p1", Reply).answer == "yes"
+    # It answered, so it is healthy again; "second" is now the one resting
+    llm.generate_json("p2", Reply)
+    assert setup.calls == ["second", "first", "first"]
+
+def test_a_daily_limit_rests_the_model_for_later_requests(setup):
+    setup.script = [daily_limit(), GOOD, GOOD]
+    llm.generate_json("p1", Reply)
+    llm.generate_json("p2", Reply)
+    assert setup.calls == ["first", "second", "second"]
+
+def test_a_request_gives_up_on_a_hung_model_well_within_a_minute():
+    assert coach.REQUEST_TIMEOUT_MS <= 40000

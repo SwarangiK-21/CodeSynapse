@@ -4,7 +4,10 @@ import httpx
 from google.genai import errors, types
 from pydantic import BaseModel, ValidationError
 from codesynapse import config
-from codesynapse.services import cache, coach, embeddings
+from codesynapse.services import cache, coach, embeddings, model_health
+
+# Errors that mean the model itself is struggling, so it should rest for a while
+SLOW_CODES = {500, 503, 504}
 
 # Long-running work can wait for the service to recover
 ROUNDS = 3
@@ -61,11 +64,13 @@ def generate_json(prompt, schema: type[BaseModel], usage: Usage | None = None, t
     exhausted = set()
     for round_number in range(ROUNDS):
         wait = BACKOFF_SECONDS * (round_number + 1)
-        for model_name in config.GEMINI_MODELS:
+        # Models that recently timed out or were overloaded go last
+        for model_name in model_health.ordered(config.GEMINI_MODELS):
             if model_name in exhausted:
                 continue
             try:
                 reply = call_model(model_name, prompt, schema, generation, usage)
+                model_health.mark_ok(model_name)
                 if cache_parts:
                     cache.put("llm", cache_parts, reply.model_dump_json())
                 return reply
@@ -74,13 +79,17 @@ def generate_json(prompt, schema: type[BaseModel], usage: Usage | None = None, t
                 last_code = e.code
                 if e.code not in coach.FALLBACK_CODES:
                     raise LLMError(coach.describe_error(e.code))
+                if e.code in SLOW_CODES:
+                    model_health.mark_slow(model_name)
                 if e.code == 429 and embeddings.is_daily_limit(e):
                     exhausted.add(model_name)
+                    model_health.mark_slow(model_name, model_health.EXHAUSTED_SECONDS)
                 elif e.code == 429:
                     wait = max(wait, embeddings.retry_delay(e))
             except (httpx.TransportError, OSError) as e:
                 print(f"LLM Network Error on {model_name}: {e}")
                 last_code = 504
+                model_health.mark_slow(model_name)
             except (ValidationError, TypeError) as e:
                 print(f"LLM Reply Error on {model_name}: {e}")
         if exhausted == set(config.GEMINI_MODELS):

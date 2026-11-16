@@ -59,3 +59,12 @@ def test_unreadable_replies_are_hidden(raw):
 
 def test_reply_without_actions():
     assert chat.format_reply('{"advice": "Rest", "actions": []}') == "Rest"
+
+def test_a_timeout_falls_back_and_the_slow_model_rests(monkeypatch):
+    import httpx
+    from codesynapse.services import model_health
+    models = use(monkeypatch, lambda m: httpx.ReadTimeout("slow") if m == "first" else '{"advice": "ok", "actions": []}')
+    assert advice(coach.ask_gemini("q", [])) == "ok"
+    assert advice(coach.ask_gemini("q", [])) == "ok"
+    assert models.calls == ["first", "second", "second"]
+    assert model_health.ordered(["first", "second"]) == ["second", "first"]
