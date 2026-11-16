@@ -48,12 +48,16 @@ def vector_ranking(db: Session, chunks, query_vector):
         .order_by(CodeChunk.embedding.cosine_distance(query_vector)).limit(CANDIDATES)
     ))
 
-def fuse(rankings):
-    """Reciprocal rank fusion: rewards results that rank well in either list."""
+def fuse(rankings, weights=None, k=RRF_K):
+    """Reciprocal rank fusion: rewards results that rank well in either list.
+
+    weights scales each list's say (default equal); a smaller k favours each list's top results.
+    """
+    weights = weights or [1.0] * len(rankings)
     scores = {}
-    for ranking in rankings:
+    for ranking, weight in zip(rankings, weights):
         for rank, chunk_id in enumerate(ranking):
-            scores[chunk_id] = scores.get(chunk_id, 0) + 1 / (RRF_K + rank + 1)
+            scores[chunk_id] = scores.get(chunk_id, 0) + weight / (k + rank + 1)
     return sorted(scores.items(), key=lambda item: item[1], reverse=True)
 
 def search_code(db: Session, user: User, query, repo_id=None, limit=10):

@@ -118,6 +118,21 @@ What this shows: on easy cases a single prompt is as accurate, but the agent is 
 
 Reproduce: `python -m evals.run agent`, `baseline`, `agent-hard`, `baseline-hard`, `injection`, then `python -m evals.run report`.
 
+### Code search quality
+
+From [`evals/results/retrieval.json`](evals/results/retrieval.json): can search find real evidence for a skill? The queries are the 37 skills labelled present across both sets. A code chunk counts as relevant when it contains that skill's proof, the same pattern [`check_labels.py`](evals/check_labels.py) verifies against the real files, so the labels need no AI. Success@k: a relevant chunk is in the top k. MRR: how high the first one ranks.
+
+| Method | Success@1 | Success@5 | MRR@10 | Paraphrased skills (10): Success@1 / MRR |
+|---|---:|---:|---:|---:|
+| Keyword (BM25) | 0.30 | 0.59 | 0.40 | 0.20 / 0.30 |
+| Vector | 0.41 | **0.84** | 0.57 | 0.30 / **0.53** |
+| Hybrid, equal weights (in use) | 0.30 | 0.70 | 0.47 | 0.00 / 0.29 |
+| **Hybrid, tuned** | **0.49** | 0.81 | **0.61** | 0.30 / 0.51 |
+
+The equal-weight hybrid the app uses scored *below* vector search alone: on paraphrased skills its first result was never relevant, because weak keyword matches pushed good vector matches down. Giving keywords a quarter of the weight with a sharper fusion curve (RRF k=10) fixed that. The setting was tuned on the standard set only and held up on the paraphrased hard queries it never saw. The app keeps equal weights until the agent is re-evaluated with the tuned search. With 37 queries these numbers are indicative.
+
+Reproduce: `python -m evals.retrieval` (reuses the evaluation index; query vectors are cached).
+
 ---
 
 ## 🔧 Running locally

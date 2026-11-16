@@ -1,0 +1,1582 @@
+{
+ "keyword (BM25)": {
+  "all": {
+   "success@1": 0.297,
+   "success@5": 0.595,
+   "mrr@10": 0.401,
+   "ndcg@10": 0.321,
+   "queries": 37
+  },
+  "standard": {
+   "success@1": 0.308,
+   "success@5": 0.654,
+   "mrr@10": 0.417,
+   "ndcg@10": 0.376,
+   "queries": 26
+  },
+  "hard: paraphrased": {
+   "success@1": 0.2,
+   "success@5": 0.4,
+   "mrr@10": 0.297,
+   "ndcg@10": 0.173,
+   "queries": 10
+  },
+  "per_query": [
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7680578490001237,
+    "suite": "core",
+    "type": "plain",
+    "query": "Cryptographic signing with HMAC",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7095272044910244,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python type hints",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.3589542101716347,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTML escaping",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1111111111111111,
+    "ndcg@10": 0.18457569677956817,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python C extensions",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.6222783806289389,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.24342516237554856,
+    "suite": "core",
+    "type": "plain",
+    "query": "Express middleware",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.30077259211005997,
+    "suite": "core",
+    "type": "plain",
+    "query": "CORS headers",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9217868789962071,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6457699306980325,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7653606369886217,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python asyncio",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.47289350335945446,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.08514311764162098,
+    "suite": "core",
+    "type": "plain",
+    "query": "PostgreSQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.2032389337527008,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python async concurrency",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6378891765242927,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "TypeScript",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7728378251807518,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.09478836436955078,
+    "suite": "core",
+    "type": "plain",
+    "query": "FastAPI",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7007731679885373,
+    "suite": "core",
+    "type": "plain",
+    "query": "React",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.4736200079773859,
+    "suite": "core",
+    "type": "plain",
+    "query": "JWT authentication",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Docker",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.3882047626431879,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.22009176629808017,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Tamper-proof data serialization",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Expiring tokens",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Preventing cross-site scripting",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1,
+    "ndcg@10": 0.17723928678404774,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Performance optimisation in native code",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.32583242649464755,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Handling browser preflight requests",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.125,
+    "ndcg@10": 0.31546487678572877,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Allow-listing web origins",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.46845052016107697,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running raw SQL queries",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Exporting data to CSV and JSON",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.3589542101716347,
+    "suite": "hard",
+    "type": "contrast",
+    "query": "MySQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.22009176629808017,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Asynchronous database drivers",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Connection pooling",
+    "repo": "encode/databases"
+   }
+  ]
+ },
+ "vector": {
+  "all": {
+   "success@1": 0.405,
+   "success@5": 0.838,
+   "mrr@10": 0.567,
+   "ndcg@10": 0.455,
+   "queries": 37
+  },
+  "standard": {
+   "success@1": 0.462,
+   "success@5": 0.769,
+   "mrr@10": 0.586,
+   "ndcg@10": 0.478,
+   "queries": 26
+  },
+  "hard: paraphrased": {
+   "success@1": 0.3,
+   "success@5": 1.0,
+   "mrr@10": 0.525,
+   "ndcg@10": 0.404,
+   "queries": 10
+  },
+  "per_query": [
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.3794140541514857,
+    "suite": "core",
+    "type": "plain",
+    "query": "Cryptographic signing with HMAC",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.125,
+    "ndcg@10": 0.30712981332153244,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python type hints",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.3340514446642156,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTML escaping",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5437713091520254,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python C extensions",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.4430895440946126,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.15166831491748423,
+    "suite": "core",
+    "type": "plain",
+    "query": "Express middleware",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.40432209650495937,
+    "suite": "core",
+    "type": "plain",
+    "query": "CORS headers",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7039180890341347,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.21840743681816419,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python asyncio",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.43735247915031,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.08514311764162098,
+    "suite": "core",
+    "type": "plain",
+    "query": "PostgreSQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.4911492931622974,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.23440650992329987,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python async concurrency",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.28371255449703187,
+    "suite": "core",
+    "type": "plain",
+    "query": "TypeScript",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7534494445524138,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "FastAPI",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "React",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.23463936301137822,
+    "suite": "core",
+    "type": "plain",
+    "query": "JWT authentication",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Docker",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.933745776545611,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.2984900352767555,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Tamper-proof data serialization",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.25469837558210445,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Expiring tokens",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.22784037450527975,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Preventing cross-site scripting",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Performance optimisation in native code",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.28240923066366025,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Handling browser preflight requests",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Allow-listing web origins",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.5012658353418871,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running raw SQL queries",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6509209298071326,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Exporting data to CSV and JSON",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.3636237070689246,
+    "suite": "hard",
+    "type": "contrast",
+    "query": "MySQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.11004588314904008,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Asynchronous database drivers",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.28371255449703187,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Connection pooling",
+    "repo": "encode/databases"
+   }
+  ]
+ },
+ "hybrid (RRF)": {
+  "all": {
+   "success@1": 0.297,
+   "success@5": 0.703,
+   "mrr@10": 0.471,
+   "ndcg@10": 0.426,
+   "queries": 37
+  },
+  "standard": {
+   "success@1": 0.385,
+   "success@5": 0.692,
+   "mrr@10": 0.52,
+   "ndcg@10": 0.462,
+   "queries": 26
+  },
+  "hard: paraphrased": {
+   "success@1": 0.0,
+   "success@5": 0.7,
+   "mrr@10": 0.29,
+   "ndcg@10": 0.331,
+   "queries": 10
+  },
+  "per_query": [
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.734388434701441,
+    "suite": "core",
+    "type": "plain",
+    "query": "Cryptographic signing with HMAC",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.125,
+    "ndcg@10": 0.10699313236726378,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9709286432396581,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python type hints",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.30523488393970116,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTML escaping",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.45560514958746035,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python C extensions",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5857420314400269,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.24342516237554856,
+    "suite": "core",
+    "type": "plain",
+    "query": "Express middleware",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.30077259211005997,
+    "suite": "core",
+    "type": "plain",
+    "query": "CORS headers",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9674679834891693,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8508957228074243,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9134015924715543,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.20438239758848611,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python asyncio",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.5727555047321237,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.22009176629808017,
+    "suite": "core",
+    "type": "plain",
+    "query": "PostgreSQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1111111111111111,
+    "ndcg@10": 0.12987501165334076,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python async concurrency",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8899541168509599,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.28323251649726616,
+    "suite": "core",
+    "type": "plain",
+    "query": "TypeScript",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.685119869332369,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "FastAPI",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.31280477890197517,
+    "suite": "core",
+    "type": "plain",
+    "query": "React",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6256646589861505,
+    "suite": "core",
+    "type": "plain",
+    "query": "JWT authentication",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3562071871080222,
+    "suite": "core",
+    "type": "plain",
+    "query": "Docker",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6618313225363274,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.21222636597291458,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Tamper-proof data serialization",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.25469837558210445,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Expiring tokens",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.15139734109601002,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Preventing cross-site scripting",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6240505200038379,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Performance optimisation in native code",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.3350772058974043,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Handling browser preflight requests",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Allow-listing web origins",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6934264036172708,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running raw SQL queries",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.39780880120575696,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Exporting data to CSV and JSON",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.42838543210841196,
+    "suite": "hard",
+    "type": "contrast",
+    "query": "MySQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1111111111111111,
+    "ndcg@10": 0.06625422345438903,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Asynchronous database drivers",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.14201905717762703,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Connection pooling",
+    "repo": "encode/databases"
+   }
+  ]
+ },
+ "hybrid, tuned": {
+  "all": {
+   "success@1": 0.486,
+   "success@5": 0.811,
+   "mrr@10": 0.612,
+   "ndcg@10": 0.467,
+   "queries": 37
+  },
+  "standard": {
+   "success@1": 0.538,
+   "success@5": 0.769,
+   "mrr@10": 0.636,
+   "ndcg@10": 0.494,
+   "queries": 26
+  },
+  "hard: paraphrased": {
+   "success@1": 0.3,
+   "success@5": 0.9,
+   "mrr@10": 0.508,
+   "ndcg@10": 0.403,
+   "queries": 10
+  },
+  "per_query": [
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.5654431568989117,
+    "suite": "core",
+    "type": "plain",
+    "query": "Cryptographic signing with HMAC",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.21515079688078367,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python type hints",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.41528076708874123,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTML escaping",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5706417189553201,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python C extensions",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6818624649454276,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.2170476781108665,
+    "suite": "core",
+    "type": "plain",
+    "query": "Express middleware",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.4554860820893459,
+    "suite": "core",
+    "type": "plain",
+    "query": "CORS headers",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9292442392789195,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7653606369886217,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.20438239758848611,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python asyncio",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.5103515512676446,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLAlchemy",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.13886244387355454,
+    "suite": "core",
+    "type": "plain",
+    "query": "PostgreSQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.2640681225725909,
+    "suite": "core",
+    "type": "plain",
+    "query": "Database transactions",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.22793826167775832,
+    "suite": "core",
+    "type": "plain",
+    "query": "Python async concurrency",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9305687780632227,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.2863459897524692,
+    "suite": "core",
+    "type": "plain",
+    "query": "TypeScript",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7506372960520509,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "FastAPI",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "React",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.2960819109658652,
+    "suite": "core",
+    "type": "plain",
+    "query": "JWT authentication",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Docker",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9216017310213246,
+    "suite": "core",
+    "type": "plain",
+    "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.36792125721353275,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Tamper-proof data serialization",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.25469837558210445,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Expiring tokens",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.16421958630632802,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Preventing cross-site scripting",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9197207891481876,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Performance optimisation in native code",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3236744220695469,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Handling browser preflight requests",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Allow-listing web origins",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6509209298071326,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running raw SQL queries",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5437713091520254,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Exporting data to CSV and JSON",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.40350157154648025,
+    "suite": "hard",
+    "type": "contrast",
+    "query": "MySQL",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.09478836436955078,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Asynchronous database drivers",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.28371255449703187,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Connection pooling",
+    "repo": "encode/databases"
+   }
+  ]
+ }
+}
