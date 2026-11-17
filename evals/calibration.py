@@ -41,6 +41,7 @@ def collect():
     from codesynapse.services import llm
     upgrade()
     done = {(r["suite"], r["repo"]) for r in load_records()}
+    waiting = []
     with SessionLocal() as db:
         user = run.eval_user(db)
         for suite in ("core", "hard"):
@@ -49,8 +50,9 @@ def collect():
                     continue
                 repo_id = run.indexed_repo(db, user, case)
                 if repo_id is None:
-                    print("Embedding quota used up for today. Run again tomorrow to resume.")
-                    return 1
+                    # Out of embedding quota: skip it, so repositories already indexed still run today
+                    waiting.append(f"{suite}/{case['repo']}")
+                    continue
                 started = time.time()
                 try:
                     report, _, _ = run.gap_analysis.run(db, user, run.job_for(case), [repo_id])
@@ -70,6 +72,9 @@ def collect():
                             "stated_confidence": result.get("stated_confidence"),
                         }) + "\n")
                 print(f"finished {suite}/{case['repo']} in {round(time.time() - started)}s", flush=True)
+    if waiting:
+        print(f"Embedding quota used up for today. Waiting for: {', '.join(waiting)}. Run again tomorrow to resume.")
+        return 1
     return 0
 
 # --- ANALYZE ---
