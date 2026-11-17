@@ -43,6 +43,7 @@ Students preparing for software roles get generic advice that ignores what they 
 - **AI career coach** — a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies and automatic fallback to another model.
 - **Skill-gap agent** — a LangGraph workflow (`plan → retrieve → assess → verify → recommend`) compares repositories with a job description. A deterministic verifier checks every quoted claim against the real source, links it to exact lines, and retries or drops unsupported claims; a person approves the report before it is final.
 - **Resume claim checker** — upload a resume PDF (or paste it) and the same agent checks each technical claim against your repositories: backed by code, partly backed, or not found, with links to the lines. Only the extracted claims are stored, never the full resume or contact details.
+- **MCP server** — six tools that let AI assistants such as Claude or Cursor index repositories, search code and run skill and resume checks in conversation, with every result linked to the exact lines.
 - **Hybrid code search** — indexes public repositories by function and class with Tree-sitter, then retrieves with BM25 + vector search merged by reciprocal rank fusion. Repository code is read, never executed.
 - **Job-description parsing** — extracts required skills and drops any skill the model cannot back with a quote from the text.
 - **Private per-user data, PDF report and REST API** — everything in the UI is also available through FastAPI.
@@ -165,6 +166,46 @@ Set `DATABASE_URL` to a Postgres database and `UI_SECRET` to a long random value
 ```bash
 docker build -t codesynapse .
 docker run --env-file .env -p 7860:7860 codesynapse
+```
+
+---
+
+## 🤖 Use it from an AI assistant (MCP)
+
+[`codesynapse/mcp_server.py`](codesynapse/mcp_server.py) is a [Model Context Protocol](https://modelcontextprotocol.io) server, so Claude Desktop, Claude Code, Cursor or any MCP client can use CodeSynapse in conversation: *"index my repo and check it against this job post"*, *"which claims on my resume does my code back up?"*.
+
+| Tool | What it does |
+|---|---|
+| `index_repository` | Adds a public GitHub repository and waits until it is searchable |
+| `list_repositories` | Lists your indexed repositories |
+| `search_code` | Searches by keywords and meaning; every result links to the exact lines |
+| `start_skill_check` | Starts checking repositories against a job description |
+| `start_resume_check` | Starts checking each claim on a resume against repositories |
+| `get_report` | Returns progress, or the finished report with its evidence links |
+
+Analyses take minutes, longer than assistants wait for one call, so they are started by one tool and collected with `get_report`. The server talks to the live demo by default; set `CODESYNAPSE_URL` to use your own. On first use it creates a private user and keeps the token in `~/.codesynapse/token`.
+
+```bash
+pip install -r requirements-mcp.txt
+```
+
+**Claude Code:**
+
+```bash
+claude mcp add codesynapse -- python /path/to/CodeSynapse/codesynapse/mcp_server.py
+```
+
+**Claude Desktop** (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "codesynapse": {
+      "command": "python",
+      "args": ["/path/to/CodeSynapse/codesynapse/mcp_server.py"]
+    }
+  }
+}
 ```
 
 ---
