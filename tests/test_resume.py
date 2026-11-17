@@ -164,7 +164,7 @@ def test_resume_report_wording():
     assert "resume claims backed by code" in html and "Your resume says" in html
     assert "&lt;Redis&gt;" in html and "<Redis>" not in html
     assert "Resume claims checked" in html
-    assert "claims on your resume" in components.empty_report("resume")
+    assert "claim on your resume" in components.empty_report("resume")
     assert "Check each claim" in components.stage_tracker(2, components.RESUME_STAGES)
 
 def test_repository_list_parsing():
