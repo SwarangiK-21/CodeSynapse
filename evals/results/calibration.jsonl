@@ -1,0 +1,29 @@
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "Cryptographic signing with HMAC", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 0.99}
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "pytest", "type": "plain", "present": true, "level": "strong", "citations": 4, "rejected_claims": 0, "stated_confidence": 0.98}
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "GitHub Actions", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "Python type hints", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 0.99}
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "Kubernetes", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "Redis", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "pallets/itsdangerous", "skill": "React", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "pallets/markupsafe", "skill": "HTML escaping", "type": "plain", "present": true, "level": "strong", "citations": 1, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "core", "repo": "pallets/markupsafe", "skill": "Python C extensions", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "core", "repo": "pallets/markupsafe", "skill": "pytest", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "core", "repo": "pallets/markupsafe", "skill": "SQLAlchemy", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "pallets/markupsafe", "skill": "FastAPI", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "expressjs/cors", "skill": "Express middleware", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "core", "repo": "expressjs/cors", "skill": "CORS headers", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "expressjs/cors", "skill": "GitHub Actions", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 2, "stated_confidence": 1.0}
+{"suite": "core", "repo": "expressjs/cors", "skill": "TypeScript", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "expressjs/cors", "skill": "Docker", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "expressjs/cors", "skill": "PostgreSQL", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "kennethreitz/records", "skill": "SQLAlchemy", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 1, "stated_confidence": 0.95}
+{"suite": "core", "repo": "kennethreitz/records", "skill": "Database transactions", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "kennethreitz/records", "skill": "pytest", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 2, "stated_confidence": 1.0}
+{"suite": "core", "repo": "kennethreitz/records", "skill": "Docker", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "kennethreitz/records", "skill": "React", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "encode/databases", "skill": "Python asyncio", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "core", "repo": "encode/databases", "skill": "SQLAlchemy", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "core", "repo": "encode/databases", "skill": "PostgreSQL", "type": "plain", "present": true, "level": "strong", "citations": 1, "rejected_claims": 2, "stated_confidence": 0.9}
+{"suite": "core", "repo": "encode/databases", "skill": "Database transactions", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 0.98}
+{"suite": "core", "repo": "encode/databases", "skill": "Kubernetes", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "encode/databases", "skill": "Redis", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
