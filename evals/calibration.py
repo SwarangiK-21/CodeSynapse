@@ -8,18 +8,28 @@ stopped, like evals.run. analyze compares four ways of turning a result into a p
 each scored by leave-one-repository-out cross-validation, so a repository is never scored by
 a model that saw it. It writes the scores, a reliability chart, and the final model fitted
 on all the data to codesynapse/agents/confidence_model.json.
+
+Unlike evals.run, this uses the app's own model list: the confidence model scores the live
+app's answers, so it learns from the models the app really calls.
 """
 import json
+import os
 import sys
 import time
 from datetime import date
 from pathlib import Path
-import numpy as np
-from evals import calibration_metrics as cm
-from evals import check_labels
-from codesynapse.agents import confidence
 
 ROOT = Path(__file__).parent
+if __name__ == "__main__":
+    # Before any app code reads its settings: keep the search index in evals/.cache, which
+    # is reused between runs (and cached by the Evals workflow) so it isn't embedded again
+    os.environ["DATABASE_URL"] = f"sqlite:///{(ROOT / '.cache' / 'eval.db').as_posix()}"
+
+import numpy as np  # noqa: E402
+from evals import calibration_metrics as cm  # noqa: E402
+from evals import check_labels  # noqa: E402
+from codesynapse.agents import confidence  # noqa: E402
+
 RECORDS = ROOT / "results" / "calibration.jsonl"
 SUMMARY = ROOT / "results" / "calibration.json"
 CHART = ROOT.parent / "docs" / "images" / "calibration.svg"
@@ -33,8 +43,7 @@ def load_records():
     return [json.loads(line) for line in RECORDS.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 def collect():
-    # Imported here so analyze works without the agent: evals.run picks the evaluation
-    # database and model, then loads the agent
+    # Imported here so analyze works without the agent
     from evals import run
     from codesynapse.db.migrate import upgrade
     from codesynapse.db.session import SessionLocal
