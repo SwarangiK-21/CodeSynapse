@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, Response, UploadFile, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from codesynapse.db.models import User
 from codesynapse.db.session import get_db
-from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, search, users
+from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, resume, search, users
 
 router = APIRouter(prefix="/api")
 bearer = HTTPBearer(auto_error=False)
@@ -32,7 +32,7 @@ def analysis_out(a):
             "finished_at": a.finished_at}
 
 def job_out(job):
-    return {"id": job.id, "title": job.title, "skills": job.skills, "created_at": job.created_at}
+    return {"id": job.id, "kind": job.kind, "title": job.title, "skills": job.skills, "created_at": job.created_at}
 
 def current_user(credentials: HTTPAuthorizationCredentials | None = Depends(bearer), db: Session = Depends(get_db)):
     user = users.get_user_by_token(db, credentials.credentials) if credentials else None
@@ -114,6 +114,29 @@ def create_job(body: JobIn, user: User = Depends(current_user), db: Session = De
         return job_out(jobs.create_job(db, user, body.text))
     except jobs.JobError as e:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(e))
+
+@router.post("/resumes", status_code=status.HTTP_201_CREATED)
+def create_resume(file: UploadFile | None = File(None), text: str | None = Form(None, max_length=resume.MAX_CHARS),
+                  user: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Reads a resume (an uploaded PDF, or pasted text) and returns the claims to check.
+
+    Pass the returned id as job_id to POST /api/analyses to check the claims against repositories.
+    """
+    if not file and not text:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Upload a PDF or paste the resume text.")
+    limits.check("job", user.id)
+    try:
+        if file:
+            # Reads one byte past the limit, so an oversized file is refused without loading it all
+            content = resume.pdf_text(file.file.read(resume.MAX_BYTES + 1))
+            name = file.filename or "resume.pdf"
+        else:
+            content, name = text, "pasted text"
+        return job_out(resume.create_resume(db, user, content, name))
+    except resume.ResumeUnavailable as e:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(e))
+    except resume.ResumeError as e:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(e))
 
 @router.get("/jobs/{job_id}")
 def read_job(job_id: int, user: User = Depends(current_user), db: Session = Depends(get_db)):

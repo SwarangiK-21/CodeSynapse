@@ -261,6 +261,8 @@ button.lg, button.md { font-weight: 700 !important; transition: transform .15s e
 .cs-badge-none::before { content: "○ "; }
 .cs-skill-body { padding: 0 18px 14px; }
 .cs-skill-body:empty { display: none; }
+.cs-said { margin: 0 0 8px; padding: 8px 12px; border-radius: 12px; font-size: 14px; font-style: italic;
+  background: var(--cs-subtle); color: var(--cs-muted); }
 .cs-citations { list-style: none; margin: 0; padding: 0; }
 .cs-citation { padding: 12px 0; border-top: 1px dashed var(--cs-border); }
 .cs-citation p { margin: 0 0 4px; }

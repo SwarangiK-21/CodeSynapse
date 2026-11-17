@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 from codesynapse import config
 from codesynapse.db.session import SessionLocal
-from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, users
+from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, resume, users
 from codesynapse.ui import components
 from codesynapse.ui.style import RESTORE_THEME, TOGGLE_THEME
 
@@ -18,6 +18,17 @@ SAMPLE_REPO = "pallets/itsdangerous"
 SAMPLE_JOB = """Python Developer. You must have strong Python and experience with cryptographic signing.
 You will write automated tests with pytest and maintain GitHub Actions pipelines.
 Experience with Redis caching is a bonus."""
+
+MAX_RESUME_REPOS = 3
+SAMPLE_RESUME_REPO = "pallets/itsdangerous"
+# A made-up resume: some claims the sample repository proves, some it doesn't
+SAMPLE_RESUME = """Alex Example, Backend Developer
+Skills
+- Implemented HMAC-based signing of tokens and cookies in Python
+- Wrote automated tests with pytest and kept CI green with GitHub Actions
+- Used Python type hints across the codebase
+- Built caching layers with Redis
+- Deployed services on Kubernetes"""
 
 # The finished report appears below the form, where it is easy to miss
 SCROLL_TO_REPORT = "() => document.querySelector('.cs-report')?.scrollIntoView({block: 'start'})"
@@ -173,6 +184,67 @@ def run_agent_logic(token, repo, job_text):
             return
         yield report_view(analysis)
 
+def parse_repo_list(text):
+    """Splits repositories given one per line or separated by commas, keeping their order."""
+    names = [part.strip() for part in (text or "").replace(",", "\n").split("\n")]
+    return list(dict.fromkeys(name for name in names if name))
+
+def read_resume(file_path, text):
+    """Returns the resume's text and a name for it, from an uploaded PDF or pasted text."""
+    if file_path:
+        with open(file_path, "rb") as f:
+            data = f.read(resume.MAX_BYTES + 1)
+        return resume.pdf_text(data), os.path.basename(file_path)
+    return resume.check_text(text), "pasted text"
+
+def load_latest_resume_report(token):
+    with SessionLocal() as db:
+        user = users.get_user_by_token(db, token)
+        analysis = analyses.latest_report(db, user, "resume") if user else None
+        return report_view(analysis) if analysis else hidden_view(components.empty_report("resume"))
+
+def run_resume_logic(token, file_path, text, repo_text):
+    """Reads the resume, indexes the repositories, then checks every claim against the code."""
+    names = parse_repo_list(repo_text)
+    if not names or not (file_path or (text or "").strip()):
+        yield hidden_view(components.message_box("Add your repositories and upload or paste your resume.", "error"))
+        return
+    if len(names) > MAX_RESUME_REPOS:
+        yield hidden_view(components.message_box(f"Choose up to {MAX_RESUME_REPOS} repositories.", "error"))
+        return
+    stages = components.RESUME_STAGES
+    with SessionLocal() as db:
+        user = require_user(db, token)
+        try:
+            limits.check("analysis", user.id)
+            # Read the file first: a bad PDF should fail before the slow indexing starts
+            content, name = read_resume(file_path, text)
+            yield hidden_view(components.stage_tracker(0, stages))
+            indexed = [repos.start_index(db, user, repo) for repo in names]
+            for repo in indexed:
+                wait_while(db, repo, "indexing")
+                if repo.status == "failed":
+                    yield hidden_view(components.message_box(f"{repo.full_name}: {repo.error}", "error"))
+                    return
+            yield hidden_view(components.stage_tracker(1, stages))
+            record = resume.create_resume(db, user, content, name)
+            yield hidden_view(components.stage_tracker(2, stages))
+            analysis = analyses.create_analysis(db, user, record.id, [r.id for r in indexed])
+        except (repos.RepoError, resume.ResumeError, analyses.AnalysisError, limits.Limited, TimeoutError) as e:
+            yield hidden_view(components.message_box(str(e), "error"))
+            return
+
+        analyses.start(analysis)
+        try:
+            wait_while(db, analysis, "running")
+        except TimeoutError as e:
+            yield hidden_view(components.message_box(str(e), "error"))
+            return
+        if analysis.status == "failed":
+            yield hidden_view(components.message_box(analysis.error, "error"))
+            return
+        yield report_view(analysis)
+
 def approve_logic(token, analysis_id):
     with SessionLocal() as db:
         analysis = analyses.get_analysis(db, require_user(db, token), analysis_id)
@@ -218,7 +290,27 @@ with gr.Blocks(title="CodeSynapse") as demo:
                 download_btn = gr.DownloadButton("Download report", visible=False)
             analysis_id = gr.State(None)
 
-        # TAB 2: CODING PROFILE
+        # TAB 2: RESUME CHECK
+        with gr.TabItem("📄 Resume Check"):
+            gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">🔎</span>'
+                    'Check the technical claims on your resume against your public code.</p>')
+            resume_file = gr.File(label="Resume (PDF)", file_types=[".pdf"], type="filepath")
+            resume_text = gr.Textbox(label="Or paste your resume text", lines=5,
+                                     placeholder="Paste the text if your resume is a scanned image")
+            resume_repos = gr.Textbox(label=f"Your GitHub repositories (up to {MAX_RESUME_REPOS})", lines=2,
+                                      placeholder="owner/repo, one per line or separated by commas")
+            gr.HTML('<p class="cs-muted">Your resume is sent to the AI once to find its claims. Only the '
+                    'claims are kept: not your name, contact details or the rest of the file.</p>')
+            with gr.Row():
+                resume_sample_btn = gr.Button("✨ Try an example")
+                resume_run_btn = gr.Button("Check my claims 🔍", variant="primary")
+            resume_output = gr.HTML(components.empty_report("resume"))
+            with gr.Row():
+                resume_approve_btn = gr.Button("Approve report", variant="primary", visible=False)
+                resume_download_btn = gr.DownloadButton("Download report", visible=False)
+            resume_analysis_id = gr.State(None)
+
+        # TAB 3: CODING PROFILE
         with gr.TabItem("📊 Profile"):
             gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">📈</span>'
                     'See your public GitHub and LeetCode stats in one place.</p>')
@@ -232,7 +324,7 @@ with gr.Blocks(title="CodeSynapse") as demo:
                 pdf_btn = gr.Button("Create PDF summary")
                 pdf_out = gr.File(label="PDF summary")
 
-        # TAB 3: CAREER COACH
+        # TAB 4: CAREER COACH
         with gr.TabItem("💬 Coach"):
             gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">💡</span>'
                     'Ask about your stats, your resume or what to learn next. '
@@ -245,11 +337,19 @@ with gr.Blocks(title="CodeSynapse") as demo:
     demo.load(None, None, None, js=RESTORE_THEME)
     theme_btn.click(None, None, None, js=TOGGLE_THEME)
     demo.load(load_session, [user_token], [user_token, gh_in, lc_in, stats_display, score_plot, chatbot]).then(
-        load_latest_report, [user_token], [agent_output, analysis_id, approve_btn, download_btn])
+        load_latest_report, [user_token], [agent_output, analysis_id, approve_btn, download_btn]).then(
+        load_latest_resume_report, [user_token],
+        [resume_output, resume_analysis_id, resume_approve_btn, resume_download_btn])
     sync_btn.click(fetch_data_logic, [user_token, gh_in, lc_in], [stats_display, score_plot])
     pdf_btn.click(generate_pdf_logic, [user_token], [pdf_out])
     sample_btn.click(lambda: (SAMPLE_REPO, SAMPLE_JOB), None, [repo_in, job_in])
     run_btn.click(run_agent_logic, [user_token, repo_in, job_in], [agent_output, analysis_id, approve_btn, download_btn]).then(
         None, None, None, js=SCROLL_TO_REPORT)
     approve_btn.click(approve_logic, [user_token, analysis_id], [agent_output, analysis_id, approve_btn, download_btn])
+    resume_outputs = [resume_output, resume_analysis_id, resume_approve_btn, resume_download_btn]
+    resume_sample_btn.click(lambda: (None, SAMPLE_RESUME, SAMPLE_RESUME_REPO), None,
+                            [resume_file, resume_text, resume_repos])
+    resume_run_btn.click(run_resume_logic, [user_token, resume_file, resume_text, resume_repos], resume_outputs).then(
+        None, None, None, js=SCROLL_TO_REPORT)
+    resume_approve_btn.click(approve_logic, [user_token, resume_analysis_id], resume_outputs)
     chatbot.clear(clear_chat_logic, [user_token])

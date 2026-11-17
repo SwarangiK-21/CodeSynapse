@@ -12,6 +12,7 @@ LEVELS = {
 }
 PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2}
 STAGES = ["Read the repository", "Read the job description", "Analyse and verify the evidence"]
+RESUME_STAGES = ["Read your repositories", "Find the claims in your resume", "Check each claim against your code"]
 
 def esc(value):
     return escape(str(value), quote=True)
@@ -25,17 +26,21 @@ def safe_link(url, label):
 def message_box(text, kind="info"):
     return f'<div class="cs-message cs-message-{esc(kind)}" role="status">{esc(text)}</div>'
 
-def empty_report():
-    return """<div class="cs-empty">
-      <div class="cs-empty-art" aria-hidden="true">🔍✨</div>
+def empty_report(kind="job"):
+    if kind == "resume":
+        art, text = "📄🔍", "Each technical claim on your resume is checked against your code, with links to the exact lines."
+    else:
+        art, text = "🔍✨", "Each skill in the job description is checked against your code, with links to the exact lines."
+    return f"""<div class="cs-empty">
+      <div class="cs-empty-art" aria-hidden="true">{art}</div>
       <h3>Your report will appear here</h3>
-      <p>Each skill in the job description is checked against your code, with links to the exact lines.</p>
+      <p>{text}</p>
     </div>"""
 
-def stage_tracker(active):
+def stage_tracker(active, stages=STAGES):
     """Shows which stage is running. Stages before `active` are finished."""
     items = []
-    for index, label in enumerate(STAGES):
+    for index, label in enumerate(stages):
         state = "done" if index < active else "active" if index == active else "waiting"
         mark = "✓" if state == "done" else index + 1
         current =' aria-current="step"' if state == "active" else ""
@@ -60,7 +65,7 @@ def confidence_tag(value):
     title = "Calibrated estimate that this skill is really present, from the evidence checks"
     return f'<span class="cs-confidence" title="{title}">{percent}% likely</span>'
 
-def skill_card(skill):
+def skill_card(skill, resume=False):
     text, css = LEVELS.get(skill["level"], LEVELS["none"])
     citations = "".join(citation_html(c) for c in skill["citations"])
     evidence = f'<ul class="cs-citations">{citations}</ul>' if citations else ""
@@ -68,6 +73,7 @@ def skill_card(skill):
     not_found = f'<div class="cs-gaps"><h5>Not found in the code searched</h5><ul>{gaps}</ul></div>' if gaps else ""
     count = len(skill["citations"])
     summary_note = f"{count} code reference{'' if count == 1 else 's'}" if count else ""
+    said = f'<p class="cs-said">Your resume says: "{esc(skill["job_quote"])}"</p>' if resume and skill.get("job_quote") else ""
     opened = " open" if skill["level"] != "strong" else ""
     return f"""<details class="cs-skill"{opened}>
       <summary>
@@ -77,7 +83,7 @@ def skill_card(skill):
         <span class="cs-count">{summary_note}</span>
         <span class="cs-badge cs-badge-{css}">{text}</span>
       </summary>
-      <div class="cs-skill-body">{evidence}{not_found}</div>
+      <div class="cs-skill-body">{said}{evidence}{not_found}</div>
     </details>"""
 
 def stat(value, label, css=""):
@@ -95,26 +101,32 @@ def recommendations_html(recommendations):
     return f'<h3>Recommended next steps</h3><ol class="cs-actions">{items}</ol>'
 
 def report_html(report, status):
+    resume = report.get("kind") == "resume"
     skills = sorted(report["skills"], key=lambda s: s["importance"] != "required")
     levels = [s["level"] for s in skills]
     required = [s for s in skills if s["importance"] == "required"]
     matched = sum(1 for s in required if s["level"] != "none")
     state = "Approved report" if status == "approved" else "Draft: review the evidence, then approve this report"
+    heading = "Resume claims checked against your code" if resume else esc(report["job_title"])
+    main_stat = "resume claims backed by code" if resume else "required skills with evidence"
+    note = ("Findings come from searching these repositories, so \"not found\" means no proof was found in public code, "
+            "not that the claim is untrue." if resume else
+            "Findings come from searching this repository, so \"not found\" means no evidence was found, "
+            "not that you lack the skill.")
     return f"""<article class="cs-report">
       <p class="cs-state cs-state-{esc(status)}">{state}</p>
-      <h2>{esc(report['job_title'])}</h2>
+      <h2>{heading}</h2>
       <p class="cs-summary">{esc(report['summary'])}</p>
       <div class="cs-stats">
-        {stat(f"{matched}/{len(required)}", "required skills with evidence", "cs-stat-main")}
+        {stat(f"{matched}/{len(required)}", main_stat, "cs-stat-main")}
         {stat(levels.count("strong"), "strong")}
         {stat(levels.count("partial"), "some evidence")}
         {stat(levels.count("none"), "not found")}
       </div>
-      <h3>Skills</h3>
-      {"".join(skill_card(s) for s in skills)}
+      <h3>{"Claims" if resume else "Skills"}</h3>
+      {"".join(skill_card(s, resume) for s in skills)}
       {recommendations_html(report["recommendations"])}
-      <p class="cs-muted">Findings come from searching this repository, so "not found" means no evidence was found,
-      not that you lack the skill.</p>
+      <p class="cs-muted">{note}</p>
     </article>"""
 
 def profile_html(stats):

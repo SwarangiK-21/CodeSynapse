@@ -42,6 +42,7 @@ Students preparing for software roles get generic advice that ignores what they 
 - **Competency scores** — each platform's stats become a 0–100 score in an interactive Plotly chart.
 - **AI career coach** — a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies and automatic fallback to another model.
 - **Skill-gap agent** — a LangGraph workflow (`plan → retrieve → assess → verify → recommend`) compares repositories with a job description. A deterministic verifier checks every quoted claim against the real source, links it to exact lines, and retries or drops unsupported claims; a person approves the report before it is final.
+- **Resume claim checker** — upload a resume PDF (or paste it) and the same agent checks each technical claim against your repositories: backed by code, partly backed, or not found, with links to the lines. Only the extracted claims are stored, never the full resume or contact details.
 - **Hybrid code search** — indexes public repositories by function and class with Tree-sitter, then retrieves with BM25 + vector search merged by reciprocal rank fusion. Repository code is read, never executed.
 - **Job-description parsing** — extracts required skills and drops any skill the model cannot back with a quote from the text.
 - **Private per-user data, PDF report and REST API** — everything in the UI is also available through FastAPI.
@@ -183,6 +184,7 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 | GET | `/api/search?q=` | Search indexed code by keyword and meaning |
 | POST | `/api/jobs` | Extract skills from a job description |
 | GET | `/api/jobs/{id}` | Read a parsed job description |
+| POST | `/api/resumes` | Read a resume (PDF upload or `text` form field) and extract its claims; pass the returned id as `job_id` to `/api/analyses` |
 | POST | `/api/analyses` | Start a skill-gap analysis |
 | GET | `/api/analyses/{id}` | Read status, report, step trace and token usage |
 | POST | `/api/analyses/{id}/approve` | Approve a draft report |

@@ -73,6 +73,8 @@ class JobDescription(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     title: Mapped[str] = mapped_column(String(200))
+    # "job", or "resume" when the requirements are the person's own claims
+    kind: Mapped[str] = mapped_column(String(10), default="job", server_default="job")
     raw_text: Mapped[str] = mapped_column(Text)
     skills: Mapped[list] = mapped_column(JSON, default=list)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
