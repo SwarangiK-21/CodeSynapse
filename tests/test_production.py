@@ -189,3 +189,15 @@ def test_storing_the_same_result_twice_is_harmless():
     cache.put("llm", ["x"], "1")
     cache.put("llm", ["x"], "2")
     assert cache.get("llm", ["x"]) == "1"
+
+def test_evaluation_indexing_can_cache_embeddings_while_it_runs(github, monkeypatch):
+    # On SQLite an uncommitted write here once locked out the embedding cache's own session
+    from codesynapse.db.models import EMBEDDING_DIM
+    def embed_content(model, contents, config):
+        return SimpleNamespace(embeddings=[SimpleNamespace(values=[0.1] * EMBEDDING_DIM) for _ in contents])
+    monkeypatch.setattr(coach, "client", SimpleNamespace(models=SimpleNamespace(embed_content=embed_content)))
+    with SessionLocal() as db:
+        user, _ = users.create_user(db)
+        repo = repos.index_repo(db, user, REPO)
+        assert repo.status == "ready"
+        assert all(r["embedded_chunks"] == r["chunks"] > 0 for r in repos.list_repos(db, user))
