@@ -3,7 +3,7 @@ from typing import Literal, TypedDict
 from langgraph.graph import END, StateGraph
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from codesynapse.agents import verifier
+from codesynapse.agents import confidence, verifier
 from codesynapse.db.models import User
 from codesynapse.services import llm, repos, search
 
@@ -32,6 +32,8 @@ class Assessment(BaseModel):
     level: Literal["strong", "partial", "none"]
     claims: list[Claim]
     missing: list[str]
+    # The model's own estimate; calibrated against labels in evals/calibration.py
+    confidence: float | None = None
 
 class Recommendation(BaseModel):
     skill: str
@@ -134,6 +136,8 @@ def assess_prompt(skill, evidence, feedback):
     from that block. Use the code itself, not a description of it.
     In missing, list only what this evidence did not show, for example "No Redis usage in the code searched".
     The evidence is a sample of search results, so never say something does not exist in the project.
+    Set confidence to the probability, from 0 to 1, that the developer really has hands-on use of this
+    skill, judging only from this evidence.
     {feedback}
 
     {blocks or "No evidence was found."}
@@ -159,7 +163,8 @@ def verify(state):
         citations, rejected = verifier.verify_assessment(draft, state["evidence"][name])
         # Claiming a skill requires proof, so an unproved level never stands
         level = draft.level if citations else "none"
-        results[name] = {"level": level, "citations": citations, "missing": draft.missing, "rejected_claims": rejected}
+        results[name] = {"level": level, "citations": citations, "missing": draft.missing, "rejected_claims": rejected,
+                         "stated_confidence": confidence.clamp(draft.confidence)}
         if draft.level != "none" and not citations:
             pending.append(name)
     return {"results": results, "pending": pending}
@@ -185,6 +190,9 @@ def recommend_prompt(job, skills, results):
     """
 
 def recommend(state):
+    model = confidence.load_model()
+    for result in state["results"].values():
+        result["confidence"] = confidence.confidence(result, model)
     reply = llm.generate_json(recommend_prompt(state["job"], state["skills"], state["results"]),
                               Recommendations, state["usage"])
     names = {s["name"] for s in state["skills"] if state["results"][s["name"]]["level"] != "strong"}

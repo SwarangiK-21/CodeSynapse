@@ -52,6 +52,14 @@ def citation_html(citation):
       <pre><code>{esc(citation['quote'])}</code></pre>
     </li>"""
 
+def confidence_tag(value):
+    """How likely the skill is really present, from the calibrated confidence model."""
+    if not isinstance(value, (int, float)):
+        return ""
+    percent = round(min(max(value, 0), 1) * 100)
+    title = "Calibrated estimate that this skill is really present, from the evidence checks"
+    return f'<span class="cs-confidence" title="{title}">{percent}% likely</span>'
+
 def skill_card(skill):
     text, css = LEVELS.get(skill["level"], LEVELS["none"])
     citations = "".join(citation_html(c) for c in skill["citations"])
@@ -65,6 +73,7 @@ def skill_card(skill):
       <summary>
         <span class="cs-skill-name">{esc(skill['name'])}</span>
         <span class="cs-tag">{esc(skill['importance'])}</span>
+        {confidence_tag(skill.get("confidence"))}
         <span class="cs-count">{summary_note}</span>
         <span class="cs-badge cs-badge-{css}">{text}</span>
       </summary>

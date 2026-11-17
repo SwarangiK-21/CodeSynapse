@@ -70,7 +70,8 @@ def to_markdown(analysis):
     report = analysis.report
     lines = [f"# Skill gap report: {report['job_title']}", "", report["summary"], "", "## Skills", ""]
     for skill in report["skills"]:
-        lines.append(f"### {skill['name']} ({skill['importance']}): {skill['level']}")
+        sure = f", {round(skill['confidence'] * 100)}% likely present" if skill.get("confidence") is not None else ""
+        lines.append(f"### {skill['name']} ({skill['importance']}): {skill['level']}{sure}")
         lines.extend(f"- {c['claim']} ([{c['path']}:{c['start_line']}]({c['url']}))" for c in skill["citations"])
         if skill["missing"]:
             lines.append(f"- **Not found in the code searched:** {'; '.join(skill['missing'])}")

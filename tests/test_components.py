@@ -192,3 +192,10 @@ def test_ui_gives_up_waiting_eventually(monkeypatch):
 def test_ui_rate_limit_is_explained(monkeypatch):
     monkeypatch.setitem(limits.LIMITS, "analysis", (0, 3600))
     assert "limit" in run(new_token())[-1][0]
+
+def test_confidence_shows_as_a_percentage_only_when_known():
+    from codesynapse.ui import components
+    base = {"name": "Redis", "importance": "required", "level": "strong", "citations": [], "missing": []}
+    assert "87% likely" in components.skill_card({**base, "confidence": 0.871})
+    assert "likely" not in components.skill_card(base)
+    assert "likely" not in components.skill_card({**base, "confidence": "<script>"})

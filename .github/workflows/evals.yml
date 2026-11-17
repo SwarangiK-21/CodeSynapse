@@ -1,0 +1,54 @@
+name: Evals
+
+# Runs the AI evaluations that need Gemini. Started by hand from the Actions tab, because it
+# uses the free daily quota. Results are committed back to the branch it ran on, and a run
+# stopped by the quota resumes where it left off when started again.
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "What to run"
+        type: choice
+        options: [calibration]
+        default: calibration
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: write
+    concurrency: evals-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+      - run: pip install -r requirements.txt
+      # The search index takes a while and quota to build, so it is kept between runs
+      - uses: actions/cache/restore@v4
+        with:
+          path: evals/.cache
+          key: eval-index-${{ hashFiles('evals/cases.json', 'evals/cases_hard.json') }}-${{ github.run_id }}
+          restore-keys: eval-index-${{ hashFiles('evals/cases.json', 'evals/cases_hard.json') }}-
+      - name: Collect calibration records
+        if: inputs.command == 'calibration'
+        run: python -m evals.calibration collect
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: evals/.cache
+          key: eval-index-${{ hashFiles('evals/cases.json', 'evals/cases_hard.json') }}-${{ github.run_id }}
+      - name: Commit the records
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add evals/results/calibration.jsonl || exit 0
+          git diff --cached --quiet && exit 0
+          git commit -m "Add calibration records from the Evals workflow"
+          git push

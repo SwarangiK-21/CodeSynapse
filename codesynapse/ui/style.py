@@ -248,6 +248,8 @@ button.lg, button.md { font-weight: 700 !important; transition: transform .15s e
 .cs-skill-name { font-weight: 700; }
 .cs-tag { padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600;
   background: var(--cs-sky); color: var(--cs-sky-ink); }
+.cs-confidence { padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700;
+  background: var(--cs-mist); color: var(--cs-mist-ink); }
 .cs-count { font-size: 12px; color: var(--cs-muted); margin-left: auto; }
 .cs-badge { padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .cs-count:empty + .cs-badge { margin-left: auto; }
