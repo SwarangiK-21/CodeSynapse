@@ -32,6 +32,16 @@ jobs:
           path: evals/.cache
           key: eval-index-${{ hashFiles('evals/cases.json', 'evals/cases_hard.json') }}-${{ github.run_id }}
           restore-keys: eval-index-${{ hashFiles('evals/cases.json', 'evals/cases_hard.json') }}-
+      # Without a cached index, start from the published one instead of embedding every
+      # repository again, which would take days of the free embedding quota
+      - name: Fetch the published evaluation index
+        run: |
+          if [ -f evals/.cache/eval.db ]; then echo "Using the cached index"; exit 0; fi
+          mkdir -p evals/.cache
+          curl -sSfL -o "$RUNNER_TEMP/eval.db.xz" \
+            "https://github.com/${{ github.repository }}/releases/download/eval-index-v1/eval.db.xz"
+          xz -d -c "$RUNNER_TEMP/eval.db.xz" > evals/.cache/eval.db
+          echo "4b9da900e02eb95c68ad93eecdad9af6f534435bcdd04cc71530fe30e4ecc274  evals/.cache/eval.db" | sha256sum -c -
       - name: Collect calibration records
         if: inputs.command == 'calibration'
         run: python -m evals.calibration collect
