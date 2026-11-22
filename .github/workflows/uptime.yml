@@ -1,0 +1,30 @@
+name: Uptime
+
+# Checks the live demo once a day. The health check queries the database, which also keeps
+# the free Supabase project from pausing after a week without activity. A failed run
+# emails the repository owner through GitHub's usual notifications.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check the live demo
+        env:
+          URL: https://swarangik-21-codesynapse.hf.space/health
+        run: |
+          # A sleeping Space takes a few minutes to wake, so keep trying for a while
+          for attempt in $(seq 1 20); do
+            body=$(curl -s -m 30 "$URL" || true)
+            echo "attempt $attempt: $body"
+            if echo "$body" | grep -q '"database":"ok"'; then exit 0; fi
+            sleep 30
+          done
+          echo "The live demo or its database did not answer."
+          exit 1
