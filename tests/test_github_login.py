@@ -13,6 +13,13 @@ PUBLIC = "https://codesynapse.test"
 GITHUB_USER = {"id": 4242, "login": "octocat"}
 
 @pytest.fixture
+def client():
+    """Over https: the state cookie is Secure, so a browser only sends it back over https."""
+    from fastapi.testclient import TestClient
+    from codesynapse.main import app
+    return TestClient(app, base_url="https://testserver")
+
+@pytest.fixture
 def configured(monkeypatch):
     monkeypatch.setattr(config, "GITHUB_CLIENT_ID", "client-id")
     monkeypatch.setattr(config, "GITHUB_CLIENT_SECRET", "client-secret")
