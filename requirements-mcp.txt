@@ -1,0 +1,3 @@
+# The optional MCP server (python -m codesynapse.mcp_server); the web app does not need it
+mcp==2.3.0
+httpx==0.28.1

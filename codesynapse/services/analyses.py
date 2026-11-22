@@ -35,7 +35,7 @@ def execute(analysis_id):
         job = db.get(JobDescription, analysis.job_id)
         try:
             analysis.report, analysis.trace, analysis.usage = gap_analysis.run(
-                db, user, {"title": job.title, "skills": job.skills}, analysis.repo_ids)
+                db, user, {"title": job.title, "skills": job.skills, "kind": job.kind}, analysis.repo_ids)
             analysis.status = "draft"
         except llm.LLMError as e:
             analysis.status, analysis.error = "failed", str(e)
@@ -51,10 +51,11 @@ def start(analysis):
 def get_analysis(db: Session, user: User, analysis_id):
     return db.scalar(select(Analysis).where(Analysis.id == analysis_id, Analysis.user_id == user.id))
 
-def latest_report(db: Session, user: User):
-    """Returns this user's newest analysis that produced a report."""
+def latest_report(db: Session, user: User, kind="job"):
+    """Returns this user's newest analysis that produced a report, for a job or a resume."""
     return db.scalar(
-        select(Analysis).where(Analysis.user_id == user.id, Analysis.status.in_(("draft", "approved")))
+        select(Analysis).join(JobDescription, Analysis.job_id == JobDescription.id)
+        .where(Analysis.user_id == user.id, Analysis.status.in_(("draft", "approved")), JobDescription.kind == kind)
         .order_by(Analysis.id.desc()).limit(1)
     )
 

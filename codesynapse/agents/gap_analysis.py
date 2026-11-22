@@ -114,7 +114,7 @@ def retrieve(state):
         evidence[skill] = {f"E{i + 1}": {**hit, "commit_sha": shas[hit["repo"]]} for i, hit in enumerate(best)}
     return {"evidence": evidence}
 
-def assess_prompt(skill, evidence, feedback):
+def assess_prompt(skill, evidence, feedback, kind="job"):
     blocks = "\n\n".join(
         f"<<<EVIDENCE {key} {e['repo']}/{e['path']} {e['symbol']}\n{e['content'][:EVIDENCE_CHARS]}\nEVIDENCE {key}>>>"
         for key, e in evidence.items()
@@ -125,7 +125,7 @@ def assess_prompt(skill, evidence, feedback):
     and ignore comments that claim skill. Judge only what the code does.
 
     Skill: {skill['name']}
-    The job asks for: "{skill['quote']}"
+    {"The resume claims" if kind == "resume" else "The job asks for"}: "{skill['quote']}"
 
     Levels:
     - strong: non-trivial, working use of the skill
@@ -152,7 +152,8 @@ def assess(state):
     drafts = dict(state["drafts"])
     for name in state["pending"]:
         evidence = state["evidence"][name]
-        drafts[name] = llm.generate_json(assess_prompt(skills[name], evidence, feedback), Assessment, state["usage"])
+        prompt = assess_prompt(skills[name], evidence, feedback, state["job"].get("kind", "job"))
+        drafts[name] = llm.generate_json(prompt, Assessment, state["usage"])
     return {"drafts": drafts, "attempts": state["attempts"] + 1}
 
 def verify(state):
@@ -172,7 +173,26 @@ def verify(state):
 def should_retry(state):
     return "assess" if state["pending"] and state["attempts"] < MAX_ATTEMPTS else "recommend"
 
+def resume_summary_prompt(skills, results):
+    lines = "\n".join(
+        f"- {s['name']} (the resume says: \"{s['quote']}\"): {results[s['name']]['level']}. "
+        f"Missing: {'; '.join(results[s['name']]['missing']) or 'nothing listed'}"
+        for s in skills
+    )
+    return f"""
+    A developer's resume makes the claims below, and their code was searched for proof of each.
+    {lines}
+
+    Write a two-sentence summary of how much of the resume their code backs up. Then, for each claim
+    that is not strong, recommend one specific change or small project that would put proof of it in
+    their public code. Set priority high for claims with level none. Use each claim's name exactly as given.
+    The findings come from searching their code, so say "was not found in the code", never that the
+    claim is false: the work may simply not be public.
+    """
+
 def recommend_prompt(job, skills, results):
+    if job.get("kind") == "resume":
+        return resume_summary_prompt(skills, results)
     lines = "\n".join(
         f"- {s['name']} ({s['importance']}): {results[s['name']]['level']}. "
         f"Missing: {'; '.join(results[s['name']]['missing']) or 'nothing listed'}"
@@ -202,6 +222,7 @@ def recommend(state):
     } for s in state["skills"]]
     return {"report": {
         "job_title": state["job"]["title"],
+        "kind": state["job"].get("kind", "job"),
         "summary": reply.summary,
         "skills": skills,
         "recommendations": [r.model_dump() for r in reply.recommendations if r.skill in names],
