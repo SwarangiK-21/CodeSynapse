@@ -6,14 +6,19 @@
     {"name": "Python type hints", "present": true, "proof": "-> (str|bytes|bool|None)"},
     {"name": "Kubernetes", "present": false, "proof": "kind: (Deployment|Service)"},
     {"name": "Redis", "present": false, "proof": "(?i)\\bredis\\b"},
-    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"}
+    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"},
+    {"name": "Base64 encoding", "present": true, "proof": "base64"},
+    {"name": "Data compression", "present": true, "proof": "\\bzlib\\b"},
+    {"name": "SQLAlchemy", "present": false, "proof": "(?i)sqlalchemy"}
   ]},
   {"repo": "pallets/markupsafe", "commit": "4e111271b1494995708a9e878a10829b5e10c7ba", "skills": [
     {"name": "HTML escaping", "present": true, "proof": "&lt;|&#34;"},
     {"name": "Python C extensions", "present": true, "proof": "PyInit_|PyObject"},
     {"name": "pytest", "present": true, "proof": "import pytest"},
     {"name": "SQLAlchemy", "present": false, "proof": "(?i)sqlalchemy"},
-    {"name": "FastAPI", "present": false, "proof": "(?i)from fastapi|import fastapi"}
+    {"name": "FastAPI", "present": false, "proof": "(?i)from fastapi|import fastapi"},
+    {"name": "Operator overloading", "present": true, "proof": "def __(add|mod|mul)__"},
+    {"name": "Python asyncio", "present": false, "proof": "(?i)\\basyncio\\b"}
   ]},
   {"repo": "expressjs/cors", "commit": "5317ebe670db2aaebc1d496eb5d33493deefb3ed", "skills": [
     {"name": "Express middleware", "present": true, "proof": "function \\w*\\(req, res, next\\)|\\(req, res, next\\)"},
@@ -21,14 +26,21 @@
     {"name": "GitHub Actions", "present": true, "proof": "^on:"},
     {"name": "TypeScript", "present": false, "proof": "\\binterface \\w+ \\{"},
     {"name": "Docker", "present": false, "proof": "^FROM "},
-    {"name": "PostgreSQL", "present": false, "proof": "(?i)postgres"}
+    {"name": "PostgreSQL", "present": false, "proof": "(?i)postgres"},
+    {"name": "HTTP Vary header", "present": true, "proof": "Vary"},
+    {"name": "JWT authentication", "present": false, "proof": "(?i)\\bjwt\\b"},
+    {"name": "Session cookies", "present": false, "proof": "(?i)express-session|res\\.cookie\\("}
   ]},
   {"repo": "kennethreitz/records", "commit": "ea4273695cee6da42edf1cb294d1f2a4505470fc", "skills": [
     {"name": "SQLAlchemy", "present": true, "proof": "from sqlalchemy|import sqlalchemy"},
     {"name": "Database transactions", "present": true, "proof": "transaction"},
     {"name": "pytest", "present": true, "proof": "import pytest"},
     {"name": "Docker", "present": false, "proof": "^FROM "},
-    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"}
+    {"name": "React", "present": false, "proof": "from ['\"]react['\"]"},
+    {"name": "Command-line interface", "present": true, "proof": "docopt"},
+    {"name": "Excel export", "present": true, "proof": "(?i)xlsx"},
+    {"name": "SQLite", "present": true, "proof": "(?i)sqlite"},
+    {"name": "Python asyncio", "present": false, "proof": "(?i)\\basyncio\\b|async def"}
   ]},
   {"repo": "encode/databases", "commit": "ae3fb16f40201d9ed0ed31bea31a289127169568", "skills": [
     {"name": "Python asyncio", "present": true, "proof": "import asyncio"},
@@ -36,20 +48,35 @@
     {"name": "PostgreSQL", "present": true, "proof": "asyncpg"},
     {"name": "Database transactions", "present": true, "proof": "class Transaction"},
     {"name": "Kubernetes", "present": false, "proof": "kind: (Deployment|Service)"},
-    {"name": "Redis", "present": false, "proof": "(?i)\\bredis\\b"}
+    {"name": "Redis", "present": false, "proof": "(?i)\\bredis\\b"},
+    {"name": "asyncpg", "present": true, "proof": "import asyncpg"},
+    {"name": "SQLite", "present": true, "proof": "aiosqlite"},
+    {"name": "Context variables", "present": true, "proof": "ContextVar"},
+    {"name": "GraphQL", "present": false, "proof": "(?i)graphql"}
   ]},
   {"repo": "fastapi/asyncer", "commit": "3b301d75c4bb0c681e03a90f62963a1f62dd7b0c", "skills": [
     {"name": "Python async concurrency", "present": true, "proof": "async def"},
     {"name": "GitHub Actions", "present": true, "proof": "^on:"},
     {"name": "PostgreSQL", "present": false, "proof": "(?i)postgres"},
-    {"name": "JWT authentication", "present": false, "proof": "(?i)\\bjwt\\b"}
+    {"name": "JWT authentication", "present": false, "proof": "(?i)\\bjwt\\b"},
+    {"name": "AnyIO", "present": true, "proof": "import anyio|from anyio"},
+    {"name": "Running blocking code in threads", "present": true, "proof": "to_thread"},
+    {"name": "Generic typing with ParamSpec", "present": true, "proof": "ParamSpec"},
+    {"name": "pytest", "present": true, "proof": "import pytest"},
+    {"name": "Django", "present": false, "proof": "(?i)\\bdjango\\b"},
+    {"name": "Redis", "present": false, "proof": "(?i)\\bredis\\b"}
   ]},
   {"repo": "sindresorhus/ky", "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d", "skills": [
     {"name": "TypeScript", "present": true, "proof": "\\binterface \\w+|export type "},
     {"name": "HTTP retry logic", "present": true, "proof": "(?i)retry"},
     {"name": "React", "present": false, "proof": "from ['\"]react['\"]"},
     {"name": "SQL databases", "present": false, "proof": "\\bINSERT INTO\\b"},
-    {"name": "Docker", "present": false, "proof": "^FROM "}
+    {"name": "Docker", "present": false, "proof": "^FROM "},
+    {"name": "Fetch API", "present": true, "proof": "\\bfetch\\("},
+    {"name": "Request timeouts", "present": true, "proof": "AbortController"},
+    {"name": "Request lifecycle hooks", "present": true, "proof": "beforeRequest|afterResponse"},
+    {"name": "AVA test framework", "present": true, "proof": "from 'ava'"},
+    {"name": "GraphQL", "present": false, "proof": "(?i)graphql"}
   ]},
   {"repo": "fastapi/full-stack-fastapi-template", "commit": "f4bcfaba7c85be3c6332cc74a20819f586dcdbc6", "skills": [
     {"name": "FastAPI", "present": true, "proof": "from fastapi"},
@@ -59,6 +86,13 @@
     {"name": "GitHub Actions", "present": true, "proof": "^on:"},
     {"name": "Kubernetes", "present": false, "proof": "kind: (Deployment|Service)"},
     {"name": "Redis", "present": false, "proof": "(?i)import redis|from redis"},
-    {"name": "GraphQL", "present": false, "proof": "(?i)\\bgraphql\\b"}
+    {"name": "GraphQL", "present": false, "proof": "(?i)\\bgraphql\\b"},
+    {"name": "SQLModel ORM", "present": true, "proof": "from sqlmodel import"},
+    {"name": "Alembic migrations", "present": true, "proof": "from alembic import op"},
+    {"name": "Playwright end-to-end tests", "present": true, "proof": "@playwright/test"},
+    {"name": "Password hashing", "present": true, "proof": "(?i)pwdlib|passlib|bcrypt|argon2"},
+    {"name": "Sentry error monitoring", "present": true, "proof": "sentry_sdk"},
+    {"name": "MongoDB", "present": false, "proof": "(?i)mongo"},
+    {"name": "Kafka", "present": false, "proof": "(?i)kafka"}
   ]}
 ]
