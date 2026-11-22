@@ -26,6 +26,17 @@ def safe_link(url, label):
 def message_box(text, kind="info"):
     return f'<div class="cs-message cs-message-{esc(kind)}" role="status">{esc(text)}</div>'
 
+def account_html(github_login, configured):
+    """The GitHub sign-in area: who is signed in, or the button, or nothing when not set up."""
+    if github_login:
+        return (f'<div class="cs-account"><span>Signed in with GitHub as <strong>@{esc(github_login)}</strong></span>'
+                '<span class="cs-muted">Your reports and profile follow you to any device you sign in on.</span></div>')
+    if not configured:
+        return ""
+    # target=_top leaves the Hugging Face page frame, which GitHub's sign-in page refuses to load inside
+    return ('<div class="cs-account"><span>Keep your reports and profile on every device.</span>'
+            '<a class="cs-github-btn" href="/auth/github/login" target="_top">Sign in with GitHub</a></div>')
+
 def empty_report(kind="job"):
     if kind == "resume":
         art, text = "📄🔍", "Each technical claim on your resume is checked against your code, with links to the exact lines."

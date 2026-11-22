@@ -1,6 +1,7 @@
 import gradio as gr
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from codesynapse.api import auth
 from codesynapse.api.routes import router
 from codesynapse.services import limits
 from codesynapse.ui.app import demo
@@ -8,6 +9,7 @@ from codesynapse.ui.style import custom_css, theme
 
 app = FastAPI(title="CodeSynapse")
 app.include_router(router)
+app.include_router(auth.router)
 
 @app.exception_handler(limits.Limited)
 def rate_limited(request: Request, error: limits.Limited):

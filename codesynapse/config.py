@@ -27,3 +27,9 @@ WORKERS = int(os.getenv("WORKERS", "2"))
 
 # Encrypts the browser's copy of the user token. Set a real value when deployed.
 UI_SECRET = os.getenv("UI_SECRET") or "local-dev-only"
+
+# Optional "Sign in with GitHub". All three are needed; without them the button is hidden.
+# PUBLIC_URL is the app's own address, used for GitHub's callback, e.g. https://you-app.hf.space
+GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
+PUBLIC_URL = (os.getenv("PUBLIC_URL") or "").rstrip("/")

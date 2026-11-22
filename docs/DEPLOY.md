@@ -56,6 +56,22 @@ Space URL when it's done.
 To deploy by hand instead, set `HF_SPACE` and an `HF_TOKEN` with write access, then run
 `python deploy/push_space.py`.
 
+## 4. Optional: Sign in with GitHub
+
+Without this, users stay anonymous per browser. With it, a "Sign in with GitHub" button appears
+on the Profile tab and a user's reports follow them to any device.
+
+1. On GitHub, open **Settings → Developer settings → OAuth Apps → New OAuth App** and set:
+   - Application name: `CodeSynapse`
+   - Homepage URL: `https://swarangik-21-codesynapse.hf.space`
+   - Authorization callback URL: `https://swarangik-21-codesynapse.hf.space/auth/github/callback`
+2. Create it, then **Generate a new client secret**. Copy the client ID and the secret.
+3. Add three **secrets** to the Space: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, and
+   `PUBLIC_URL` = `https://swarangik-21-codesynapse.hf.space`.
+
+The app asks GitHub for no permissions: it reads only the account's public id and username,
+and never stores GitHub's access token.
+
 ## What gets uploaded
 
 Only what the container needs: `app.py`, `Dockerfile`, `requirements.txt`, `alembic.ini`,

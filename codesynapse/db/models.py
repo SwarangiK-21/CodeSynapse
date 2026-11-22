@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import JSON, DateTime, ForeignKey, String, Text, UniqueConstraint
+from sqlalchemy import JSON, BigInteger, DateTime, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 EMBEDDING_DIM = 768
@@ -20,6 +20,17 @@ class User(Base):
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     # Only the hash is stored, so a database leak does not expose usable tokens
     token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    # Set once the user signs in with GitHub; the GitHub access token itself is never kept
+    github_id: Mapped[int | None] = mapped_column(BigInteger, unique=True, nullable=True)
+    github_login: Mapped[str | None] = mapped_column(String(100), nullable=True)
+
+class UserToken(Base):
+    """Extra tokens, one per further device a GitHub user signs in from."""
+    __tablename__ = "user_tokens"
+
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 class Profile(Base):

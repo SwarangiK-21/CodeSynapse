@@ -55,6 +55,7 @@ Students preparing for software roles get generic advice that ignores what they 
 - **Live profile sync and scores** — fetches public GitHub and LeetCode stats; each becomes a 0–100 score in a Plotly chart. If a user doesn't exist or a service is down, the app says so instead of inventing numbers.
 - **AI career coach** — a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies.
 - **REST API, PDF and Markdown reports** — everything in the UI is also available through FastAPI, with private per-user data.
+- **Sign in with GitHub** — optional; links an anonymous browser's work to the GitHub account and makes it available on every device. No GitHub permissions are requested and GitHub's token is never stored.
 
 **Built to run as a service**
 
@@ -191,6 +192,7 @@ Optional settings in `.env`:
 | `GEMINI_MODELS` | Comma-separated models to try in order |
 | `UI_SECRET` | Encrypts the browser's copy of the user token; required when deployed |
 | `WORKERS` | How many indexing and analysis jobs run at once (default 2) |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `PUBLIC_URL` | Turn on "Sign in with GitHub" ([setup](docs/DEPLOY.md)) |
 
 Checks:
 
@@ -322,7 +324,7 @@ CodeSynapse/
 - The live demo runs on free tiers: the Space sleeps when idle, Gemini's daily embedding quota limits how much new code can be indexed in a day, and an overloaded Gemini model can make an analysis slow.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits). Scanned-image resumes need their text pasted.
 - "Not found" means no evidence was found in the code searched, not that the person lacks the skill or that a resume claim is false.
-- Users are anonymous per browser; there is no GitHub login yet.
+- Without the GitHub OAuth settings, users are anonymous per browser.
 - Background jobs, rate limits and model fallback live in one process, which suits a single server. Several servers would need a shared queue and store such as Redis.
 
 ## 🗺️ Roadmap
@@ -345,7 +347,7 @@ CodeSynapse/
 - [ ] Switch the app to the tuned search after re-running the agent evaluation
 - [ ] Fine-tuned reranker distilled from Gemini's relevance judgements
 - [ ] Larger evaluation sets
-- [ ] GitHub login
+- [x] Sign in with GitHub, with data shared across devices
 
 ## 🤝 Contributing
 

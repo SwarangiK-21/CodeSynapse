@@ -285,6 +285,14 @@ button.lg, button.md { font-weight: 700 !important; transition: transform .15s e
 .cs-priority-high { background: var(--cs-clay); color: var(--cs-clay-ink); }
 .cs-priority-medium { background: var(--cs-sand); color: var(--cs-sand-ink); }
 
+/* --- Account --- */
+.cs-account { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 14px 18px; border-radius: 18px; background: var(--cs-glass); border: 1px solid var(--cs-border); }
+.cs-github-btn { padding: 8px 16px; border-radius: 999px; font-weight: 700; text-decoration: none;
+  background: var(--cs-text); color: var(--cs-surface) !important; }
+.cs-github-btn::before { content: "⌥ "; }
+.cs-github-btn:hover { opacity: .9; }
+
 /* --- Profile --- */
 .cs-profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .cs-profile { padding: 18px; border-radius: 20px; background: var(--cs-surface); border: 1px solid var(--cs-border); }
