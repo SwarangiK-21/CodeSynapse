@@ -27,3 +27,24 @@
 {"suite": "core", "repo": "encode/databases", "skill": "Database transactions", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 0.98}
 {"suite": "core", "repo": "encode/databases", "skill": "Kubernetes", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
 {"suite": "core", "repo": "encode/databases", "skill": "Redis", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "fastapi/asyncer", "skill": "Python async concurrency", "type": "plain", "present": true, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "fastapi/asyncer", "skill": "GitHub Actions", "type": "plain", "present": true, "level": "strong", "citations": 1, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "core", "repo": "fastapi/asyncer", "skill": "PostgreSQL", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "fastapi/asyncer", "skill": "JWT authentication", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "sindresorhus/ky", "skill": "TypeScript", "type": "plain", "present": true, "level": "strong", "citations": 4, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "core", "repo": "sindresorhus/ky", "skill": "HTTP retry logic", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "core", "repo": "sindresorhus/ky", "skill": "React", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "sindresorhus/ky", "skill": "SQL databases", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "sindresorhus/ky", "skill": "Docker", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "FastAPI", "type": "plain", "present": true, "level": "strong", "citations": 1, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "React", "type": "plain", "present": true, "level": "strong", "citations": 4, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "JWT authentication", "type": "plain", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "Docker", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "GitHub Actions", "type": "plain", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "Kubernetes", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "Redis", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "core", "repo": "fastapi/full-stack-fastapi-template", "skill": "GraphQL", "type": "plain", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "pallets/itsdangerous", "skill": "Tamper-proof data serialization", "type": "paraphrase", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "pallets/itsdangerous", "skill": "Expiring tokens", "type": "paraphrase", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 0.98}
+{"suite": "hard", "repo": "pallets/itsdangerous", "skill": "Password hashing", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "hard", "repo": "pallets/itsdangerous", "skill": "JWT authentication", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
