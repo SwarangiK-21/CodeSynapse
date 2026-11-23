@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 from codesynapse import config
 from codesynapse.db.session import SessionLocal
-from codesynapse.services import analyses, chat, jobs, limits, profiles, reports, repos, resume, users
+from codesynapse.services import analyses, chat, github_auth, jobs, limits, profiles, reports, repos, resume, users
 from codesynapse.ui import components
 from codesynapse.ui.style import RESTORE_THEME, TOGGLE_THEME
 
@@ -86,7 +86,39 @@ def load_session(token, request: gr.Request = None):
             components.profile_html(stats),
             build_chart(stats),
             chat.get_history(db, user),
+            components.account_html(user.github_login, github_auth.is_configured()),
+            gr.update(visible=bool(user.github_login)),
         )
+
+LOGIN_ERRORS = {
+    "cancelled": "GitHub sign-in was cancelled.",
+    "expired": "That sign-in took too long or started in another browser. Please try again.",
+    "github": "GitHub didn't confirm the sign-in. Please try again.",
+}
+
+# Takes the one-time sign-in code from the address bar, then removes it so it isn't reused or shared
+READ_LOGIN = """(token, code, error) => {
+  const params = new URLSearchParams(window.location.search);
+  const found = [params.get('login') || '', params.get('login_error') || ''];
+  if (found[0] || found[1]) window.history.replaceState(null, '', window.location.pathname);
+  return [token, ...found];
+}"""
+
+def complete_login_logic(token, code, error):
+    """Finishes a GitHub sign-in when the page opens with a one-time code."""
+    if error:
+        gr.Warning(LOGIN_ERRORS.get(error, "Sign-in didn't finish. Please try again."))
+        return token
+    if not code:
+        return token
+    with SessionLocal() as db:
+        try:
+            token, user = github_auth.complete_login(db, token, code)
+        except github_auth.LoginError as e:
+            gr.Warning(str(e))
+            return token
+        gr.Info(f"Signed in as @{user.github_login}")
+    return token
 
 def fetch_data_logic(token, gh, lc):
     """Fetches data and returns the stats + the score chart"""
@@ -314,6 +346,8 @@ with gr.Blocks(title="CodeSynapse") as demo:
         with gr.TabItem("📊 Profile"):
             gr.HTML('<p class="cs-intro"><span class="cs-intro-emoji" aria-hidden="true">📈</span>'
                     'See your public GitHub and LeetCode stats in one place.</p>')
+            account_box = gr.HTML("")
+            sign_out_btn = gr.Button("Sign out", size="sm", visible=False)
             with gr.Row():
                 gh_in = gr.Textbox(label="GitHub username", value="", placeholder="octocat")
                 lc_in = gr.Textbox(label="LeetCode username", value="", placeholder="your_username")
@@ -336,7 +370,11 @@ with gr.Blocks(title="CodeSynapse") as demo:
     # --- WIRING ---
     demo.load(None, None, None, js=RESTORE_THEME)
     theme_btn.click(None, None, None, js=TOGGLE_THEME)
-    demo.load(load_session, [user_token], [user_token, gh_in, lc_in, stats_display, score_plot, chatbot]).then(
+    login_code = gr.Textbox(visible=False)
+    login_error = gr.Textbox(visible=False)
+    demo.load(complete_login_logic, [user_token, login_code, login_error], [user_token], js=READ_LOGIN).then(
+        load_session, [user_token],
+        [user_token, gh_in, lc_in, stats_display, score_plot, chatbot, account_box, sign_out_btn]).then(
         load_latest_report, [user_token], [agent_output, analysis_id, approve_btn, download_btn]).then(
         load_latest_resume_report, [user_token],
         [resume_output, resume_analysis_id, resume_approve_btn, resume_download_btn])
@@ -352,4 +390,6 @@ with gr.Blocks(title="CodeSynapse") as demo:
     resume_run_btn.click(run_resume_logic, [user_token, resume_file, resume_text, resume_repos], resume_outputs).then(
         None, None, None, js=SCROLL_TO_REPORT)
     resume_approve_btn.click(approve_logic, [user_token, resume_analysis_id], resume_outputs)
+    # Forgets this browser's token; the reload starts a fresh anonymous session
+    sign_out_btn.click(lambda: None, None, [user_token]).then(None, None, None, js="() => window.location.reload()")
     chatbot.clear(clear_chat_logic, [user_token])

@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+from codesynapse.api import auth
 from codesynapse.api.routes import router
 from codesynapse.db.session import engine
 from codesynapse.services import limits
@@ -11,6 +12,7 @@ from codesynapse.ui.style import custom_css, theme
 
 app = FastAPI(title="CodeSynapse")
 app.include_router(router)
+app.include_router(auth.router)
 
 @app.exception_handler(limits.Limited)
 def rate_limited(request: Request, error: limits.Limited):
