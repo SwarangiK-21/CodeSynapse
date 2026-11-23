@@ -4,7 +4,17 @@ from codesynapse.db.models import User
 from codesynapse.db.session import SessionLocal
 
 def test_health(client):
-    assert client.get("/health").json() == {"status": "ok"}
+    assert client.get("/health").json() == {"status": "ok", "database": "ok"}
+
+def test_health_reports_an_unreachable_database(client, monkeypatch):
+    from sqlalchemy.exc import OperationalError
+    from codesynapse import main
+    class Broken:
+        def connect(self):
+            raise OperationalError("SELECT 1", {}, Exception("connection refused"))
+    monkeypatch.setattr(main, "engine", Broken())
+    response = client.get("/health")
+    assert response.status_code == 503 and response.json()["database"] == "unreachable"
 
 @pytest.mark.parametrize("method,path", [
     ("get", "/api/profile"), ("put", "/api/profile"), ("get", "/api/chat"),
