@@ -7,6 +7,11 @@
     python -m evals.run injection
     python -m evals.run report
     python -m evals.run status
+
+agent, baseline and their -hard versions are the published results, measured on the first
+46 and 22 labelled pairs. The same systems with -equal or -tuned run on the current, larger
+sets with the app's search fusion (equal weights) or the tuned one, for example
+agent-hard-tuned, so the two can be compared before the app switches.
 """
 import json
 import os
@@ -24,6 +29,10 @@ RESULTS.mkdir(exist_ok=True)
 os.environ["DATABASE_URL"] = f"sqlite:///{(CACHE / 'eval.db').as_posix()}"
 # One model throughout, so every score is comparable
 os.environ["GEMINI_MODELS"] = EVAL_MODEL
+# Search fusion: the tuned setting from evals/retrieval.py, or the app's equal weights
+TUNED_SEARCH = {"SEARCH_KEYWORD_WEIGHT": "0.25", "SEARCH_RRF_K": "10"}
+if len(sys.argv) > 1 and sys.argv[1].endswith("-tuned"):
+    os.environ.update(TUNED_SEARCH)
 
 from sqlalchemy import select
 from codesynapse.db.migrate import upgrade
@@ -33,10 +42,16 @@ from codesynapse.services import llm, repos, users
 from codesynapse.agents import gap_analysis
 from evals import baseline, check_labels, injection, metrics
 
-RUNNERS = ("agent", "baseline", "agent-hard", "baseline-hard")
+PUBLISHED = ("agent", "baseline", "agent-hard", "baseline-hard")
+RERUNS = tuple(f"{base}{hard}-{search}" for search in ("equal", "tuned")
+               for base in ("agent", "baseline") for hard in ("", "-hard"))
+RUNNERS = PUBLISHED + RERUNS
 
 def suite_of(system):
-    return "hard" if system.endswith("-hard") else "core"
+    return "hard" if "-hard" in system else "core"
+
+def kind_of(system):
+    return system.split("-")[0]
 
 def result_file(system):
     return RESULTS / f"{system}.jsonl"
@@ -88,7 +103,7 @@ def run_baseline(db, user, case, repo_id):
             "usage": {"llm_calls": usage.calls, "prompt_tokens": usage.prompt_tokens, "output_tokens": usage.output_tokens}}
 
 def run_system(system):
-    runner = {"agent": run_agent, "baseline": run_baseline}[system.removesuffix("-hard")]
+    runner = {"agent": run_agent, "baseline": run_baseline}[kind_of(system)]
     upgrade()
     done = finished(system)
     with SessionLocal() as db:
@@ -146,7 +161,9 @@ def system_report(system):
     }
 
 def report():
-    summary = {system: system_report(system) for system in RUNNERS}
+    # Reruns appear once they have results; the published systems always do
+    summary = {system: system_report(system) for system in RUNNERS
+               if system in PUBLISHED or result_file(system).exists()}
     path = result_file("injection")
     if path.exists():
         attacks = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]

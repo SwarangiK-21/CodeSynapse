@@ -9,7 +9,7 @@ on:
       command:
         description: "What to run"
         type: choice
-        options: [calibration, reranker]
+        options: [calibration, reranker, agent-rerun]
         default: calibration
 
 jobs:
@@ -60,6 +60,19 @@ jobs:
       - name: Train and evaluate the reranker
         if: inputs.command == 'reranker'
         run: python -m evals.reranker train
+      # Each system resumes where it stopped, so a quota stop in one doesn't lose the others
+      - name: Re-run the agent and baseline on the current sets
+        if: inputs.command == 'agent-rerun'
+        run: |
+          status=0
+          for system in agent-equal agent-tuned agent-hard-equal agent-hard-tuned baseline-equal baseline-hard-equal; do
+            python -m evals.run "$system" || status=1
+          done
+          python -m evals.run report > /dev/null || status=1
+          exit $status
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/upload-artifact@v4
         if: inputs.command == 'reranker'
         with:
@@ -76,7 +89,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add evals/results/calibration.jsonl evals/results/reranker_labels.jsonl evals/results/reranker.json 2>/dev/null || true
+          git add evals/results/calibration.jsonl evals/results/reranker_labels.jsonl evals/results/reranker.json             evals/results/*-equal.jsonl evals/results/*-tuned.jsonl evals/results/summary.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -m "Add ${{ inputs.command }} results from the Evals workflow"
           git push

@@ -27,3 +27,8 @@ WORKERS = int(os.getenv("WORKERS", "2"))
 
 # Encrypts the browser's copy of the user token. Set a real value when deployed.
 UI_SECRET = os.getenv("UI_SECRET") or "local-dev-only"
+
+# How code search merges keyword and vector results (reciprocal rank fusion). Equal weight
+# and k=60 are the defaults; evals/retrieval.py measured keyword weight 0.25 with k=10 as better.
+SEARCH_KEYWORD_WEIGHT = float(os.getenv("SEARCH_KEYWORD_WEIGHT", "1.0"))
+SEARCH_RRF_K = int(os.getenv("SEARCH_RRF_K", "60"))
