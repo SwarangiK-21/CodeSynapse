@@ -3,6 +3,7 @@ import numpy as np
 from rank_bm25 import BM25Plus
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from codesynapse import config
 from codesynapse.db.models import CodeChunk, Repo, User
 from codesynapse.services import embeddings
 
@@ -78,7 +79,8 @@ def search_code(db: Session, user: User, query, repo_id=None, limit=10):
     vector = vector_ranking(db, chunks, query_vector) if query_vector else []
 
     results = []
-    for chunk_id, score in fuse([keyword, vector])[:limit]:
+    fused = fuse([keyword, vector], weights=[config.SEARCH_KEYWORD_WEIGHT, 1.0], k=config.SEARCH_RRF_K)
+    for chunk_id, score in fused[:limit]:
         c = by_id[chunk_id]
         results.append({
             "repo": repo_names[chunk_id], "path": c.path, "symbol": c.symbol, "kind": c.kind,

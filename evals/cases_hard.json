@@ -30,5 +30,22 @@
     {"name": "FastAPI", "type": "mentioned-only", "present": false, "proof": "(?i)fastapi", "mention": "(?i)fastapi"},
     {"name": "Docker", "type": "mentioned-only", "present": false, "proof": "(?i)docker", "mention": "(?i)docker"},
     {"name": "MongoDB", "type": "neighbour", "present": false, "proof": "(?i)mongo"}
+  ]},
+  {"repo": "fastapi/asyncer", "commit": "3b301d75c4bb0c681e03a90f62963a1f62dd7b0c", "skills": [
+    {"name": "Calling blocking code from async functions", "type": "paraphrase", "present": true, "proof": "to_thread"},
+    {"name": "Running tasks concurrently and collecting results", "type": "paraphrase", "present": true, "proof": "task_group|create_task_group"},
+    {"name": "Multiprocessing", "type": "neighbour", "present": false, "proof": "(?i)multiprocessing|ProcessPool"}
+  ]},
+  {"repo": "sindresorhus/ky", "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d", "skills": [
+    {"name": "Retrying failed requests automatically", "type": "paraphrase", "present": true, "proof": "\\bretry\\b"},
+    {"name": "Cancelling in-flight requests", "type": "paraphrase", "present": true, "proof": "AbortController"},
+    {"name": "Axios", "type": "mentioned-only", "present": false, "proof": "(?i)\\baxios\\b", "mention": "(?i)axios"},
+    {"name": "WebSockets", "type": "neighbour", "present": false, "proof": "(?i)websocket"}
+  ]},
+  {"repo": "fastapi/full-stack-fastapi-template", "commit": "f4bcfaba7c85be3c6332cc74a20819f586dcdbc6", "skills": [
+    {"name": "Password recovery emails", "type": "paraphrase", "present": true, "proof": "(?i)recover"},
+    {"name": "Celery", "type": "mentioned-only", "present": false, "proof": "(?i)\\bcelery\\b", "mention": "(?i)celery"},
+    {"name": "Rate limiting", "type": "neighbour", "present": false, "proof": "(?i)rate.?limit|slowapi"},
+    {"name": "Kubernetes", "type": "neighbour", "present": false, "proof": "(?i)kubernetes"}
   ]}
 ]

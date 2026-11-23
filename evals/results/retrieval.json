@@ -1,25 +1,25 @@
 {
  "keyword (BM25)": {
   "all": {
-   "success@1": 0.297,
-   "success@5": 0.595,
-   "mrr@10": 0.401,
-   "ndcg@10": 0.321,
-   "queries": 37
+   "success@1": 0.323,
+   "success@5": 0.554,
+   "mrr@10": 0.424,
+   "ndcg@10": 0.349,
+   "queries": 65
   },
   "standard": {
-   "success@1": 0.308,
-   "success@5": 0.654,
-   "mrr@10": 0.417,
-   "ndcg@10": 0.376,
-   "queries": 26
+   "success@1": 0.347,
+   "success@5": 0.592,
+   "mrr@10": 0.444,
+   "ndcg@10": 0.387,
+   "queries": 49
   },
   "hard: paraphrased": {
    "success@1": 0.2,
    "success@5": 0.4,
-   "mrr@10": 0.297,
-   "ndcg@10": 0.173,
-   "queries": 10
+   "mrr@10": 0.323,
+   "ndcg@10": 0.226,
+   "queries": 15
   },
   "per_query": [
    {
@@ -66,6 +66,26 @@
     "success@1": 1.0,
     "success@5": 1.0,
     "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Base64 encoding",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Data compression",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
     "ndcg@10": 0.3589542101716347,
     "suite": "core",
     "type": "plain",
@@ -90,6 +110,16 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Operator overloading",
     "repo": "pallets/markupsafe"
    },
    {
@@ -123,6 +153,16 @@
     "repo": "expressjs/cors"
    },
    {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8411523906828934,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP Vary header",
+    "repo": "expressjs/cors"
+   },
+   {
     "success@1": 0.0,
     "success@5": 1.0,
     "mrr@10": 0.25,
@@ -150,6 +190,36 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.15642624200758548,
+    "suite": "core",
+    "type": "plain",
+    "query": "Command-line interface",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.3333333333333333,
+    "suite": "core",
+    "type": "plain",
+    "query": "Excel export",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
     "repo": "kennethreitz/records"
    },
    {
@@ -195,6 +265,36 @@
    {
     "success@1": 0.0,
     "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "asyncpg",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.13961814555374907,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Context variables",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
     "mrr@10": 0.14285714285714285,
     "ndcg@10": 0.2032389337527008,
     "suite": "core",
@@ -210,6 +310,46 @@
     "suite": "core",
     "type": "plain",
     "query": "GitHub Actions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.1736666713479918,
+    "suite": "core",
+    "type": "plain",
+    "query": "AnyIO",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.2691828628414762,
+    "suite": "core",
+    "type": "plain",
+    "query": "Running blocking code in threads",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Generic typing with ParamSpec",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9060254355346823,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
     "repo": "fastapi/asyncer"
    },
    {
@@ -230,6 +370,46 @@
     "suite": "core",
     "type": "plain",
     "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.2687374555268953,
+    "suite": "core",
+    "type": "plain",
+    "query": "Fetch API",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request timeouts",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.28952298823485745,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request lifecycle hooks",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8611375561264454,
+    "suite": "core",
+    "type": "plain",
+    "query": "AVA test framework",
     "repo": "sindresorhus/ky"
    },
    {
@@ -280,6 +460,56 @@
     "suite": "core",
     "type": "plain",
     "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.41528076708874123,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLModel ORM",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.125,
+    "ndcg@10": 0.10699313236726378,
+    "suite": "core",
+    "type": "plain",
+    "query": "Alembic migrations",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.4092727151605027,
+    "suite": "core",
+    "type": "plain",
+    "query": "Playwright end-to-end tests",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Password hashing",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Sentry error monitoring",
     "repo": "fastapi/full-stack-fastapi-template"
    },
    {
@@ -391,30 +621,80 @@
     "type": "paraphrase",
     "query": "Connection pooling",
     "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.13012668333070054,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Calling blocking code from async functions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1,
+    "ndcg@10": 0.07311683844390995,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running tasks concurrently and collecting results",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.457957694513121,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Retrying failed requests automatically",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.125,
+    "ndcg@10": 0.13568544539116628,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Cancelling in-flight requests",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8630152897016882,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Password recovery emails",
+    "repo": "fastapi/full-stack-fastapi-template"
    }
   ]
  },
  "vector": {
   "all": {
-   "success@1": 0.405,
-   "success@5": 0.838,
-   "mrr@10": 0.567,
-   "ndcg@10": 0.455,
-   "queries": 37
+   "success@1": 0.385,
+   "success@5": 0.831,
+   "mrr@10": 0.566,
+   "ndcg@10": 0.45,
+   "queries": 65
   },
   "standard": {
-   "success@1": 0.462,
-   "success@5": 0.769,
-   "mrr@10": 0.586,
-   "ndcg@10": 0.478,
-   "queries": 26
+   "success@1": 0.408,
+   "success@5": 0.796,
+   "mrr@10": 0.579,
+   "ndcg@10": 0.459,
+   "queries": 49
   },
   "hard: paraphrased": {
-   "success@1": 0.3,
-   "success@5": 1.0,
-   "mrr@10": 0.525,
-   "ndcg@10": 0.404,
-   "queries": 10
+   "success@1": 0.333,
+   "success@5": 0.933,
+   "mrr@10": 0.53,
+   "ndcg@10": 0.427,
+   "queries": 15
   },
   "per_query": [
    {
@@ -458,6 +738,26 @@
     "repo": "pallets/itsdangerous"
    },
    {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8701249883466592,
+    "suite": "core",
+    "type": "plain",
+    "query": "Base64 encoding",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.5855700749881525,
+    "suite": "core",
+    "type": "plain",
+    "query": "Data compression",
+    "repo": "pallets/itsdangerous"
+   },
+   {
     "success@1": 0.0,
     "success@5": 1.0,
     "mrr@10": 0.5,
@@ -485,6 +785,16 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.34870224750355494,
+    "suite": "core",
+    "type": "plain",
+    "query": "Operator overloading",
     "repo": "pallets/markupsafe"
    },
    {
@@ -520,6 +830,16 @@
    {
     "success@1": 0.0,
     "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.5680062719281794,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP Vary header",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
     "mrr@10": 0.3333333333333333,
     "ndcg@10": 0.5,
     "suite": "core",
@@ -545,6 +865,36 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.49818925746641285,
+    "suite": "core",
+    "type": "plain",
+    "query": "Command-line interface",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.3333333333333333,
+    "suite": "core",
+    "type": "plain",
+    "query": "Excel export",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6131471927654584,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
     "repo": "kennethreitz/records"
    },
    {
@@ -590,6 +940,36 @@
    {
     "success@1": 0.0,
     "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575,
+    "suite": "core",
+    "type": "plain",
+    "query": "asyncpg",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.3308744461818274,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Context variables",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
     "mrr@10": 0.25,
     "ndcg@10": 0.23440650992329987,
     "suite": "core",
@@ -605,6 +985,46 @@
     "suite": "core",
     "type": "plain",
     "query": "GitHub Actions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.29062463495158997,
+    "suite": "core",
+    "type": "plain",
+    "query": "AnyIO",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Running blocking code in threads",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.43292617940918415,
+    "suite": "core",
+    "type": "plain",
+    "query": "Generic typing with ParamSpec",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1,
+    "ndcg@10": 0.13565197343244778,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
     "repo": "fastapi/asyncer"
    },
    {
@@ -625,6 +1045,46 @@
     "suite": "core",
     "type": "plain",
     "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.4666234168001789,
+    "suite": "core",
+    "type": "plain",
+    "query": "Fetch API",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.13886244387355454,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request timeouts",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6901935063354874,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request lifecycle hooks",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.7799082337019198,
+    "suite": "core",
+    "type": "plain",
+    "query": "AVA test framework",
     "repo": "sindresorhus/ky"
    },
    {
@@ -675,6 +1135,56 @@
     "suite": "core",
     "type": "plain",
     "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.11004588314904008,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLModel ORM",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.3391602052736161,
+    "suite": "core",
+    "type": "plain",
+    "query": "Alembic migrations",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.5501126236272345,
+    "suite": "core",
+    "type": "plain",
+    "query": "Playwright end-to-end tests",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.4125317798925535,
+    "suite": "core",
+    "type": "plain",
+    "query": "Password hashing",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9197207891481876,
+    "suite": "core",
+    "type": "plain",
+    "query": "Sentry error monitoring",
     "repo": "fastapi/full-stack-fastapi-template"
    },
    {
@@ -786,30 +1296,80 @@
     "type": "paraphrase",
     "query": "Connection pooling",
     "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Calling blocking code from async functions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.4928485157616413,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running tasks concurrently and collecting results",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7951657524814091,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Retrying failed requests automatically",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.1487639058405727,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Cancelling in-flight requests",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9216017310213246,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Password recovery emails",
+    "repo": "fastapi/full-stack-fastapi-template"
    }
   ]
  },
  "hybrid (RRF)": {
   "all": {
-   "success@1": 0.297,
-   "success@5": 0.703,
-   "mrr@10": 0.471,
-   "ndcg@10": 0.426,
-   "queries": 37
+   "success@1": 0.323,
+   "success@5": 0.708,
+   "mrr@10": 0.492,
+   "ndcg@10": 0.442,
+   "queries": 65
   },
   "standard": {
-   "success@1": 0.385,
-   "success@5": 0.692,
-   "mrr@10": 0.52,
-   "ndcg@10": 0.462,
-   "queries": 26
+   "success@1": 0.367,
+   "success@5": 0.714,
+   "mrr@10": 0.523,
+   "ndcg@10": 0.466,
+   "queries": 49
   },
   "hard: paraphrased": {
-   "success@1": 0.0,
-   "success@5": 0.7,
-   "mrr@10": 0.29,
-   "ndcg@10": 0.331,
-   "queries": 10
+   "success@1": 0.133,
+   "success@5": 0.667,
+   "mrr@10": 0.358,
+   "ndcg@10": 0.363,
+   "queries": 15
   },
   "per_query": [
    {
@@ -856,6 +1416,26 @@
     "success@1": 1.0,
     "success@5": 1.0,
     "mrr@10": 1.0,
+    "ndcg@10": 0.8701249883466592,
+    "suite": "core",
+    "type": "plain",
+    "query": "Base64 encoding",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.2476427880871277,
+    "suite": "core",
+    "type": "plain",
+    "query": "Data compression",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
     "ndcg@10": 0.30523488393970116,
     "suite": "core",
     "type": "plain",
@@ -880,6 +1460,16 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.34870224750355494,
+    "suite": "core",
+    "type": "plain",
+    "query": "Operator overloading",
     "repo": "pallets/markupsafe"
    },
    {
@@ -913,6 +1503,16 @@
     "repo": "expressjs/cors"
    },
    {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.843706044175124,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP Vary header",
+    "repo": "expressjs/cors"
+   },
+   {
     "success@1": 0.0,
     "success@5": 1.0,
     "mrr@10": 0.5,
@@ -940,6 +1540,36 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6049306994552042,
+    "suite": "core",
+    "type": "plain",
+    "query": "Command-line interface",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3562071871080222,
+    "suite": "core",
+    "type": "plain",
+    "query": "Excel export",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9197207891481876,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
     "repo": "kennethreitz/records"
    },
    {
@@ -984,6 +1614,36 @@
    },
    {
     "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575,
+    "suite": "core",
+    "type": "plain",
+    "query": "asyncpg",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.21819512777734998,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Context variables",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
     "success@5": 0.0,
     "mrr@10": 0.1111111111111111,
     "ndcg@10": 0.12987501165334076,
@@ -1005,6 +1665,46 @@
    {
     "success@1": 0.0,
     "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.09478836436955078,
+    "suite": "core",
+    "type": "plain",
+    "query": "AnyIO",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Running blocking code in threads",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6238470455881189,
+    "suite": "core",
+    "type": "plain",
+    "query": "Generic typing with ParamSpec",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6719882468370725,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
     "mrr@10": 0.3333333333333333,
     "ndcg@10": 0.28323251649726616,
     "suite": "core",
@@ -1020,6 +1720,46 @@
     "suite": "core",
     "type": "plain",
     "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.13698471029831175,
+    "suite": "core",
+    "type": "plain",
+    "query": "Fetch API",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.2863459897524692,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request timeouts",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.7799082337019198,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request lifecycle hooks",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.7799082337019198,
+    "suite": "core",
+    "type": "plain",
+    "query": "AVA test framework",
     "repo": "sindresorhus/ky"
    },
    {
@@ -1070,6 +1810,56 @@
     "suite": "core",
     "type": "plain",
     "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.37185395737611554,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLModel ORM",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.36971678359107674,
+    "suite": "core",
+    "type": "plain",
+    "query": "Alembic migrations",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.5113553108118987,
+    "suite": "core",
+    "type": "plain",
+    "query": "Playwright end-to-end tests",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.15743107269979564,
+    "suite": "core",
+    "type": "plain",
+    "query": "Password hashing",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Sentry error monitoring",
     "repo": "fastapi/full-stack-fastapi-template"
    },
    {
@@ -1181,30 +1971,80 @@
     "type": "paraphrase",
     "query": "Connection pooling",
     "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1111111111111111,
+    "ndcg@10": 0.2303612461053624,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Calling blocking code from async functions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.1111111111111111,
+    "ndcg@10": 0.07614334071738352,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running tasks concurrently and collecting results",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.5309999066793252,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Retrying failed requests automatically",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.30523488393970116,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Cancelling in-flight requests",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Password recovery emails",
+    "repo": "fastapi/full-stack-fastapi-template"
    }
   ]
  },
  "hybrid, tuned": {
   "all": {
-   "success@1": 0.486,
-   "success@5": 0.811,
-   "mrr@10": 0.612,
-   "ndcg@10": 0.467,
-   "queries": 37
+   "success@1": 0.462,
+   "success@5": 0.815,
+   "mrr@10": 0.61,
+   "ndcg@10": 0.476,
+   "queries": 65
   },
   "standard": {
-   "success@1": 0.538,
-   "success@5": 0.769,
-   "mrr@10": 0.636,
-   "ndcg@10": 0.494,
-   "queries": 26
+   "success@1": 0.51,
+   "success@5": 0.816,
+   "mrr@10": 0.641,
+   "ndcg@10": 0.495,
+   "queries": 49
   },
   "hard: paraphrased": {
-   "success@1": 0.3,
-   "success@5": 0.9,
-   "mrr@10": 0.508,
-   "ndcg@10": 0.403,
-   "queries": 10
+   "success@1": 0.267,
+   "success@5": 0.8,
+   "mrr@10": 0.483,
+   "ndcg@10": 0.416,
+   "queries": 15
   },
   "per_query": [
    {
@@ -1251,6 +2091,26 @@
     "success@1": 1.0,
     "success@5": 1.0,
     "mrr@10": 1.0,
+    "ndcg@10": 0.8701249883466592,
+    "suite": "core",
+    "type": "plain",
+    "query": "Base64 encoding",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.5413996682199069,
+    "suite": "core",
+    "type": "plain",
+    "query": "Data compression",
+    "repo": "pallets/itsdangerous"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
     "ndcg@10": 0.41528076708874123,
     "suite": "core",
     "type": "plain",
@@ -1275,6 +2135,16 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "pallets/markupsafe"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.34870224750355494,
+    "suite": "core",
+    "type": "plain",
+    "query": "Operator overloading",
     "repo": "pallets/markupsafe"
    },
    {
@@ -1310,6 +2180,16 @@
    {
     "success@1": 0.0,
     "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.5734133100049832,
+    "suite": "core",
+    "type": "plain",
+    "query": "HTTP Vary header",
+    "repo": "expressjs/cors"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
     "mrr@10": 0.3333333333333333,
     "ndcg@10": 0.5,
     "suite": "core",
@@ -1335,6 +2215,36 @@
     "suite": "core",
     "type": "plain",
     "query": "pytest",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6508205185601091,
+    "suite": "core",
+    "type": "plain",
+    "query": "Command-line interface",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3562071871080222,
+    "suite": "core",
+    "type": "plain",
+    "query": "Excel export",
+    "repo": "kennethreitz/records"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.8175295903539445,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
     "repo": "kennethreitz/records"
    },
    {
@@ -1378,6 +2288,36 @@
     "repo": "encode/databases"
    },
    {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "asyncpg",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.23680742154717782,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLite",
+    "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Context variables",
+    "repo": "encode/databases"
+   },
+   {
     "success@1": 0.0,
     "success@5": 1.0,
     "mrr@10": 0.2,
@@ -1398,6 +2338,46 @@
     "repo": "fastapi/asyncer"
    },
    {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.3529461582433962,
+    "suite": "core",
+    "type": "plain",
+    "query": "AnyIO",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Running blocking code in threads",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.5809949937791564,
+    "suite": "core",
+    "type": "plain",
+    "query": "Generic typing with ParamSpec",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.3501483019834802,
+    "suite": "core",
+    "type": "plain",
+    "query": "pytest",
+    "repo": "fastapi/asyncer"
+   },
+   {
     "success@1": 1.0,
     "success@5": 1.0,
     "mrr@10": 1.0,
@@ -1415,6 +2395,46 @@
     "suite": "core",
     "type": "plain",
     "query": "HTTP retry logic",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.4634464183177906,
+    "suite": "core",
+    "type": "plain",
+    "query": "Fetch API",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.2082936658103318,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request timeouts",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7605591431973847,
+    "suite": "core",
+    "type": "plain",
+    "query": "Request lifecycle hooks",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.7799082337019198,
+    "suite": "core",
+    "type": "plain",
+    "query": "AVA test framework",
     "repo": "sindresorhus/ky"
    },
    {
@@ -1465,6 +2485,56 @@
     "suite": "core",
     "type": "plain",
     "query": "GitHub Actions",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.22009176629808017,
+    "suite": "core",
+    "type": "plain",
+    "query": "SQLModel ORM",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.3391602052736161,
+    "suite": "core",
+    "type": "plain",
+    "query": "Alembic migrations",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.5423247252962317,
+    "suite": "core",
+    "type": "plain",
+    "query": "Playwright end-to-end tests",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.434996033829323,
+    "suite": "core",
+    "type": "plain",
+    "query": "Password hashing",
+    "repo": "fastapi/full-stack-fastapi-template"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0,
+    "suite": "core",
+    "type": "plain",
+    "query": "Sentry error monitoring",
     "repo": "fastapi/full-stack-fastapi-template"
    },
    {
@@ -1576,6 +2646,56 @@
     "type": "paraphrase",
     "query": "Connection pooling",
     "repo": "encode/databases"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Calling blocking code from async functions",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.44293981265090565,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Running tasks concurrently and collecting results",
+    "repo": "fastapi/asyncer"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 1.0,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.685119869332369,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Retrying failed requests automatically",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 0.0,
+    "success@5": 0.0,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.14465249243306436,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Cancelling in-flight requests",
+    "repo": "sindresorhus/ky"
+   },
+   {
+    "success@1": 1.0,
+    "success@5": 1.0,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9266360779006398,
+    "suite": "hard",
+    "type": "paraphrase",
+    "query": "Password recovery emails",
+    "repo": "fastapi/full-stack-fastapi-template"
    }
   ]
  }

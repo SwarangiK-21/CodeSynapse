@@ -1,0 +1,4 @@
+# Only for the reranker experiment (python -m evals.reranker train); the app does not need it
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.15.0+cpu
+transformers==5.22.1

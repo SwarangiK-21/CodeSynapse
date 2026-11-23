@@ -33,3 +33,8 @@ UI_SECRET = os.getenv("UI_SECRET") or "local-dev-only"
 GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
 PUBLIC_URL = (os.getenv("PUBLIC_URL") or "").rstrip("/")
+
+# How code search merges keyword and vector results (reciprocal rank fusion). Equal weight
+# and k=60 are the defaults; evals/retrieval.py measured keyword weight 0.25 with k=10 as better.
+SEARCH_KEYWORD_WEIGHT = float(os.getenv("SEARCH_KEYWORD_WEIGHT", "1.0"))
+SEARCH_RRF_K = int(os.getenv("SEARCH_RRF_K", "60"))
