@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 594 408" font-family="system-ui, sans-serif" font-size="12">
+<rect x="44" y="44" width="320" height="320" fill="none" stroke="#8b949e"/>
+<line x1="44" y1="364" x2="364" y2="44" stroke="#8b949e" stroke-dasharray="4 4"/>
+<text x="204.0" y="396" text-anchor="middle" fill="#8b949e">Confidence</text>
+<text x="14" y="204.0" text-anchor="middle" fill="#8b949e" transform="rotate(-90 14 204.0)">How often it was right</text>
+<text x="44" y="379" text-anchor="middle" fill="#8b949e">0</text>
+<text x="38" y="368" text-anchor="end" fill="#8b949e">0</text>
+<text x="204.0" y="379" text-anchor="middle" fill="#8b949e">0.5</text>
+<text x="38" y="208.0" text-anchor="end" fill="#8b949e">0.5</text>
+<text x="364" y="379" text-anchor="middle" fill="#8b949e">1</text>
+<text x="38" y="48" text-anchor="end" fill="#8b949e">1</text>
+<polyline fill="none" stroke="#e07a5f" stroke-width="2.5" points="44.0,353.0 268.0,204.0 359.0,61.3"/>
+<circle cx="44.0" cy="353.0" r="4" fill="#e07a5f"/>
+<circle cx="268.0" cy="204.0" r="4" fill="#e07a5f"/>
+<circle cx="359.0" cy="61.3" r="4" fill="#e07a5f"/>
+<rect x="380" y="45" width="12" height="12" rx="3" fill="#e07a5f"/>
+<text x="398" y="55" fill="#8b949e">AI's own confidence (ECE 0.041)</text>
+<polyline fill="none" stroke="#8d99ae" stroke-width="2.5" points="101.5,344.6 326.3,44.0"/>
+<circle cx="101.5" cy="344.6" r="4" fill="#8d99ae"/>
+<circle cx="326.3" cy="44.0" r="4" fill="#8d99ae"/>
+<rect x="380" y="67" width="12" height="12" rx="3" fill="#8d99ae"/>
+<text x="398" y="77" fill="#8b949e">Verified level only (ECE 0.118)</text>
+<polyline fill="none" stroke="#f2a541" stroke-width="2.5" points="96.5,353.0 268.3,150.7 312.2,61.8"/>
+<circle cx="96.5" cy="353.0" r="4" fill="#f2a541"/>
+<circle cx="268.3" cy="150.7" r="4" fill="#f2a541"/>
+<circle cx="312.2" cy="61.8" r="4" fill="#f2a541"/>
+<rect x="380" y="89" width="12" height="12" rx="3" fill="#f2a541"/>
+<text x="398" y="99" fill="#8b949e">AI's confidence, rescaled (ECE 0.113)</text>
+<polyline fill="none" stroke="#2b7a78" stroke-width="2.5" points="71.5,353.0 132.7,364.0 188.5,44.0 237.7,364.0 345.3,44.0"/>
+<circle cx="71.5" cy="353.0" r="4" fill="#2b7a78"/>
+<circle cx="132.7" cy="364.0" r="4" fill="#2b7a78"/>
+<circle cx="188.5" cy="44.0" r="4" fill="#2b7a78"/>
+<circle cx="237.7" cy="364.0" r="4" fill="#2b7a78"/>
+<circle cx="345.3" cy="44.0" r="4" fill="#2b7a78"/>
+<rect x="380" y="111" width="12" height="12" rx="3" fill="#2b7a78"/>
+<text x="398" y="121" fill="#8b949e">Learned model (all features) (ECE 0.077)</text>
+</svg>

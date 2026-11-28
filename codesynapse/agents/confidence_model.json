@@ -1,0 +1,20 @@
+{
+ "intercept": -2.4527,
+ "weights": {
+  "stated_confidence": 1.3398,
+  "strong": 1.8005,
+  "partial": -0.0201,
+  "verified_citations": 1.7591,
+  "any_rejected": 0.604
+ },
+ "trained_on": 68,
+ "repositories": 8,
+ "l2": 1.0,
+ "cross_validated": {
+  "ece": 0.077,
+  "brier": 0.03,
+  "auroc": 0.973,
+  "accuracy@0.5": 0.956
+ },
+ "date": "2026-11-28"
+}

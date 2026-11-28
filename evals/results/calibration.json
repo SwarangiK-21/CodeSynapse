@@ -1,0 +1,129 @@
+{
+ "records": 68,
+ "repositories": 8,
+ "methods": {
+  "AI's own confidence": {
+   "ece": 0.041,
+   "brier": 0.05,
+   "auroc": 0.959,
+   "accuracy@0.5": 0.941,
+   "bins": [
+    {
+     "low": 0.0,
+     "high": 0.2,
+     "count": 29,
+     "confidence": 0.0,
+     "accuracy": 0.034482758620689655
+    },
+    {
+     "low": 0.6000000000000001,
+     "high": 0.8,
+     "count": 2,
+     "confidence": 0.7,
+     "accuracy": 0.5
+    },
+    {
+     "low": 0.8,
+     "high": 1.0,
+     "count": 37,
+     "confidence": 0.9843243243243244,
+     "accuracy": 0.9459459459459459
+    }
+   ]
+  },
+  "Verified level only": {
+   "ece": 0.118,
+   "brier": 0.043,
+   "auroc": 0.951,
+   "accuracy@0.5": 0.971,
+   "bins": [
+    {
+     "low": 0.0,
+     "high": 0.2,
+     "count": 33,
+     "confidence": 0.17960610007176017,
+     "accuracy": 0.06060606060606061
+    },
+    {
+     "low": 0.8,
+     "high": 1.0,
+     "count": 35,
+     "confidence": 0.882277571302124,
+     "accuracy": 1.0
+    }
+   ]
+  },
+  "AI's confidence, rescaled": {
+   "ece": 0.113,
+   "brier": 0.064,
+   "auroc": 0.936,
+   "accuracy@0.5": 0.941,
+   "bins": [
+    {
+     "low": 0.0,
+     "high": 0.2,
+     "count": 29,
+     "confidence": 0.16421598384606514,
+     "accuracy": 0.034482758620689655
+    },
+    {
+     "low": 0.6000000000000001,
+     "high": 0.8,
+     "count": 3,
+     "confidence": 0.7009526443877562,
+     "accuracy": 0.6666666666666666
+    },
+    {
+     "low": 0.8,
+     "high": 1.0,
+     "count": 36,
+     "confidence": 0.838039778281023,
+     "accuracy": 0.9444444444444444
+    }
+   ]
+  },
+  "Learned model (all features)": {
+   "ece": 0.077,
+   "brier": 0.03,
+   "auroc": 0.973,
+   "accuracy@0.5": 0.956,
+   "bins": [
+    {
+     "low": 0.0,
+     "high": 0.2,
+     "count": 29,
+     "confidence": 0.08602295924951175,
+     "accuracy": 0.034482758620689655
+    },
+    {
+     "low": 0.2,
+     "high": 0.4,
+     "count": 2,
+     "confidence": 0.2770807954411567,
+     "accuracy": 0.0
+    },
+    {
+     "low": 0.4,
+     "high": 0.6000000000000001,
+     "count": 1,
+     "confidence": 0.45164517357536715,
+     "accuracy": 1.0
+    },
+    {
+     "low": 0.6000000000000001,
+     "high": 0.8,
+     "count": 1,
+     "confidence": 0.6052324421955426,
+     "accuracy": 0.0
+    },
+    {
+     "low": 0.8,
+     "high": 1.0,
+     "count": 35,
+     "confidence": 0.9416364539743067,
+     "accuracy": 1.0
+    }
+   ]
+  }
+ }
+}
