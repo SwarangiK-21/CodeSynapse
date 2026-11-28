@@ -145,6 +145,23 @@ What this shows: on easy cases a single prompt is as accurate, but the agent is 
 
 Reproduce: `python -m evals.run agent`, `baseline`, `agent-hard`, `baseline-hard`, `injection`, then `python -m evals.run report`.
 
+#### Larger sets, and does better search help the agent?
+
+The same systems were run again on the larger sets (80 standard and 33 hard pairs across all eight repositories), with the app's search and with the tuned search from the next section:
+
+| Set | System | Pairs scored | Precision | Recall | F1 | Citations real |
+|---|---|---:|---:|---:|---:|---:|
+| Standard | Baseline | 80 | 1.00 | 1.00 | **1.00** | — (none given) |
+| Standard | **Agent, app's search** | 77 | 1.00 | 0.98 | 0.99 | **107 / 107** |
+| Standard | Agent, tuned search | 77 | 1.00 | 0.94 | 0.97 | 102 / 102 |
+| Hard | Baseline | 33 | 0.80 | 1.00 | 0.89 | — (none given) |
+| Hard | **Agent, app's search** | 33 | 0.94 | 1.00 | **0.97** | **35 / 35** |
+| Hard | Agent, tuned search | 33 | 0.88 | 0.94 | 0.91 | 35 / 35 |
+
+The earlier findings hold on more data: the agent clearly beats a single prompt on the hard traps and is the only one whose evidence can be checked, with all 142 citations verified. The agent checks at most 12 skills per job, so 3 of the template's 15 standard skills weren't scored for it.
+
+The tuned search, which wins the search-only test below, made the agent *worse*. What it missed were exact identifiers such as `ContextVar`, `ParamSpec`, `to_thread` and `sentry_sdk`: the agent writes its own queries full of library names, which is where keyword matching is strongest, and the tuned setting turns keywords down. The search test scores one plain query at a time, which isn't how the agent searches, so the app keeps equal weights. Reproduce with the Evals workflow's `agent-rerun` run.
+
 ### Code search quality
 
 From [`evals/results/retrieval.json`](evals/results/retrieval.json): can search find real evidence for a skill? The queries are the 65 skills labelled present across both sets. A code chunk counts as relevant when it contains that skill's proof, the same pattern [`check_labels.py`](evals/check_labels.py) verifies against the real files, so the labels need no AI. Success@k: a relevant chunk is in the top k. MRR: how high the first one ranks.
@@ -156,7 +173,7 @@ From [`evals/results/retrieval.json`](evals/results/retrieval.json): can search 
 | Hybrid, equal weights (in use) | 0.32 | 0.71 | 0.49 | 0.13 / 0.36 |
 | **Hybrid, tuned** | **0.46** | 0.82 | **0.61** | 0.27 / 0.48 |
 
-The equal-weight hybrid the app uses scores *below* vector search alone, worst on paraphrased skills, because weak keyword matches push good vector matches down. Giving keywords a quarter of the weight with a sharper fusion curve (RRF k=10) fixes that. The setting was tuned on the first 26 standard queries only, so the other 39 are a held-out check, and it held: on the 28 queries added later it reached Success@1 0.43 against 0.36 for every other method, and MRR 0.61 against at most 0.57. The app keeps equal weights until the agent is re-evaluated with the tuned search.
+The equal-weight hybrid the app uses scores *below* vector search alone, worst on paraphrased skills, because weak keyword matches push good vector matches down. Giving keywords a quarter of the weight with a sharper fusion curve (RRF k=10) fixes that. The setting was tuned on the first 26 standard queries only, so the other 39 are a held-out check, and it held: on the 28 queries added later it reached Success@1 0.43 against 0.36 for every other method, and MRR 0.61 against at most 0.57. Despite that, the full agent did worse with the tuned setting (see above), so the app keeps equal weights.
 
 Reproduce: `python -m evals.retrieval` (reuses the evaluation index; query vectors are cached).
 
@@ -334,7 +351,6 @@ CodeSynapse/
 
 - Evaluation sets are small (standard: 8 repositories, 80 skill pairs; hard: 8 repositories, 33 pairs), so results are indicative, not statistically strong. The agent and baseline results above were measured on the first 46 and 22 pairs.
 - Confidence calibration has 29 of 68 records so far, so reports show no "% likely" value until its model is trained.
-- The tuned search setting measured above isn't switched on yet: the agent's published scores used the equal-weight hybrid, and switching needs a re-run first.
 - The live demo runs on free tiers: the Space sleeps when idle, Gemini's daily embedding quota limits how much new code can be indexed in a day, and an overloaded Gemini model can make an analysis slow.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits). Scanned-image resumes need their text pasted.
 - "Not found" means no evidence was found in the code searched, not that the person lacks the skill or that a resume claim is false.
@@ -358,7 +374,7 @@ CodeSynapse/
 - [x] Resume claim checker
 - [x] MCP server for AI assistants
 - [ ] Calibrated confidence: finish collecting records, train and publish
-- [ ] Switch the app to the tuned search after re-running the agent evaluation
+- [x] Re-ran the agent with the tuned search (it did worse end to end, so the app keeps equal weights)
 - [x] Distilled reranker experiment (measured; it didn't beat the search order, so it isn't used)
 - [x] Larger evaluation sets (68 → 113 labelled pairs, every label checked against the real files)
 - [x] Sign in with GitHub, with data shared across devices
