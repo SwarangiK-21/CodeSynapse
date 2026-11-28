@@ -41,3 +41,13 @@ def test_tables_are_closed_to_hosted_data_apis():
             "SELECT relname FROM pg_class WHERE relnamespace = 'public'::regnamespace "
             "AND relkind = 'r' AND NOT relrowsecurity")).scalars().all()
     assert open_tables == []
+
+def test_pasted_settings_lose_stray_whitespace(monkeypatch):
+    monkeypatch.setenv("GITHUB_CLIENT_ID", "Ov23abc
+")
+    monkeypatch.setenv("PUBLIC_URL", " https://x.test/ 
+")
+    monkeypatch.delenv("GITHUB_CLIENT_SECRET", raising=False)
+    assert config.setting("GITHUB_CLIENT_ID") == "Ov23abc"
+    assert config.setting("PUBLIC_URL").rstrip("/") == "https://x.test"
+    assert config.setting("GITHUB_CLIENT_SECRET") == ""

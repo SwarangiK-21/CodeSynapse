@@ -30,9 +30,13 @@ UI_SECRET = os.getenv("UI_SECRET") or "local-dev-only"
 
 # Optional "Sign in with GitHub". All three are needed; without them the button is hidden.
 # PUBLIC_URL is the app's own address, used for GitHub's callback, e.g. https://you-app.hf.space
-GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
-GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
-PUBLIC_URL = (os.getenv("PUBLIC_URL") or "").rstrip("/")
+def setting(name):
+    """A value pasted into a hosting dashboard often brings a stray space or line break along."""
+    return (os.getenv(name) or "").strip()
+
+GITHUB_CLIENT_ID = setting("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = setting("GITHUB_CLIENT_SECRET")
+PUBLIC_URL = setting("PUBLIC_URL").rstrip("/")
 
 # How code search merges keyword and vector results (reciprocal rank fusion). Equal weight
 # and k=60 are the defaults; evals/retrieval.py measured keyword weight 0.25 with k=10 as better.
