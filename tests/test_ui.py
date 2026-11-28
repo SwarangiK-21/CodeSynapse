@@ -9,18 +9,20 @@ def new_token():
         return users.create_user(db)[1]
 
 def test_first_visit_creates_a_user():
-    token, github, leetcode, stats_text, chart, history = ui.load_session(None)
+    token, github, leetcode, stats_text, chart, history, account, sign_out = ui.load_session(None)
     with SessionLocal() as db:
         assert users.get_user_by_token(db, token)
     assert (github, leetcode, chart, history) == ("", "", None, [])
     assert "Sync your profiles" in stats_text
+    # Without GitHub sign-in configured, a new visitor sees no account area and no sign-out
+    assert account == "" and sign_out["visible"] is False
 
 def test_returning_visit_restores_data(fake_stats, fake_ai):
     token = new_token()
     ui.fetch_data_logic(token, "octocat", "")
     ui.chat_logic("hello", [], token)
 
-    same_token, github, _, stats_text, chart, history = ui.load_session(token)
+    same_token, github, _, stats_text, chart, history, _, _ = ui.load_session(token)
     assert same_token == token and github == "octocat"
     assert "GitHub" in stats_text and chart is not None
     assert history[0] == {"role": "user", "content": "hello"}

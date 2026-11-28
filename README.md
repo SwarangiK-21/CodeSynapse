@@ -55,6 +55,7 @@ Students preparing for software roles get generic advice that ignores what they 
 - **Live profile sync and scores** — fetches public GitHub and LeetCode stats; each becomes a 0–100 score in a Plotly chart. If a user doesn't exist or a service is down, the app says so instead of inventing numbers.
 - **AI career coach** — a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies.
 - **REST API, PDF and Markdown reports** — everything in the UI is also available through FastAPI, with private per-user data.
+- **Sign in with GitHub** — optional; links an anonymous browser's work to the GitHub account and makes it available on every device. No GitHub permissions are requested and GitHub's token is never stored.
 
 **Built to run as a service**
 
@@ -146,16 +147,16 @@ Reproduce: `python -m evals.run agent`, `baseline`, `agent-hard`, `baseline-hard
 
 ### Code search quality
 
-From [`evals/results/retrieval.json`](evals/results/retrieval.json): can search find real evidence for a skill? The queries are the 37 skills labelled present across both sets. A code chunk counts as relevant when it contains that skill's proof, the same pattern [`check_labels.py`](evals/check_labels.py) verifies against the real files, so the labels need no AI. Success@k: a relevant chunk is in the top k. MRR: how high the first one ranks.
+From [`evals/results/retrieval.json`](evals/results/retrieval.json): can search find real evidence for a skill? The queries are the 65 skills labelled present across both sets. A code chunk counts as relevant when it contains that skill's proof, the same pattern [`check_labels.py`](evals/check_labels.py) verifies against the real files, so the labels need no AI. Success@k: a relevant chunk is in the top k. MRR: how high the first one ranks.
 
-| Method | Success@1 | Success@5 | MRR@10 | Paraphrased skills (10): Success@1 / MRR |
+| Method | Success@1 | Success@5 | MRR@10 | Paraphrased skills (15): Success@1 / MRR |
 |---|---:|---:|---:|---:|
-| Keyword (BM25) | 0.30 | 0.59 | 0.40 | 0.20 / 0.30 |
-| Vector | 0.41 | **0.84** | 0.57 | 0.30 / **0.53** |
-| Hybrid, equal weights (in use) | 0.30 | 0.70 | 0.47 | 0.00 / 0.29 |
-| **Hybrid, tuned** | **0.49** | 0.81 | **0.61** | 0.30 / 0.51 |
+| Keyword (BM25) | 0.32 | 0.55 | 0.42 | 0.20 / 0.32 |
+| Vector | 0.38 | **0.83** | 0.57 | **0.33** / **0.53** |
+| Hybrid, equal weights (in use) | 0.32 | 0.71 | 0.49 | 0.13 / 0.36 |
+| **Hybrid, tuned** | **0.46** | 0.82 | **0.61** | 0.27 / 0.48 |
 
-The equal-weight hybrid the app uses scored *below* vector search alone: on paraphrased skills its first result was never relevant, because weak keyword matches pushed good vector matches down. Giving keywords a quarter of the weight with a sharper fusion curve (RRF k=10) fixed that. The setting was tuned on the standard set only and held up on the paraphrased hard queries it never saw. The app keeps equal weights until the agent is re-evaluated with the tuned search. With 37 queries these numbers are indicative.
+The equal-weight hybrid the app uses scores *below* vector search alone, worst on paraphrased skills, because weak keyword matches push good vector matches down. Giving keywords a quarter of the weight with a sharper fusion curve (RRF k=10) fixes that. The setting was tuned on the first 26 standard queries only, so the other 39 are a held-out check, and it held: on the 28 queries added later it reached Success@1 0.43 against 0.36 for every other method, and MRR 0.61 against at most 0.57. The app keeps equal weights until the agent is re-evaluated with the tuned search.
 
 Reproduce: `python -m evals.retrieval` (reuses the evaluation index; query vectors are cached).
 
@@ -191,6 +192,7 @@ Optional settings in `.env`:
 | `GEMINI_MODELS` | Comma-separated models to try in order |
 | `UI_SECRET` | Encrypts the browser's copy of the user token; required when deployed |
 | `WORKERS` | How many indexing and analysis jobs run at once (default 2) |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `PUBLIC_URL` | Turn on "Sign in with GitHub" ([setup](docs/DEPLOY.md)) |
 
 Checks:
 
@@ -316,13 +318,13 @@ CodeSynapse/
 
 ## ⚠️ Limitations
 
-- Evaluation sets are small (standard: 8 repositories, 46 skill pairs; hard: 5 repositories, 22 pairs), so results are indicative, not statistically strong.
+- Evaluation sets are small (standard: 8 repositories, 80 skill pairs; hard: 8 repositories, 33 pairs), so results are indicative, not statistically strong. The agent and baseline results above were measured on the first 46 and 22 pairs.
 - Confidence calibration has 29 of 68 records so far, so reports show no "% likely" value until its model is trained.
 - The tuned search setting measured above isn't switched on yet: the agent's published scores used the equal-weight hybrid, and switching needs a re-run first.
 - The live demo runs on free tiers: the Space sleeps when idle, Gemini's daily embedding quota limits how much new code can be indexed in a day, and an overloaded Gemini model can make an analysis slow.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits). Scanned-image resumes need their text pasted.
 - "Not found" means no evidence was found in the code searched, not that the person lacks the skill or that a resume claim is false.
-- Users are anonymous per browser; there is no GitHub login yet.
+- Without the GitHub OAuth settings, users are anonymous per browser.
 - Background jobs, rate limits and model fallback live in one process, which suits a single server. Several servers would need a shared queue and store such as Redis.
 
 ## 🗺️ Roadmap
@@ -344,8 +346,8 @@ CodeSynapse/
 - [ ] Calibrated confidence: finish collecting records, train and publish
 - [ ] Switch the app to the tuned search after re-running the agent evaluation
 - [ ] Fine-tuned reranker distilled from Gemini's relevance judgements
-- [ ] Larger evaluation sets
-- [ ] GitHub login
+- [x] Larger evaluation sets (68 → 113 labelled pairs, every label checked against the real files)
+- [x] Sign in with GitHub, with data shared across devices
 
 ## 🤝 Contributing
 

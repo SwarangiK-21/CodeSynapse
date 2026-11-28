@@ -28,3 +28,29 @@ def test_fusion_weights_shift_the_order():
     plain = [i for i, _ in search.fuse([keyword, vector])]
     weighted = [i for i, _ in search.fuse([keyword, vector], weights=[0.1, 1.0], k=10)]
     assert plain[0] == "v1" and weighted.index("v2") < weighted.index("k1")
+
+def test_live_search_uses_the_fusion_settings(monkeypatch):
+    from codesynapse import config
+    from codesynapse.db.models import CodeChunk, Repo
+    from codesynapse.db.session import SessionLocal
+    from codesynapse.services import users
+    seen = {}
+    real_fuse = search.fuse
+    def spy(rankings, weights=None, k=search.RRF_K):
+        seen.update(weights=weights, k=k)
+        return real_fuse(rankings, weights, k)
+    monkeypatch.setattr(search, "fuse", spy)
+    with SessionLocal() as db:
+        user, _ = users.create_user(db)
+        repo = Repo(user_id=user.id, full_name="o/r", commit_sha="a" * 40)
+        db.add(repo)
+        db.flush()
+        db.add(CodeChunk(repo_id=repo.id, path="a.py", language="python", kind="function", symbol="sign",
+                         start_line=1, end_line=2, content="def sign(): pass"))
+        db.commit()
+        search.search_code(db, user, "sign")
+        assert seen == {"weights": [1.0, 1.0], "k": 60}
+        monkeypatch.setattr(config, "SEARCH_KEYWORD_WEIGHT", 0.25)
+        monkeypatch.setattr(config, "SEARCH_RRF_K", 10)
+        search.search_code(db, user, "sign")
+        assert seen == {"weights": [0.25, 1.0], "k": 10}

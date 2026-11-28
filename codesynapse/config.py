@@ -27,3 +27,18 @@ WORKERS = int(os.getenv("WORKERS", "2"))
 
 # Encrypts the browser's copy of the user token. Set a real value when deployed.
 UI_SECRET = os.getenv("UI_SECRET") or "local-dev-only"
+
+# Optional "Sign in with GitHub". All three are needed; without them the button is hidden.
+# PUBLIC_URL is the app's own address, used for GitHub's callback, e.g. https://you-app.hf.space
+def setting(name):
+    """A value pasted into a hosting dashboard often brings a stray space or line break along."""
+    return (os.getenv(name) or "").strip()
+
+GITHUB_CLIENT_ID = setting("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = setting("GITHUB_CLIENT_SECRET")
+PUBLIC_URL = setting("PUBLIC_URL").rstrip("/")
+
+# How code search merges keyword and vector results (reciprocal rank fusion). Equal weight
+# and k=60 are the defaults; evals/retrieval.py measured keyword weight 0.25 with k=10 as better.
+SEARCH_KEYWORD_WEIGHT = float(os.getenv("SEARCH_KEYWORD_WEIGHT", "1.0"))
+SEARCH_RRF_K = int(os.getenv("SEARCH_RRF_K", "60"))
