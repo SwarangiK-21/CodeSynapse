@@ -122,6 +122,9 @@ def get_or_create(db: Session, user: User, full_name):
 def index_repo(db: Session, user: User, value, sha=None):
     """Indexes a public repository and waits for it. The evaluation uses this."""
     repo = get_or_create(db, user, parse_name(value))
+    # Commit before embedding: the embedding cache writes from its own session, and SQLite
+    # allows one writer at a time, so an open write here would lock it out
+    db.commit()
     return fill_repo(db, repo, sha)
 
 def check_exists(full_name):

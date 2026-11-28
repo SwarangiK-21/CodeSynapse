@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464 584" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="14">
+<rect width="464" height="584" rx="14" fill="#ffffff"/>
+<rect x="64" y="28" width="360" height="360" fill="none" stroke="#d9e2ec"/>
+<line x1="154.0" y1="28" x2="154.0" y2="388" stroke="#d9e2ec"/>
+<line x1="64" y1="298.0" x2="424" y2="298.0" stroke="#d9e2ec"/>
+<line x1="244.0" y1="28" x2="244.0" y2="388" stroke="#d9e2ec"/>
+<line x1="64" y1="208.0" x2="424" y2="208.0" stroke="#d9e2ec"/>
+<line x1="334.0" y1="28" x2="334.0" y2="388" stroke="#d9e2ec"/>
+<line x1="64" y1="118.0" x2="424" y2="118.0" stroke="#d9e2ec"/>
+<line x1="64" y1="388" x2="424" y2="28" stroke="#52606d" stroke-dasharray="5 5"/>
+<text x="308.8" y="172.0" fill="#52606d" font-size="12" transform="rotate(-45 308.8 172.0)">perfectly calibrated</text>
+<text x="64" y="408" text-anchor="middle" fill="#52606d">0</text>
+<text x="54" y="393" text-anchor="end" fill="#52606d">0</text>
+<text x="244.0" y="408" text-anchor="middle" fill="#52606d">0.5</text>
+<text x="54" y="213.0" text-anchor="end" fill="#52606d">0.5</text>
+<text x="424" y="408" text-anchor="middle" fill="#52606d">1</text>
+<text x="54" y="33" text-anchor="end" fill="#52606d">1</text>
+<text x="244.0" y="430" text-anchor="middle" fill="#1f2933">Stated confidence</text>
+<text x="18" y="208.0" text-anchor="middle" fill="#1f2933" transform="rotate(-90 18 208.0)">How often it was right</text>
+<polyline fill="none" stroke="#e07a5f" stroke-width="2" stroke-opacity="0.55" points="64.0,375.6 316.0,208.0 418.4,47.5"/>
+<circle cx="64.0" cy="375.6" r="11.6" fill="#e07a5f" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="316.0" cy="208.0" r="5.3" fill="#e07a5f" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="418.4" cy="47.5" r="12.7" fill="#e07a5f" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="441" r="6" fill="#e07a5f"/>
+<text x="84" y="446" fill="#1f2933">AI's own confidence</text>
+<text x="424" y="446" text-anchor="end" fill="#52606d">ECE 0.041 · Brier 0.05</text>
+<polyline fill="none" stroke="#7b8794" stroke-width="2" stroke-opacity="0.55" points="128.7,366.2 381.6,28.0"/>
+<circle cx="128.7" cy="366.2" r="12.2" fill="#7b8794" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="381.6" cy="28.0" r="12.5" fill="#7b8794" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="467" r="6" fill="#7b8794"/>
+<text x="84" y="472" fill="#1f2933">Verified level only</text>
+<text x="424" y="472" text-anchor="end" fill="#52606d">ECE 0.118 · Brier 0.043</text>
+<polyline fill="none" stroke="#d9a12b" stroke-width="2" stroke-opacity="0.55" points="123.1,375.6 316.3,148.0 365.7,48.0"/>
+<circle cx="123.1" cy="375.6" r="11.6" fill="#d9a12b" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="316.3" cy="148.0" r="5.8" fill="#d9a12b" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="365.7" cy="48.0" r="12.6" fill="#d9a12b" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="493" r="6" fill="#d9a12b"/>
+<text x="84" y="498" fill="#1f2933">AI's confidence, rescaled</text>
+<text x="424" y="498" text-anchor="end" fill="#52606d">ECE 0.113 · Brier 0.064</text>
+<polyline fill="none" stroke="#2b7a78" stroke-width="2" stroke-opacity="0.55" points="95.0,375.6 163.7,388.0 226.6,28.0 281.9,388.0 403.0,28.0"/>
+<circle cx="95.0" cy="375.6" r="11.6" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="163.7" cy="388.0" r="5.3" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="226.6" cy="28.0" r="4.6" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="281.9" cy="388.0" r="4.6" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="403.0" cy="28.0" r="12.5" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="519" r="6" fill="#2b7a78"/>
+<text x="84" y="524" fill="#1f2933">Learned model (all features)</text>
+<text x="424" y="524" text-anchor="end" fill="#52606d">ECE 0.077 · Brier 0.03</text>
+<text x="64" y="558" fill="#52606d" font-size="12">Dot size: how many skills fell in that confidence band</text>
+</svg>

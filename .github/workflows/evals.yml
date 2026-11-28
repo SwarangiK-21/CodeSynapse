@@ -9,7 +9,7 @@ on:
       command:
         description: "What to run"
         type: choice
-        options: [calibration, reranker, agent-rerun]
+        options: [calibration, calibration-analyze, reranker, agent-rerun]
         default: calibration
 
 jobs:
@@ -48,6 +48,10 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
+      # No AI: scores the confidence methods, trains the model and draws the reliability chart
+      - name: Analyze calibration and train the confidence model
+        if: inputs.command == 'calibration-analyze'
+        run: python -m evals.calibration analyze
       - name: Score reranker candidates with the teacher model
         if: inputs.command == 'reranker'
         run: python -m evals.reranker label
@@ -90,7 +94,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # git add rejects the whole list if one file is missing, so add only those that exist
-          for f in evals/results/calibration.jsonl evals/results/reranker_labels.jsonl evals/results/reranker.json                    evals/results/*-equal.jsonl evals/results/*-tuned.jsonl evals/results/summary.json; do
+          for f in evals/results/calibration.jsonl evals/results/calibration.json docs/images/calibration.svg codesynapse/agents/confidence_model.json evals/results/reranker_labels.jsonl evals/results/reranker.json                    evals/results/*-equal.jsonl evals/results/*-tuned.jsonl evals/results/summary.json; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           git diff --cached --quiet && exit 0
