@@ -116,29 +116,55 @@ METHODS = {
 }
 
 def chart(results):
-    """A reliability diagram as SVG: a calibrated method follows the diagonal."""
-    size, pad = 320, 44
-    colors = ["#e07a5f", "#8d99ae", "#f2a541", "#2b7a78"]
+    """A reliability diagram as SVG: a calibrated method follows the diagonal.
+
+    Each point is a confidence band; its area shows how many records fell in it, so bands
+    holding one or two records, which swing the most, read as the small dots they are.
+    Drawn on its own light card so it is legible in light and dark READMEs.
+    """
+    import math
+    size, left, top = 360, 64, 28
+    legend_top = top + size + 58
+    width, height = left + size + 40, legend_top + 26 * len(results) + 34
+    ink, muted, grid = "#1f2933", "#52606d", "#d9e2ec"
+    colors = ["#e07a5f", "#7b8794", "#d9a12b", "#2b7a78"]
     def xy(conf, acc):
-        return pad + conf * size, pad + (1 - acc) * size
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size + pad + 230} {size + 2 * pad}" '
-             'font-family="system-ui, sans-serif" font-size="12">',
-             f'<rect x="{pad}" y="{pad}" width="{size}" height="{size}" fill="none" stroke="#8b949e"/>',
-             f'<line x1="{pad}" y1="{pad + size}" x2="{pad + size}" y2="{pad}" stroke="#8b949e" stroke-dasharray="4 4"/>',
-             f'<text x="{pad + size / 2}" y="{size + pad + 32}" text-anchor="middle" fill="#8b949e">Confidence</text>',
-             f'<text x="14" y="{pad + size / 2}" text-anchor="middle" fill="#8b949e" '
-             f'transform="rotate(-90 14 {pad + size / 2})">How often it was right</text>']
+        return left + conf * size, top + (1 - acc) * size
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
+             'font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="14">',
+             f'<rect width="{width}" height="{height}" rx="14" fill="#ffffff"/>',
+             f'<rect x="{left}" y="{top}" width="{size}" height="{size}" fill="none" stroke="{grid}"/>']
+    for tick in (0.25, 0.5, 0.75):
+        x, y = xy(tick, tick)
+        parts.append(f'<line x1="{x}" y1="{top}" x2="{x}" y2="{top + size}" stroke="{grid}"/>')
+        parts.append(f'<line x1="{left}" y1="{y}" x2="{left + size}" y2="{y}" stroke="{grid}"/>')
+    parts.append(f'<line x1="{left}" y1="{top + size}" x2="{left + size}" y2="{top}" stroke="{muted}" '
+                 'stroke-dasharray="5 5"/>')
+    lx, ly = xy(0.68, 0.6)
+    parts.append(f'<text x="{lx:.1f}" y="{ly:.1f}" fill="{muted}" font-size="12" '
+                 f'transform="rotate(-45 {lx:.1f} {ly:.1f})">perfectly calibrated</text>')
     for tick in (0, 0.5, 1):
-        parts.append(f'<text x="{pad + tick * size}" y="{size + pad + 15}" text-anchor="middle" fill="#8b949e">{tick}</text>')
-        parts.append(f'<text x="{pad - 6}" y="{pad + (1 - tick) * size + 4}" text-anchor="end" fill="#8b949e">{tick}</text>')
+        x, y = xy(tick, tick)
+        parts.append(f'<text x="{x}" y="{top + size + 20}" text-anchor="middle" fill="{muted}">{tick:g}</text>')
+        parts.append(f'<text x="{left - 10}" y="{y + 5}" text-anchor="end" fill="{muted}">{tick:g}</text>')
+    parts.append(f'<text x="{left + size / 2}" y="{top + size + 42}" text-anchor="middle" fill="{ink}">'
+                 'Stated confidence</text>')
+    parts.append(f'<text x="18" y="{top + size / 2}" text-anchor="middle" fill="{ink}" '
+                 f'transform="rotate(-90 18 {top + size / 2})">How often it was right</text>')
     for (name, result), color, row in zip(results.items(), colors, range(len(results))):
-        points = [xy(b["confidence"], b["accuracy"]) for b in result["bins"]]
-        parts.append(f'<polyline fill="none" stroke="{color}" stroke-width="2.5" points="'
+        bins = result["bins"]
+        points = [xy(b["confidence"], b["accuracy"]) for b in bins]
+        parts.append(f'<polyline fill="none" stroke="{color}" stroke-width="2" stroke-opacity="0.55" points="'
                      + " ".join(f"{x:.1f},{y:.1f}" for x, y in points) + '"/>')
-        parts.extend(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4" fill="{color}"/>' for x, y in points)
-        ly = pad + 10 + row * 22
-        parts.append(f'<rect x="{pad + size + 16}" y="{ly - 9}" width="12" height="12" rx="3" fill="{color}"/>')
-        parts.append(f'<text x="{pad + size + 34}" y="{ly + 1}" fill="#8b949e">{name} (ECE {result["ece"]})</text>')
+        parts.extend(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{3 + 1.6 * math.sqrt(b["count"]):.1f}" '
+                     f'fill="{color}" fill-opacity="0.8" stroke="#ffffff"/>' for (x, y), b in zip(points, bins))
+        ly = legend_top + row * 26
+        parts.append(f'<circle cx="{left + 6}" cy="{ly - 5}" r="6" fill="{color}"/>')
+        parts.append(f'<text x="{left + 20}" y="{ly}" fill="{ink}">{name}</text>')
+        parts.append(f'<text x="{left + size}" y="{ly}" text-anchor="end" fill="{muted}">'
+                     f'ECE {result["ece"]} · Brier {result["brier"]}</text>')
+    parts.append(f'<text x="{left}" y="{legend_top + 26 * len(results) + 8}" fill="{muted}" font-size="12">'
+                 'Dot size: how many skills fell in that confidence band</text>')
     parts.append("</svg>")
     return "\n".join(parts)
 

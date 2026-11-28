@@ -1,37 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 594 408" font-family="system-ui, sans-serif" font-size="12">
-<rect x="44" y="44" width="320" height="320" fill="none" stroke="#8b949e"/>
-<line x1="44" y1="364" x2="364" y2="44" stroke="#8b949e" stroke-dasharray="4 4"/>
-<text x="204.0" y="396" text-anchor="middle" fill="#8b949e">Confidence</text>
-<text x="14" y="204.0" text-anchor="middle" fill="#8b949e" transform="rotate(-90 14 204.0)">How often it was right</text>
-<text x="44" y="379" text-anchor="middle" fill="#8b949e">0</text>
-<text x="38" y="368" text-anchor="end" fill="#8b949e">0</text>
-<text x="204.0" y="379" text-anchor="middle" fill="#8b949e">0.5</text>
-<text x="38" y="208.0" text-anchor="end" fill="#8b949e">0.5</text>
-<text x="364" y="379" text-anchor="middle" fill="#8b949e">1</text>
-<text x="38" y="48" text-anchor="end" fill="#8b949e">1</text>
-<polyline fill="none" stroke="#e07a5f" stroke-width="2.5" points="44.0,353.0 268.0,204.0 359.0,61.3"/>
-<circle cx="44.0" cy="353.0" r="4" fill="#e07a5f"/>
-<circle cx="268.0" cy="204.0" r="4" fill="#e07a5f"/>
-<circle cx="359.0" cy="61.3" r="4" fill="#e07a5f"/>
-<rect x="380" y="45" width="12" height="12" rx="3" fill="#e07a5f"/>
-<text x="398" y="55" fill="#8b949e">AI's own confidence (ECE 0.041)</text>
-<polyline fill="none" stroke="#8d99ae" stroke-width="2.5" points="101.5,344.6 326.3,44.0"/>
-<circle cx="101.5" cy="344.6" r="4" fill="#8d99ae"/>
-<circle cx="326.3" cy="44.0" r="4" fill="#8d99ae"/>
-<rect x="380" y="67" width="12" height="12" rx="3" fill="#8d99ae"/>
-<text x="398" y="77" fill="#8b949e">Verified level only (ECE 0.118)</text>
-<polyline fill="none" stroke="#f2a541" stroke-width="2.5" points="96.5,353.0 268.3,150.7 312.2,61.8"/>
-<circle cx="96.5" cy="353.0" r="4" fill="#f2a541"/>
-<circle cx="268.3" cy="150.7" r="4" fill="#f2a541"/>
-<circle cx="312.2" cy="61.8" r="4" fill="#f2a541"/>
-<rect x="380" y="89" width="12" height="12" rx="3" fill="#f2a541"/>
-<text x="398" y="99" fill="#8b949e">AI's confidence, rescaled (ECE 0.113)</text>
-<polyline fill="none" stroke="#2b7a78" stroke-width="2.5" points="71.5,353.0 132.7,364.0 188.5,44.0 237.7,364.0 345.3,44.0"/>
-<circle cx="71.5" cy="353.0" r="4" fill="#2b7a78"/>
-<circle cx="132.7" cy="364.0" r="4" fill="#2b7a78"/>
-<circle cx="188.5" cy="44.0" r="4" fill="#2b7a78"/>
-<circle cx="237.7" cy="364.0" r="4" fill="#2b7a78"/>
-<circle cx="345.3" cy="44.0" r="4" fill="#2b7a78"/>
-<rect x="380" y="111" width="12" height="12" rx="3" fill="#2b7a78"/>
-<text x="398" y="121" fill="#8b949e">Learned model (all features) (ECE 0.077)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464 584" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="14">
+<rect width="464" height="584" rx="14" fill="#ffffff"/>
+<rect x="64" y="28" width="360" height="360" fill="none" stroke="#d9e2ec"/>
+<line x1="154.0" y1="28" x2="154.0" y2="388" stroke="#d9e2ec"/>
+<line x1="64" y1="298.0" x2="424" y2="298.0" stroke="#d9e2ec"/>
+<line x1="244.0" y1="28" x2="244.0" y2="388" stroke="#d9e2ec"/>
+<line x1="64" y1="208.0" x2="424" y2="208.0" stroke="#d9e2ec"/>
+<line x1="334.0" y1="28" x2="334.0" y2="388" stroke="#d9e2ec"/>
+<line x1="64" y1="118.0" x2="424" y2="118.0" stroke="#d9e2ec"/>
+<line x1="64" y1="388" x2="424" y2="28" stroke="#52606d" stroke-dasharray="5 5"/>
+<text x="308.8" y="172.0" fill="#52606d" font-size="12" transform="rotate(-45 308.8 172.0)">perfectly calibrated</text>
+<text x="64" y="408" text-anchor="middle" fill="#52606d">0</text>
+<text x="54" y="393" text-anchor="end" fill="#52606d">0</text>
+<text x="244.0" y="408" text-anchor="middle" fill="#52606d">0.5</text>
+<text x="54" y="213.0" text-anchor="end" fill="#52606d">0.5</text>
+<text x="424" y="408" text-anchor="middle" fill="#52606d">1</text>
+<text x="54" y="33" text-anchor="end" fill="#52606d">1</text>
+<text x="244.0" y="430" text-anchor="middle" fill="#1f2933">Stated confidence</text>
+<text x="18" y="208.0" text-anchor="middle" fill="#1f2933" transform="rotate(-90 18 208.0)">How often it was right</text>
+<polyline fill="none" stroke="#e07a5f" stroke-width="2" stroke-opacity="0.55" points="64.0,375.6 316.0,208.0 418.4,47.5"/>
+<circle cx="64.0" cy="375.6" r="11.6" fill="#e07a5f" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="316.0" cy="208.0" r="5.3" fill="#e07a5f" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="418.4" cy="47.5" r="12.7" fill="#e07a5f" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="441" r="6" fill="#e07a5f"/>
+<text x="84" y="446" fill="#1f2933">AI's own confidence</text>
+<text x="424" y="446" text-anchor="end" fill="#52606d">ECE 0.041 · Brier 0.05</text>
+<polyline fill="none" stroke="#7b8794" stroke-width="2" stroke-opacity="0.55" points="128.7,366.2 381.6,28.0"/>
+<circle cx="128.7" cy="366.2" r="12.2" fill="#7b8794" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="381.6" cy="28.0" r="12.5" fill="#7b8794" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="467" r="6" fill="#7b8794"/>
+<text x="84" y="472" fill="#1f2933">Verified level only</text>
+<text x="424" y="472" text-anchor="end" fill="#52606d">ECE 0.118 · Brier 0.043</text>
+<polyline fill="none" stroke="#d9a12b" stroke-width="2" stroke-opacity="0.55" points="123.1,375.6 316.3,148.0 365.7,48.0"/>
+<circle cx="123.1" cy="375.6" r="11.6" fill="#d9a12b" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="316.3" cy="148.0" r="5.8" fill="#d9a12b" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="365.7" cy="48.0" r="12.6" fill="#d9a12b" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="493" r="6" fill="#d9a12b"/>
+<text x="84" y="498" fill="#1f2933">AI's confidence, rescaled</text>
+<text x="424" y="498" text-anchor="end" fill="#52606d">ECE 0.113 · Brier 0.064</text>
+<polyline fill="none" stroke="#2b7a78" stroke-width="2" stroke-opacity="0.55" points="95.0,375.6 163.7,388.0 226.6,28.0 281.9,388.0 403.0,28.0"/>
+<circle cx="95.0" cy="375.6" r="11.6" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="163.7" cy="388.0" r="5.3" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="226.6" cy="28.0" r="4.6" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="281.9" cy="388.0" r="4.6" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="403.0" cy="28.0" r="12.5" fill="#2b7a78" fill-opacity="0.8" stroke="#ffffff"/>
+<circle cx="70" cy="519" r="6" fill="#2b7a78"/>
+<text x="84" y="524" fill="#1f2933">Learned model (all features)</text>
+<text x="424" y="524" text-anchor="end" fill="#52606d">ECE 0.077 · Brier 0.03</text>
+<text x="64" y="558" fill="#52606d" font-size="12">Dot size: how many skills fell in that confidence band</text>
 </svg>
