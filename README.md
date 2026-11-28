@@ -15,6 +15,12 @@
   <a href="https://huggingface.co/spaces/SwarangiK-21/CodeSynapse"><img src="https://img.shields.io/badge/Live%20demo-Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" alt="Live demo"></a>
 </p>
 
+<p align="center">
+  <img src="docs/images/demo.gif" alt="Demo: the Skill Gap example on pallets/itsdangerous goes from reading the repository to a report where 5 of 5 required skills are backed by code, with the exact lines cited for cryptographic signing and Redis marked not found; then the Resume Check example starts" width="900">
+</p>
+
+<sub>Demo recorded on the live Space (28 Nov 2026), with the waits for the analysis shortened.</sub>
+
 | Skill-gap analysis | Live profile sync |
 |:---:|:---:|
 | ![Skill-gap report in light mode: 5 of 5 required skills backed by code, Redis not found](docs/images/skill_gap.png) | ![Profile tab in dark mode with live GitHub stats](docs/images/profile_sync.png) |
