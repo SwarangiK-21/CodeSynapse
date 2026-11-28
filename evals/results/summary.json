@@ -2,27 +2,27 @@
   "agent": {
     "repos": 8,
     "presence": {
-      "pairs": 80,
+      "pairs": 46,
       "tp": 26,
       "fp": 0,
-      "fn": 23,
-      "tn": 31,
+      "fn": 0,
+      "tn": 20,
       "precision": 1.0,
-      "recall": 0.531,
-      "f1": 0.693,
-      "accuracy": 0.713
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
     },
     "by_type": {
       "plain": {
-        "pairs": 80,
+        "pairs": 46,
         "tp": 26,
         "fp": 0,
-        "fn": 23,
-        "tn": 31,
+        "fn": 0,
+        "tn": 20,
         "precision": 1.0,
-        "recall": 0.531,
-        "f1": 0.693,
-        "accuracy": 0.713
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
       }
     },
     "citations": {
@@ -35,194 +35,32 @@
     "llm_calls": 63,
     "tokens": 155458,
     "seconds_per_repo": 72,
-    "errors": [
-      {
-        "repo": "pallets/itsdangerous",
-        "skill": "Base64 encoding",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "pallets/itsdangerous",
-        "skill": "Data compression",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "pallets/markupsafe",
-        "skill": "Operator overloading",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "expressjs/cors",
-        "skill": "HTTP Vary header",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "kennethreitz/records",
-        "skill": "Command-line interface",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "kennethreitz/records",
-        "skill": "Excel export",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "kennethreitz/records",
-        "skill": "SQLite",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "encode/databases",
-        "skill": "asyncpg",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "encode/databases",
-        "skill": "SQLite",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "encode/databases",
-        "skill": "Context variables",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "AnyIO",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "Running blocking code in threads",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "Generic typing with ParamSpec",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "pytest",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "Fetch API",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "Request timeouts",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "Request lifecycle hooks",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "AVA test framework",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "SQLModel ORM",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Alembic migrations",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Playwright end-to-end tests",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Password hashing",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Sentry error monitoring",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      }
-    ]
+    "errors": []
   },
   "baseline": {
     "repos": 8,
     "presence": {
-      "pairs": 80,
+      "pairs": 46,
       "tp": 26,
       "fp": 0,
-      "fn": 23,
-      "tn": 31,
+      "fn": 0,
+      "tn": 20,
       "precision": 1.0,
-      "recall": 0.531,
-      "f1": 0.693,
-      "accuracy": 0.713
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
     },
     "by_type": {
       "plain": {
-        "pairs": 80,
+        "pairs": 46,
         "tp": 26,
         "fp": 0,
-        "fn": 23,
-        "tn": 31,
+        "fn": 0,
+        "tn": 20,
         "precision": 1.0,
-        "recall": 0.531,
-        "f1": 0.693,
-        "accuracy": 0.713
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
       }
     },
     "citations": {
@@ -235,169 +73,7 @@
     "llm_calls": 8,
     "tokens": 55488,
     "seconds_per_repo": 9,
-    "errors": [
-      {
-        "repo": "pallets/itsdangerous",
-        "skill": "Base64 encoding",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "pallets/itsdangerous",
-        "skill": "Data compression",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "pallets/markupsafe",
-        "skill": "Operator overloading",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "expressjs/cors",
-        "skill": "HTTP Vary header",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "kennethreitz/records",
-        "skill": "Command-line interface",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "kennethreitz/records",
-        "skill": "Excel export",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "kennethreitz/records",
-        "skill": "SQLite",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "encode/databases",
-        "skill": "asyncpg",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "encode/databases",
-        "skill": "SQLite",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "encode/databases",
-        "skill": "Context variables",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "AnyIO",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "Running blocking code in threads",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "Generic typing with ParamSpec",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/asyncer",
-        "skill": "pytest",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "Fetch API",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "Request timeouts",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "Request lifecycle hooks",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "sindresorhus/ky",
-        "skill": "AVA test framework",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "SQLModel ORM",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Alembic migrations",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Playwright end-to-end tests",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Password hashing",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Sentry error monitoring",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      }
-    ]
+    "errors": []
   },
   "agent-hard": {
     "repos": 5,
@@ -588,27 +264,27 @@
   "agent-equal": {
     "repos": 8,
     "presence": {
-      "pairs": 80,
+      "pairs": 77,
       "tp": 47,
       "fp": 0,
-      "fn": 2,
-      "tn": 31,
+      "fn": 1,
+      "tn": 29,
       "precision": 1.0,
-      "recall": 0.959,
-      "f1": 0.979,
-      "accuracy": 0.975
+      "recall": 0.979,
+      "f1": 0.989,
+      "accuracy": 0.987
     },
     "by_type": {
       "plain": {
-        "pairs": 80,
+        "pairs": 77,
         "tp": 47,
         "fp": 0,
-        "fn": 2,
-        "tn": 31,
+        "fn": 1,
+        "tn": 29,
         "precision": 1.0,
-        "recall": 0.959,
-        "f1": 0.979,
-        "accuracy": 0.975
+        "recall": 0.979,
+        "f1": 0.989,
+        "accuracy": 0.987
       }
     },
     "citations": {
@@ -625,13 +301,6 @@
       {
         "repo": "encode/databases",
         "skill": "Context variables",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Sentry error monitoring",
         "type": "plain",
         "expected": true,
         "level": "none"
@@ -858,27 +527,27 @@
   "agent-tuned": {
     "repos": 8,
     "presence": {
-      "pairs": 80,
+      "pairs": 77,
       "tp": 45,
       "fp": 0,
-      "fn": 4,
-      "tn": 31,
+      "fn": 3,
+      "tn": 29,
       "precision": 1.0,
-      "recall": 0.918,
-      "f1": 0.957,
-      "accuracy": 0.95
+      "recall": 0.938,
+      "f1": 0.968,
+      "accuracy": 0.961
     },
     "by_type": {
       "plain": {
-        "pairs": 80,
+        "pairs": 77,
         "tp": 45,
         "fp": 0,
-        "fn": 4,
-        "tn": 31,
+        "fn": 3,
+        "tn": 29,
         "precision": 1.0,
-        "recall": 0.918,
-        "f1": 0.957,
-        "accuracy": 0.95
+        "recall": 0.938,
+        "f1": 0.968,
+        "accuracy": 0.961
       }
     },
     "citations": {
@@ -909,13 +578,6 @@
       {
         "repo": "fastapi/asyncer",
         "skill": "Generic typing with ParamSpec",
-        "type": "plain",
-        "expected": true,
-        "level": "none"
-      },
-      {
-        "repo": "fastapi/full-stack-fastapi-template",
-        "skill": "Sentry error monitoring",
         "type": "plain",
         "expected": true,
         "level": "none"
