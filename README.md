@@ -44,7 +44,7 @@ Students preparing for software roles get generic advice that ignores what they 
 
 - **Skill-gap agent** — a LangGraph workflow (`plan → retrieve → assess → verify → recommend`) compares repositories with a job description. A deterministic verifier checks every quoted claim against the real source, links it to exact lines, and retries or drops unsupported claims; a person approves the report before it is final.
 - **Resume claim checker** — upload a resume PDF (or paste it) and the same agent checks each technical claim against up to three repositories: backed by code, partly backed, or not found, with links to the lines. Only the extracted claims are stored, never the full resume or contact details.
-- **Confidence estimates** — each skill can show a calibrated "% likely present", from a small logistic regression over facts the verifier has checked. The model, metrics and evaluation are built; its training data is still being collected (see Limitations below).
+- **Calibrated confidence** — each skill shows "% likely present" from a small logistic regression over facts the verifier has checked, trained on 68 labelled skills and scored by leave-one-repository-out cross-validation (Brier 0.030, AUROC 0.97).
 - **Hybrid code search** — indexes public repositories by function and class with Tree-sitter, then retrieves with BM25 + vector search merged by reciprocal rank fusion. Repository code is read, never executed.
 - **Quote-backed parsing** — skills from a job description and claims from a resume are kept only when the model quotes them word for word from the text.
 
@@ -160,11 +160,22 @@ The equal-weight hybrid the app uses scores *below* vector search alone, worst o
 
 Reproduce: `python -m evals.retrieval` (reuses the evaluation index; query vectors are cached).
 
-### Confidence calibration (in progress)
+### Confidence calibration
 
-Can the agent's confidence be trusted? [`evals/calibration.py`](evals/calibration.py) records, for every labelled skill, the verified level, the citations that held up, any rejected claims, and the model's own stated confidence. It then compares four ways of turning that into a probability (the model's raw confidence, the verified level alone, the confidence rescaled, and a logistic regression on all of it) by **leave-one-repository-out cross-validation**, scoring calibration error (ECE), Brier score and AUROC, with a reliability chart. The best model is what the app shows as "% likely present".
+Can the agent's confidence be trusted? [`evals/calibration.py`](evals/calibration.py) recorded, for each of the 68 labelled skills, the verified level, the citations that held up, any rejected claims, and Gemini's own stated confidence. Four ways of turning that into a probability were compared by **leave-one-repository-out cross-validation**, so every repository was scored by a model that never saw it ([`evals/results/calibration.json`](evals/results/calibration.json)):
 
-Status: 29 of 68 records collected. The rest wait on the free Gemini embedding quota, and results will be published here once collection finishes. Records are collected by the hand-started **Evals** workflow in GitHub Actions (`python -m evals.calibration collect`), and scored with `python -m evals.calibration analyze`, which needs no AI.
+| Method | Calibration error (ECE) ↓ | Brier score ↓ | AUROC ↑ | Accuracy at 0.5 |
+|---|---:|---:|---:|---:|
+| Gemini's own confidence | **0.041** | 0.050 | 0.959 | 0.94 |
+| Verified level only | 0.118 | 0.043 | 0.951 | **0.97** |
+| Gemini's confidence, rescaled | 0.113 | 0.064 | 0.936 | 0.94 |
+| **Logistic regression on all of it** (in use) | 0.077 | **0.030** | **0.973** | 0.96 |
+
+<p align="center"><img src="docs/images/calibration.svg" alt="Reliability chart: how often each method was right at each confidence level" width="560"></p>
+
+Gemini's own confidence turned out better calibrated than expected. The learned model is still the one the app uses: it has the lowest Brier score, which rewards being both calibrated and right (40% lower than Gemini's own), and it best separates real skills from absent ones. Its higher ECE comes mostly from confidence bands holding only one or two of the 68 records, where a single example moves the number a lot. The strongest signals are a verified "strong" level and the number of citations that held up; a rejected claim slightly *raises* the probability, because the agent mostly misquotes evidence that does exist. With 68 records these numbers are indicative.
+
+Reproduce: the hand-started **Evals** workflow collects records (`python -m evals.calibration collect`, uses Gemini) and analyses them (`python -m evals.calibration analyze`, no AI), writing the model to [`confidence_model.json`](codesynapse/agents/confidence_model.json).
 
 ---
 
@@ -319,7 +330,7 @@ CodeSynapse/
 ## ⚠️ Limitations
 
 - Evaluation sets are small (standard: 8 repositories, 80 skill pairs; hard: 8 repositories, 33 pairs), so results are indicative, not statistically strong. The agent and baseline results above were measured on the first 46 and 22 pairs.
-- Confidence calibration has 29 of 68 records so far, so reports show no "% likely" value until its model is trained.
+- The confidence model was trained on 68 labelled skills; its probabilities are a guide, not a guarantee.
 - The tuned search setting measured above isn't switched on yet: the agent's published scores used the equal-weight hybrid, and switching needs a re-run first.
 - The live demo runs on free tiers: the Space sleeps when idle, Gemini's daily embedding quota limits how much new code can be indexed in a day, and an overloaded Gemini model can make an analysis slow.
 - Only public repositories are indexed; GitHub and Gemini rate limits apply (set `GITHUB_TOKEN` for higher GitHub limits). Scanned-image resumes need their text pasted.
@@ -343,7 +354,7 @@ CodeSynapse/
 - [x] Retrieval evaluation (Success@k, MRR, nDCG) and tuned hybrid search
 - [x] Resume claim checker
 - [x] MCP server for AI assistants
-- [ ] Calibrated confidence: finish collecting records, train and publish
+- [x] Calibrated confidence, trained and evaluated with leave-one-repository-out cross-validation
 - [ ] Switch the app to the tuned search after re-running the agent evaluation
 - [ ] Fine-tuned reranker distilled from Gemini's relevance judgements
 - [x] Larger evaluation sets (68 → 113 labelled pairs, every label checked against the real files)
