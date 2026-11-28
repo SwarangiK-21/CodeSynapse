@@ -261,6 +261,422 @@
       }
     ]
   },
+  "agent-equal": {
+    "repos": 8,
+    "presence": {
+      "pairs": 77,
+      "tp": 47,
+      "fp": 0,
+      "fn": 1,
+      "tn": 29,
+      "precision": 1.0,
+      "recall": 0.979,
+      "f1": 0.989,
+      "accuracy": 0.987
+    },
+    "by_type": {
+      "plain": {
+        "pairs": 77,
+        "tp": 47,
+        "fp": 0,
+        "fn": 1,
+        "tn": 29,
+        "precision": 1.0,
+        "recall": 0.979,
+        "f1": 0.989,
+        "accuracy": 0.987
+      }
+    },
+    "citations": {
+      "citations": 107,
+      "real": 107,
+      "accuracy": 1.0
+    },
+    "rejected_claims": 23,
+    "retried_repos": 0,
+    "llm_calls": 93,
+    "tokens": 235580,
+    "seconds_per_repo": 48,
+    "errors": [
+      {
+        "repo": "encode/databases",
+        "skill": "Context variables",
+        "type": "plain",
+        "expected": true,
+        "level": "none"
+      }
+    ]
+  },
+  "agent-hard-equal": {
+    "repos": 8,
+    "presence": {
+      "pairs": 33,
+      "tp": 16,
+      "fp": 1,
+      "fn": 0,
+      "tn": 16,
+      "precision": 0.941,
+      "recall": 1.0,
+      "f1": 0.97,
+      "accuracy": 0.97
+    },
+    "by_type": {
+      "contrast": {
+        "pairs": 1,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      },
+      "mentioned-only": {
+        "pairs": 6,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "tn": 5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.833
+      },
+      "neighbour": {
+        "pairs": 11,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 11,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 1.0
+      },
+      "paraphrase": {
+        "pairs": 15,
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      }
+    },
+    "citations": {
+      "citations": 35,
+      "real": 35,
+      "accuracy": 1.0
+    },
+    "rejected_claims": 8,
+    "retried_repos": 1,
+    "llm_calls": 50,
+    "tokens": 125622,
+    "seconds_per_repo": 30,
+    "errors": [
+      {
+        "repo": "encode/databases",
+        "skill": "Docker",
+        "type": "mentioned-only",
+        "expected": false,
+        "level": "partial"
+      }
+    ]
+  },
+  "baseline-equal": {
+    "repos": 8,
+    "presence": {
+      "pairs": 80,
+      "tp": 49,
+      "fp": 0,
+      "fn": 0,
+      "tn": 31,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    },
+    "by_type": {
+      "plain": {
+        "pairs": 80,
+        "tp": 49,
+        "fp": 0,
+        "fn": 0,
+        "tn": 31,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      }
+    },
+    "citations": {
+      "citations": 0,
+      "real": 0,
+      "accuracy": null
+    },
+    "rejected_claims": 0,
+    "retried_repos": 0,
+    "llm_calls": 8,
+    "tokens": 88870,
+    "seconds_per_repo": 2,
+    "errors": []
+  },
+  "baseline-hard-equal": {
+    "repos": 8,
+    "presence": {
+      "pairs": 33,
+      "tp": 16,
+      "fp": 4,
+      "fn": 0,
+      "tn": 13,
+      "precision": 0.8,
+      "recall": 1.0,
+      "f1": 0.889,
+      "accuracy": 0.879
+    },
+    "by_type": {
+      "contrast": {
+        "pairs": 1,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      },
+      "mentioned-only": {
+        "pairs": 6,
+        "tp": 0,
+        "fp": 3,
+        "fn": 0,
+        "tn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.5
+      },
+      "neighbour": {
+        "pairs": 11,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "tn": 10,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.909
+      },
+      "paraphrase": {
+        "pairs": 15,
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      }
+    },
+    "citations": {
+      "citations": 0,
+      "real": 0,
+      "accuracy": null
+    },
+    "rejected_claims": 0,
+    "retried_repos": 0,
+    "llm_calls": 8,
+    "tokens": 52324,
+    "seconds_per_repo": 8,
+    "errors": [
+      {
+        "repo": "pallets/markupsafe",
+        "skill": "Template rendering engines",
+        "type": "neighbour",
+        "expected": false,
+        "level": "partial"
+      },
+      {
+        "repo": "kennethreitz/records",
+        "skill": "MySQL",
+        "type": "mentioned-only",
+        "expected": false,
+        "level": "partial"
+      },
+      {
+        "repo": "encode/databases",
+        "skill": "FastAPI",
+        "type": "mentioned-only",
+        "expected": false,
+        "level": "partial"
+      },
+      {
+        "repo": "encode/databases",
+        "skill": "Docker",
+        "type": "mentioned-only",
+        "expected": false,
+        "level": "partial"
+      }
+    ]
+  },
+  "agent-tuned": {
+    "repos": 8,
+    "presence": {
+      "pairs": 77,
+      "tp": 45,
+      "fp": 0,
+      "fn": 3,
+      "tn": 29,
+      "precision": 1.0,
+      "recall": 0.938,
+      "f1": 0.968,
+      "accuracy": 0.961
+    },
+    "by_type": {
+      "plain": {
+        "pairs": 77,
+        "tp": 45,
+        "fp": 0,
+        "fn": 3,
+        "tn": 29,
+        "precision": 1.0,
+        "recall": 0.938,
+        "f1": 0.968,
+        "accuracy": 0.961
+      }
+    },
+    "citations": {
+      "citations": 102,
+      "real": 102,
+      "accuracy": 1.0
+    },
+    "rejected_claims": 22,
+    "retried_repos": 1,
+    "llm_calls": 85,
+    "tokens": 201390,
+    "seconds_per_repo": 44,
+    "errors": [
+      {
+        "repo": "encode/databases",
+        "skill": "Context variables",
+        "type": "plain",
+        "expected": true,
+        "level": "none"
+      },
+      {
+        "repo": "fastapi/asyncer",
+        "skill": "Running blocking code in threads",
+        "type": "plain",
+        "expected": true,
+        "level": "none"
+      },
+      {
+        "repo": "fastapi/asyncer",
+        "skill": "Generic typing with ParamSpec",
+        "type": "plain",
+        "expected": true,
+        "level": "none"
+      }
+    ]
+  },
+  "agent-hard-tuned": {
+    "repos": 8,
+    "presence": {
+      "pairs": 33,
+      "tp": 15,
+      "fp": 2,
+      "fn": 1,
+      "tn": 15,
+      "precision": 0.882,
+      "recall": 0.938,
+      "f1": 0.909,
+      "accuracy": 0.909
+    },
+    "by_type": {
+      "contrast": {
+        "pairs": 1,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      },
+      "mentioned-only": {
+        "pairs": 6,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "tn": 5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.833
+      },
+      "neighbour": {
+        "pairs": 11,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "tn": 10,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.909
+      },
+      "paraphrase": {
+        "pairs": 15,
+        "tp": 14,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "precision": 1.0,
+        "recall": 0.933,
+        "f1": 0.966,
+        "accuracy": 0.933
+      }
+    },
+    "citations": {
+      "citations": 35,
+      "real": 35,
+      "accuracy": 1.0
+    },
+    "rejected_claims": 4,
+    "retried_repos": 1,
+    "llm_calls": 42,
+    "tokens": 96751,
+    "seconds_per_repo": 31,
+    "errors": [
+      {
+        "repo": "pallets/markupsafe",
+        "skill": "Template rendering engines",
+        "type": "neighbour",
+        "expected": false,
+        "level": "partial"
+      },
+      {
+        "repo": "encode/databases",
+        "skill": "Docker",
+        "type": "mentioned-only",
+        "expected": false,
+        "level": "partial"
+      },
+      {
+        "repo": "fastapi/asyncer",
+        "skill": "Calling blocking code from async functions",
+        "type": "paraphrase",
+        "expected": true,
+        "level": "none"
+      }
+    ]
+  },
   "injection": {
     "attacks": 8,
     "blocked": 8,

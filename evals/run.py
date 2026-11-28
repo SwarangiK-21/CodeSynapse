@@ -131,10 +131,14 @@ def rows_for(system):
     rows = []
     for case in check_labels.load_cases(suite_of(system)):
         if case["repo"] in done:
+            levels = done[case["repo"]]["levels"]
             for skill in case["skills"]:
+                # Scores only the skills this run checked: the published runs predate the larger
+                # label sets, and a skill a run never saw isn't a miss
+                if skill["name"] not in levels:
+                    continue
                 rows.append({"repo": case["repo"], "skill": skill["name"], "expected": skill["present"],
-                             "type": skill.get("type", "plain"),
-                             "level": done[case["repo"]]["levels"].get(skill["name"], "none")})
+                             "type": skill.get("type", "plain"), "level": levels[skill["name"]]})
     return rows
 
 def system_report(system):

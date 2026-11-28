@@ -9,7 +9,7 @@ on:
       command:
         description: "What to run"
         type: choice
-        options: [calibration, calibration-analyze, reranker, agent-rerun]
+        options: [calibration, calibration-analyze, reranker, agent-rerun, report]
         default: calibration
 
 jobs:
@@ -76,6 +76,12 @@ jobs:
           exit $status
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+      # No AI: rebuilds evals/results/summary.json from the saved results
+      - name: Rebuild the results summary
+        if: inputs.command == 'report'
+        run: python -m evals.run report > /dev/null
+        env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/upload-artifact@v4
         if: inputs.command == 'reranker'
