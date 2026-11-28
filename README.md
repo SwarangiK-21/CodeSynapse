@@ -56,7 +56,7 @@ Students preparing for software roles get generic advice that ignores what they 
 
 **For people and for AI assistants**
 
-- **Four-tab web app** — Skill Gap, Resume Check, Profile and Coach, with a pastel light and dark theme that remembers your choice.
+- **Four-tab web app** — Skill Gap, Resume Check, Profile and Coach, with a calm, neutral light and dark theme that remembers your choice.
 - **MCP server** — six tools that let AI assistants such as Claude or Cursor index repositories, search code and run skill and resume checks in conversation, with every result linked to the exact lines.
 - **Live profile sync and scores** — fetches public GitHub and LeetCode stats; each becomes a 0–100 score in a Plotly chart. If a user doesn't exist or a service is down, the app says so instead of inventing numbers.
 - **AI career coach** — a Gemini chatbot that sees your synced stats and your last 10 messages, with structured replies.
@@ -67,8 +67,9 @@ Students preparing for software roles get generic advice that ignores what they 
 
 - **Background jobs** — indexing and analysis run outside the web request; jobs interrupted by a restart are marked failed, never left stuck.
 - **Rate limits and caching** — per-user hourly limits protect the AI quota, and identical AI requests and embeddings are answered from a database cache.
-- **Model fallback that learns** — if a Gemini model times out or is overloaded, requests move to the next one, and the struggling model rests at the back of the line for 5 minutes instead of slowing every later call.
+- **Model fallback that learns** — if a Gemini model times out or is overloaded, requests move to the next one, and the struggling model rests at the back of the line for 5 minutes (an hour if its daily quota is used up) instead of slowing every later call.
 - **Continuous deployment** — every push to `main` that passes CI is published to the live Space, which signs in to Hugging Face as a trusted publisher with no stored token.
+- **Health monitoring** — `/health` also queries the database, and a daily GitHub Actions check calls it on the live demo, which also keeps the free Supabase project from pausing.
 
 ---
 
@@ -80,12 +81,12 @@ Students preparing for software roles get generic advice that ignores what they 
 | Frontend | Gradio (custom theme, light and dark), Plotly Express, Pandas |
 | AI | Google Gemini via `google-genai`, LangGraph, Pydantic structured output |
 | Retrieval | Tree-sitter, BM25, pgvector, reciprocal rank fusion |
-| Evaluation and ML | NumPy (calibration metrics, logistic regression), custom ranking metrics |
+| Evaluation and ML | NumPy (calibration metrics, logistic regression), custom ranking metrics, PyTorch and Hugging Face Transformers (reranker experiment) |
 | Data and documents | HTTPX (GitHub REST API, LeetCode GraphQL), pypdf (resumes), ReportLab (PDF reports) |
 | Database | SQLAlchemy, Alembic, PostgreSQL + pgvector (SQLite for quick local runs) |
 | AI assistants | Model Context Protocol (`mcp` Python SDK) |
 | Hosting | Docker on Hugging Face Spaces, Supabase Postgres with row-level security |
-| Quality | pytest, respx, ruff, GitHub Actions (lint, tests against Postgres, Docker build, deploy, on-demand evals) |
+| Quality | pytest, respx, ruff, GitHub Actions (lint, tests against Postgres, Docker build, deploy, on-demand evals, daily uptime check) |
 
 ---
 
@@ -175,7 +176,7 @@ From [`evals/results/retrieval.json`](evals/results/retrieval.json): can search 
 | Method | Success@1 | Success@5 | MRR@10 | Paraphrased skills (15): Success@1 / MRR |
 |---|---:|---:|---:|---:|
 | Keyword (BM25) | 0.32 | 0.55 | 0.42 | 0.20 / 0.32 |
-| Vector | 0.38 | **0.83** | 0.57 | **0.33** / **0.53** |
+| Vector | 0.39 | **0.83** | 0.57 | **0.33** / **0.53** |
 | Hybrid, equal weights (in use) | 0.32 | 0.71 | 0.49 | 0.13 / 0.36 |
 | **Hybrid, tuned** | **0.46** | 0.82 | **0.61** | 0.27 / 0.48 |
 
@@ -237,9 +238,11 @@ Optional settings in `.env`:
 |---|---|
 | `DATABASE_URL` | PostgreSQL with pgvector; plain `postgresql://` URLs, as Supabase gives them, work as-is |
 | `GITHUB_TOKEN` | Raises GitHub's rate limit for downloading repositories |
-| `GEMINI_MODELS` | Comma-separated models to try in order |
-| `UI_SECRET` | Encrypts the browser's copy of the user token; required when deployed |
+| `GEMINI_MODELS` | Comma-separated models to try in order (default `gemini-3.8-flash,gemini-3.6-flash,gemini-3.5-flash-lite`) |
+| `GEMINI_EMBEDDING_MODEL` | Model for code search vectors (default `gemini-embedding-2`) |
+| `UI_SECRET` | Encrypts the browser's copy of the user token; on Hugging Face Spaces the app refuses to start without it |
 | `WORKERS` | How many indexing and analysis jobs run at once (default 2) |
+| `SEARCH_KEYWORD_WEIGHT`, `SEARCH_RRF_K` | Search fusion settings (default 1.0 and 60; see [Code search quality](#code-search-quality)) |
 | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `PUBLIC_URL` | Turn on "Sign in with GitHub" ([setup](docs/DEPLOY.md)) |
 
 Checks:
@@ -277,25 +280,28 @@ The live demo runs on a Hugging Face Space (Docker) with Supabase Postgres. [`do
 | `start_resume_check` | Starts checking each claim on a resume against repositories |
 | `get_report` | Returns progress, or the finished report with its evidence links |
 
-Analyses take minutes, longer than assistants wait for one call, so they are started by one tool and collected with `get_report`. The server talks to the live demo by default; set `CODESYNAPSE_URL` to use your own. On first use it creates a private user and keeps the token in `~/.codesynapse/token`.
+Analyses take minutes, longer than assistants wait for one call, so they are started by one tool and collected with `get_report`. The server talks to the live demo by default; set `CODESYNAPSE_URL` to use your own copy, or `CODESYNAPSE_TOKEN` to use an existing user. Otherwise it creates a private user on first use and keeps the token in `~/.codesynapse/token`.
+
+The server only needs two packages, so it can have its own small environment. From the project folder (`venv/bin/python` on macOS/Linux):
 
 ```bash
-pip install -r requirements-mcp.txt
+py -3.14 -m venv venv
+venv/Scripts/python.exe -m pip install -r requirements-mcp.txt
 ```
 
-**Claude Code:**
+**Claude Code** (`--scope user` makes it available in every folder; check with `claude mcp list`):
 
 ```bash
-claude mcp add codesynapse -- python /path/to/CodeSynapse/codesynapse/mcp_server.py
+claude mcp add --scope user codesynapse -- /path/to/CodeSynapse/venv/Scripts/python.exe /path/to/CodeSynapse/codesynapse/mcp_server.py
 ```
 
-**Claude Desktop** (`claude_desktop_config.json`):
+**Claude Desktop** (Settings → Developer → Edit Config opens `claude_desktop_config.json`; on Windows, write paths with double backslashes, then fully quit and reopen Claude Desktop):
 
 ```json
 {
   "mcpServers": {
     "codesynapse": {
-      "command": "python",
+      "command": "/path/to/CodeSynapse/venv/Scripts/python.exe",
       "args": ["/path/to/CodeSynapse/codesynapse/mcp_server.py"]
     }
   }
@@ -306,7 +312,7 @@ claude mcp add codesynapse -- python /path/to/CodeSynapse/codesynapse/mcp_server
 
 ## 🔌 API
 
-Create a user with `POST /api/users`, then send the returned token as `Authorization: Bearer <token>`. Expensive actions are limited per user each hour (5 analyses, 10 repositories, 20 job descriptions or resumes, 40 coach messages); over the limit the API returns `429` with a `Retry-After` header. Indexing and analysis return `202` at once and finish in the background, so poll their status.
+Create a user with `POST /api/users`, then send the returned token as `Authorization: Bearer <token>`. Expensive actions are limited each hour (per user: 5 analyses, 10 repositories, 20 job descriptions or resumes, 40 coach messages; per IP address: 30 new users); over the limit the API returns `429` with a `Retry-After` header. Indexing and analysis return `202` at once and finish in the background, so poll their status.
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -324,7 +330,9 @@ Create a user with `POST /api/users`, then send the returned token as `Authoriza
 | GET | `/api/analyses/{id}` | Read status, report, step trace and token usage |
 | POST | `/api/analyses/{id}/approve` | Approve a draft report |
 | GET | `/api/analyses/{id}/markdown` | Export a report as Markdown |
-| GET | `/health` | Health check |
+| GET | `/health` | Health check, including the database (`503` if it is unreachable) |
+
+"Sign in with GitHub" uses `/auth/github/login` and `/auth/github/callback`. They are browser redirects for the web app, not part of the API.
 
 ---
 
@@ -338,20 +346,23 @@ CodeSynapse/
 │   ├── config.py              # Settings from environment variables
 │   ├── mcp_server.py          # MCP server for AI assistants (talks to the REST API)
 │   ├── agents/                # LangGraph agent, deterministic verifier, confidence model
-│   ├── api/routes.py          # REST endpoints
+│   ├── api/                   # REST endpoints (routes.py) and GitHub sign-in (auth.py)
 │   ├── services/              # Search, indexing, job and resume parsing, analyses, background jobs,
-│   │                          # rate limits, cache, Gemini calls and model fallback, coach, reports
+│   │                          # rate limits, cache, Gemini calls and model fallback, coach, reports,
+│   │                          # users and GitHub sign-in
 │   ├── ui/                    # Gradio interface, report components and theme
 │   └── db/                    # Models, session and migration runner
-├── evals/                     # Benchmark cases, agent/baseline runner, retrieval and calibration
-│                              # evaluations, injection attacks, metrics, saved results
+├── evals/                     # Benchmark cases, agent/baseline runner, retrieval, calibration and
+│                              # reranker evaluations, injection attacks, metrics, saved results
 ├── migrations/                # Alembic migrations
 ├── deploy/push_space.py       # Uploads the app to the Hugging Face Space
-├── docs/                      # Deployment guide and screenshots
+├── docs/                      # Deployment guide, demo GIF, screenshots and calibration chart
 ├── scripts/check_models.py    # Lists Gemini models your key can use
 ├── tests/                     # pytest suite; external services are mocked
-├── requirements-mcp.txt       # Extra dependencies for the MCP server only
-└── .github/workflows/         # ci.yml (lint, tests, Docker build), deploy.yml, evals.yml
+├── requirements.txt           # The app; requirements-dev.txt adds test tools and the MCP server
+├── requirements-mcp.txt       # The MCP server only
+├── requirements-reranker.txt  # The reranker experiment only (CPU PyTorch)
+└── .github/workflows/         # ci.yml (lint, tests, Docker build), deploy.yml, evals.yml, uptime.yml
 ```
 
 ---
@@ -395,6 +406,8 @@ CodeSynapse/
 - [x] Distilled reranker experiment (measured; it didn't beat the search order, so it isn't used)
 - [x] Larger evaluation sets (68 → 113 labelled pairs, every label checked against the real files)
 - [x] Sign in with GitHub, with data shared across devices
+- [x] Database health check and a daily uptime check of the live demo
+- [x] Demo recording in this README
 
 ## 🤝 Contributing
 

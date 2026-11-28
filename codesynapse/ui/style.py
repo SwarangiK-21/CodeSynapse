@@ -1,11 +1,11 @@
-"""Pastel look for the UI, with matching light and dark modes.
+"""Calm, neutral look for the UI, with matching light and dark modes.
 
-Pastels are used for backgrounds, badges and buttons. Text on them stays dark (light mode)
+Soft tints are used for backgrounds, badges and buttons. Text on them stays dark (light mode)
 or light (dark mode) so it keeps enough contrast to read.
 """
 import gradio as gr
 
-# Light: warm off-white with powder blue, sage and sand. Dark: deep slate with the same pastels as accents.
+# Light: warm off-white with powder blue, sage and sand. Dark: deep slate with the same soft tints as accents.
 LIGHT = {
     "bg": "#f6f8f6", "surface": "#ffffff", "subtle": "#ecf3f2", "border": "#dfe7e4",
     "text": "#1c2b2d", "muted": "#5a6a6b", "accent": "#2b7a78",
