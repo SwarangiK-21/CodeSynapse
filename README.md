@@ -160,6 +160,20 @@ The equal-weight hybrid the app uses scores *below* vector search alone, worst o
 
 Reproduce: `python -m evals.retrieval` (reuses the evaluation index; query vectors are cached).
 
+### Distilled reranker (tried, not adopted)
+
+Could a small model rerank the search results better? [`evals/reranker.py`](evals/reranker.py) had Gemini score the top 20 chunks for each of the 65 queries (0-3), then fine-tuned a small cross-encoder (`ms-marco-MiniLM-L6-v2`, about 22M parameters) on those scores from five repositories, on a free CPU runner. It was tested on the other three repositories, judged by the proof-pattern labels rather than by Gemini ([`evals/results/reranker.json`](evals/results/reranker.json)):
+
+| Method (26 test queries, unseen repositories) | Success@1 | Success@5 | MRR@10 |
+|---|---:|---:|---:|
+| **Search order (tuned hybrid)** | **0.42** | **0.85** | **0.61** |
+| Cross-encoder, not trained | 0.23 | 0.77 | 0.44 |
+| Cross-encoder, distilled from Gemini | 0.19 | 0.73 | 0.42 |
+
+Reranking made results worse, so the app keeps the search order. Two reasons stand out: the base model was trained on web passages, not code, and the teacher was far more generous than the test (it scored 636 of 1,300 candidates as relevant, against 322 that hold the proof), agreeing with the labels only 67% of the time. Fine-tuning taught the student the teacher's broader idea of relevance, which the strict test doesn't reward. A code-trained base model and teacher scores filtered for agreement would be the next things to try.
+
+Reproduce: the **Evals** workflow's `reranker` run (`python -m evals.reranker label`, then `train`, with `requirements-reranker.txt`).
+
 ### Confidence calibration (in progress)
 
 Can the agent's confidence be trusted? [`evals/calibration.py`](evals/calibration.py) records, for every labelled skill, the verified level, the citations that held up, any rejected claims, and the model's own stated confidence. It then compares four ways of turning that into a probability (the model's raw confidence, the verified level alone, the confidence rescaled, and a logistic regression on all of it) by **leave-one-repository-out cross-validation**, scoring calibration error (ECE), Brier score and AUROC, with a reliability chart. The best model is what the app shows as "% likely present".
@@ -345,7 +359,7 @@ CodeSynapse/
 - [x] MCP server for AI assistants
 - [ ] Calibrated confidence: finish collecting records, train and publish
 - [ ] Switch the app to the tuned search after re-running the agent evaluation
-- [ ] Fine-tuned reranker distilled from Gemini's relevance judgements
+- [x] Distilled reranker experiment (measured; it didn't beat the search order, so it isn't used)
 - [x] Larger evaluation sets (68 → 113 labelled pairs, every label checked against the real files)
 - [x] Sign in with GitHub, with data shared across devices
 
