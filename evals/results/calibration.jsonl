@@ -48,3 +48,21 @@
 {"suite": "hard", "repo": "pallets/itsdangerous", "skill": "Expiring tokens", "type": "paraphrase", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 0.98}
 {"suite": "hard", "repo": "pallets/itsdangerous", "skill": "Password hashing", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.95}
 {"suite": "hard", "repo": "pallets/itsdangerous", "skill": "JWT authentication", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "pallets/markupsafe", "skill": "Preventing cross-site scripting", "type": "paraphrase", "present": true, "level": "strong", "citations": 1, "rejected_claims": 2, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "pallets/markupsafe", "skill": "Performance optimisation in native code", "type": "paraphrase", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "pallets/markupsafe", "skill": "HTTP cookies", "type": "mentioned-only", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "pallets/markupsafe", "skill": "Template rendering engines", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "expressjs/cors", "skill": "Handling browser preflight requests", "type": "paraphrase", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "expressjs/cors", "skill": "Allow-listing web origins", "type": "paraphrase", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "expressjs/cors", "skill": "CSRF protection", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "expressjs/cors", "skill": "Rate limiting", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "kennethreitz/records", "skill": "Running raw SQL queries", "type": "paraphrase", "present": true, "level": "strong", "citations": 2, "rejected_claims": 1, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "kennethreitz/records", "skill": "Exporting data to CSV and JSON", "type": "paraphrase", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 1.0}
+{"suite": "hard", "repo": "kennethreitz/records", "skill": "MySQL", "type": "mentioned-only", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "kennethreitz/records", "skill": "ORM model classes", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "encode/databases", "skill": "MySQL", "type": "contrast", "present": true, "level": "strong", "citations": 2, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "hard", "repo": "encode/databases", "skill": "Asynchronous database drivers", "type": "paraphrase", "present": true, "level": "strong", "citations": 3, "rejected_claims": 0, "stated_confidence": 0.95}
+{"suite": "hard", "repo": "encode/databases", "skill": "Connection pooling", "type": "paraphrase", "present": true, "level": "partial", "citations": 1, "rejected_claims": 0, "stated_confidence": 0.75}
+{"suite": "hard", "repo": "encode/databases", "skill": "FastAPI", "type": "mentioned-only", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
+{"suite": "hard", "repo": "encode/databases", "skill": "Docker", "type": "mentioned-only", "present": false, "level": "partial", "citations": 2, "rejected_claims": 0, "stated_confidence": 0.65}
+{"suite": "hard", "repo": "encode/databases", "skill": "MongoDB", "type": "neighbour", "present": false, "level": "none", "citations": 0, "rejected_claims": 0, "stated_confidence": 0.0}
